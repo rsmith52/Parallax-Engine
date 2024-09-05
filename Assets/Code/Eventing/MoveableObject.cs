@@ -20,7 +20,6 @@ namespace Eventing
 
     public enum Directions
     {
-        None,
         Up,
         Left,
         Right,
@@ -73,11 +72,11 @@ namespace Eventing
         public Directions direction = Directions.Down;
 
         private float speed;
-        private Vector3 pos;
+        private Vector3 target_pos;
         private SpriteRenderer[] sprites;
         private SpriteMask bush_mask;
 
-        [Title("Flags")]
+        [Title("Static Flags")]
         public bool invisible = false;
         public bool move_through_walls = false;
         public bool fix_direction = false;
@@ -150,7 +149,11 @@ namespace Eventing
         }
         public Vector3 GetTargetPos()
         {
-            return pos;
+            return target_pos;
+        }
+        public bool GetInMoveRoute()
+        {
+            return in_move_route;
         }
 
         #endregion
@@ -161,7 +164,7 @@ namespace Eventing
         private void Start()
         {
             // Basic Setup
-            pos = transform.position;
+            target_pos = transform.position;
             speed = Constants.SPEEDS[(int)movement_speed];
             //animator = GetComponentInChildren<Animator>();
             sprites = GetComponentsInChildren<SpriteRenderer>();
@@ -212,16 +215,16 @@ namespace Eventing
                 // Activate the tile being moved onto
                 if (!tile_activated)
                 {
-                    Vector3 move_dir = pos - transform.position;
+                    Vector3 move_dir = target_pos - transform.position;
                     tile_activated = ActivateTile(move_dir);
                 }
 
                 // Move in that direction
-                transform.position = Vector3.MoveTowards(transform.position, pos, Time.deltaTime * speed);
+                transform.position = Vector3.MoveTowards(transform.position, target_pos, Time.deltaTime * speed);
             }
 
             // Tilemap and Event awareness check
-            if ((other_moved || moved) && transform.position == pos)
+            if ((other_moved || moved) && transform.position == target_pos)
             {
                 // Get neighboring tiles
                 // ParallaxTileBase[] neighbor_tiles = map_manager.GetNeighborTiles(this);
@@ -282,47 +285,401 @@ namespace Eventing
 
         private bool ActivateTile(ParallaxTileBase tile)
         {
-            // No tile, must be moving through air/walls
-            if (tile == null)
-                return true;
-
-            // Bush Flag
-            if (tile.is_bush)
-            {
-                in_bush = true;
-                // StartCoroutine(map_manager.GrassRustle(pos));
-            }
-            else
-                in_bush = false;
-
+            // TODO
             return true;
         }
+
         private bool ActivateTile(Vector3 move_dir)
         {
             // TODO
-            return false;
+            return true;
         }
+
+        [Button("Activate Event")]
+        public void ActivateEvent() { }
 
         #endregion
 
 
         #region Move Routing
+
+        public IEnumerator StartMoveRoute(MoveCommands[] moves)
+        {
+            in_move_route = true;
+
+            foreach (MoveCommands move in moves)
+            {
+                switch (move)
+                {
+                    case MoveCommands.TurnUp:
+                        TurnUp();
+                        yield return new WaitForSeconds(1 / speed);
+                        break;
+                    case MoveCommands.TurnLeft:
+                        TurnLeft();
+                        yield return new WaitForSeconds(1 / speed);
+                        break;
+                    case MoveCommands.TurnRight:
+                        TurnRight();
+                        yield return new WaitForSeconds(1 / speed);
+                        break;
+                    case MoveCommands.TurnDown:
+                        TurnDown();
+                        yield return new WaitForSeconds(1 / speed);
+                        break;
+                    case MoveCommands.Turn90DegreesCCW:
+                        Turn90DegreesCCW();
+                        yield return new WaitForSeconds(1 / speed);
+                        break;
+                    case MoveCommands.Turn90DegreesCW:
+                        Turn90DegreesCW();
+                        yield return new WaitForSeconds(1 / speed);
+                        break;
+                    case MoveCommands.Turn180Degrees:
+                        Turn180Degrees();
+                        yield return new WaitForSeconds(1 / speed);
+                        break;
+                    case MoveCommands.TurnAtRandom:
+                        TurnAtRandom();
+                        yield return new WaitForSeconds(1 / speed);
+                        break;
+                    case MoveCommands.TurnTowardsPlayer:
+                        TurnTowardsPlayer();
+                        yield return new WaitForSeconds(1 / speed);
+                        break;
+                    case MoveCommands.MoveUp:
+                        MoveUp(); break;
+                    case MoveCommands.MoveLeft:
+                        MoveLeft(); break;
+                    case MoveCommands.MoveRight:
+                        MoveRight(); break;
+                    case MoveCommands.MoveDown:
+                        MoveDown(); break;
+                    default:
+                        break;
+                }
+
+                yield return new WaitUntil(() => !moved);
+            }
+
+            in_move_route = false;
+        }
+
         #endregion
 
 
         #region Direction Setting
+
+        public void TurnUp()
+        {
+            if (!fix_direction)
+                direction = Directions.Up;
+        }
+        public void TurnLeft()
+        {
+            if (!fix_direction)
+                direction = Directions.Left;
+        }
+        public void TurnRight()
+        {
+            if (!fix_direction)
+                direction = Directions.Right;
+        }
+        public void TurnDown()
+        {
+            if (!fix_direction)
+                direction = Directions.Down;
+        }
+
+        public void Turn90DegreesCCW()
+        {
+            switch (direction)
+            {
+                case Directions.Up:
+                    TurnLeft(); break;
+                case Directions.Left:
+                    TurnDown(); break;
+                case Directions.Right:
+                    TurnUp(); break;
+                case Directions.Down:
+                    TurnRight(); break;
+                default:
+                    break;
+            }
+        }
+        public void Turn90DegreesCW()
+        {
+            switch (direction)
+            {
+                case Directions.Up:
+                    TurnRight(); break;
+                case Directions.Left:
+                    TurnUp(); break;
+                case Directions.Right:
+                    TurnDown(); break;
+                case Directions.Down:
+                    TurnLeft(); break;
+                default:
+                    break;
+            }
+        }
+        public void Turn180Degrees()
+        {
+            switch (direction)
+            {
+                case Directions.Up:
+                    TurnDown(); break;
+                case Directions.Left:
+                    TurnRight(); break;
+                case Directions.Right:
+                    TurnLeft(); break;
+                case Directions.Down:
+                    TurnUp(); break;
+                default:
+                    break;
+            }
+        }
+
+        public void TurnAtRandom()
+        {
+            System.Random random = Utilities.Random.GetRandom();
+            Directions new_direction = (Directions)random.Next(4);
+            while (new_direction == direction)
+            {
+                new_direction = (Directions)UnityEngine.Random.Range(0, 3);
+            }
+            if (!fix_direction)
+                direction = new_direction;
+        }
+
+        public void TurnTowardsPlayer()
+        {
+            // TODO
+        }
+
         #endregion
 
 
         #region Movement Execution
+
+        public void CancelMovement()
+        {
+            target_pos = transform.position;
+        }
+
+        public void MoveUp()
+        {
+            TurnUp();
+            if (move_through_walls || (on_tile != null && up_tile != null &&
+                (up_event == null || up_event.IsPassable()) && on_tile.up_passage &&
+                up_tile.allow_passage && up_tile.down_passage))
+            {
+                target_pos += Vector3.up;
+                moved = true;
+                tile_activated = false;
+            }
+        }
+        public void MoveLeft()
+        {
+            TurnLeft();
+            if (move_through_walls || (on_tile != null && left_tile != null &&
+                (left_event == null || left_event.IsPassable()) && on_tile.left_passage &&
+                left_tile.allow_passage && left_tile.right_passage))
+            {
+                target_pos += Vector3.left;
+                moved = true;
+                tile_activated = false;
+            }
+        }
+        public void MoveRight()
+        {
+            TurnRight();
+            if (move_through_walls || on_tile.terrain_tag == TerrainTags.StairLeft ||
+                (on_tile != null && right_tile != null &&
+                (right_event == null || right_event.IsPassable()) && on_tile.right_passage &&
+                right_tile.allow_passage && right_tile.left_passage))
+            {
+                target_pos += Vector3.right;
+                moved = true;
+                tile_activated = false;
+            }
+        }
+        public void MoveDown()
+        {
+            TurnDown();
+            if (move_through_walls || (on_tile != null && down_tile != null &&
+                (down_event == null || down_event.IsPassable()) && on_tile.down_passage &&
+                down_tile.allow_passage && down_tile.up_passage))
+            {
+                target_pos += Vector3.down;
+                moved = true;
+                tile_activated = false;
+            }
+        }
+
+        public void MoveUpLeft()
+        {
+            TurnLeft();
+            target_pos += Vector3.up + Vector3.left;
+            moved = true;
+            tile_activated = false;
+        }
+        public void MoveDownRight()
+        {
+            TurnRight();
+            target_pos += Vector3.down + Vector3.right;
+            moved = true;
+            tile_activated = false;
+        }
+
+        public void StepForward()
+        {
+            switch (direction)
+            {
+                case Directions.Up:
+                    MoveUp();
+                    break;
+                case Directions.Left:
+                    MoveLeft();
+                    break;
+                case Directions.Right:
+                    MoveRight();
+                    break;
+                case Directions.Down:
+                    MoveDown();
+                    break;
+                default:
+                    break;
+            }
+            moved = true;
+        }
+        public void StepBackward()
+        {
+            bool prev_fix_direction = fix_direction;
+            switch (direction)
+            {
+                case Directions.Up:
+                    FixDirectionOn();
+                    MoveDown();
+                    fix_direction = prev_fix_direction;
+                    break;
+                case Directions.Left:
+                    FixDirectionOn();
+                    MoveRight();
+                    fix_direction = prev_fix_direction;
+                    break;
+                case Directions.Right:
+                    FixDirectionOn();
+                    MoveLeft();
+                    fix_direction = prev_fix_direction;
+                    break;
+                case Directions.Down:
+                    FixDirectionOn();
+                    MoveUp();
+                    fix_direction = prev_fix_direction;
+                    break;
+                default:
+                    break;
+            }
+            moved = true;
+        }
+
+        public void MoveAtRandom()
+        {
+            System.Random random = Utilities.Random.GetRandom();
+            Directions new_direction = (Directions)random.Next(4);
+            switch (new_direction)
+            {
+                case Directions.Up:
+                    MoveUp();
+                    break;
+                case Directions.Left:
+                    MoveLeft();
+                    break;
+                case Directions.Right:
+                    MoveRight();
+                    break;
+                case Directions.Down:
+                    MoveDown();
+                    break;
+                default:
+                    break;
+            }
+            moved = true;
+        }
+
+        public void JumpInPlace() { }
+        public void JumpForward(int num_tiles) { }
+        public void JumpBackward(int num_tiles) { }
+
         #endregion
 
 
         #region Movement Between Layers
+
+        public void MoveLayerUp()
+        {
+            target_pos += (Constants.MAP_LAYER_HEIGHT * Vector3.back);
+            moved = true;
+            tile_activated = false;
+        }
+        public void MoveLayerDown()
+        {
+            target_pos += (Constants.MAP_LAYER_HEIGHT * Vector3.forward);
+            moved = true;
+            tile_activated = false;
+        }
+
         #endregion
 
 
         #region Set Flags
+
+        public void InvisibleOn()
+        {
+            invisible = true;
+        }
+        public void InvisibleOff()
+        {
+            invisible = false;
+        }
+
+        public void MoveThroughWallsOn()
+        {
+            move_through_walls = true;
+        }
+        public void MoveThroughWallsOff()
+        {
+            move_through_walls = false;
+        }
+
+        public void FixDirectionOn()
+        {
+            fix_direction = true;
+        }
+        public void FixDirectionOff()
+        {
+            fix_direction = false;
+        }
+
+        public void WalkingAnimationOn()
+        {
+            walking_animation = true;
+        }
+        public void WalkingAnimationOff()
+        {
+            walking_animation = true;
+        }
+
+        public void SteppingAnimationOn()
+        {
+            stepping_animation = true;
+        }
+        public void SteppingAnimationOff()
+        {
+            stepping_animation = false;
+        }
+
         #endregion
 
 

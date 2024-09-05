@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Sirenix.OdinInspector;
@@ -5,6 +6,7 @@ using Sirenix.OdinInspector;
 namespace Mapping
 {    
     [CreateAssetMenu(menuName = "Tiles/Basic Tile", fileName = "Basic Tile")]
+    [Serializable]
     public class BasicTile : ParallaxTileBase
     {
         #region Editor

@@ -6,6 +6,13 @@ namespace Utilities
 {
     public static class Constants
     {
+        #region Mapping
+
+        public static readonly float MAP_LAYER_HEIGHT = 0.5f;
+
+        #endregion
+        
+        
         #region Movement
 
         // Movement Speeds and Turn Sensitivity

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
@@ -19,6 +20,8 @@ namespace Mapping
 
     #endregion
 
+
+    [Serializable]
     public class Map : MonoBehaviour
     {
         #region Global

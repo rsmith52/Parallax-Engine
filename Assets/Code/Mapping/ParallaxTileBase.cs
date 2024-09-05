@@ -17,6 +17,7 @@ namespace Mapping
     #endregion
 
     
+    [Serializable]
     public class ParallaxTileBase : TileBase
     {
         #region Editor
