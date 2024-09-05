@@ -11,6 +11,7 @@ namespace Mapping
         None = 0,
         // Ground Types
         Grass,
+        Dirt,
         Rock,
         Sand,
         Snow,
