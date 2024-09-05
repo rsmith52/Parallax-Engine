@@ -16,10 +16,10 @@ MonoBehaviour:
   has_helper_tiles: 0
   allow_passage: 1
   up_passage: 1
+  left_passage: 1
   right_passage: 1
   down_passage: 1
-  left_passage: 1
   is_bush: 0
   is_counter: 0
   helper_tiles: []
-  sprite: {fileID: -493170416, guid: d6831084ae5c94b2aac9c8473b693a75, type: 3}
+  sprite: {fileID: 1347612635, guid: d6831084ae5c94b2aac9c8473b693a75, type: 3}

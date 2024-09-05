@@ -30,11 +30,11 @@ namespace Mapping
         [HideIf("@!allow_passage")]
         public bool up_passage = true;
         [HideIf("@!allow_passage")]
+        public bool left_passage = true;
+        [HideIf("@!allow_passage")]
         public bool right_passage = true;
         [HideIf("@!allow_passage")]
         public bool down_passage = true;
-        [HideIf("@!allow_passage")]
-        public bool left_passage = true;
 
         [Title("Flags")]
         public bool is_bush = false;

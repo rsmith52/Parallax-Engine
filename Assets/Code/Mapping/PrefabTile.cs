@@ -12,7 +12,7 @@ namespace Mapping
         [Title("Prefab Tile Settings")]
         public Sprite preview_sprite;
         public GameObject prefab;
-        
+        [DetailedInfoBox("Offset Considerations", "If the tile has an offset in it's tile palette, this value should be the intended offset (default 0.5, 0.5) + that grid selection transform offset.")]
         public Vector2 prefab_offset = new Vector2(0.5f, 0.5f);
         public float prefab_local_z = 0;
 
@@ -42,15 +42,13 @@ namespace Mapping
         public override bool StartUp(Vector3Int pos, ITilemap tilemap, GameObject go)
         {
             // This prevents rogue prefab objects from appearing when the Tile palette is present
-#if UNITY_EDITOR
+            #if UNITY_EDITOR
             if (go != null)
             {
                 if (go.scene.name == null)
-                {
                     DestroyImmediate(go);
-                }
             }
-#endif
+            #endif
 
             if (go != null)
             {
