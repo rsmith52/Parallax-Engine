@@ -21,9 +21,14 @@ namespace Mapping
 
     public class Map : MonoBehaviour
     {
-        #region Fields
-        
+        #region Global
+
         public static Dictionary<Maps, Map> map_dict;
+
+        #endregion
+        
+
+        #region Editor
 
         [Title("Basic Information")]
         public int map_id;

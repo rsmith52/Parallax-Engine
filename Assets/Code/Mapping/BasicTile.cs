@@ -3,11 +3,11 @@ using UnityEngine.Tilemaps;
 using Sirenix.OdinInspector;
 
 namespace Mapping
-{
+{    
     [CreateAssetMenu(menuName = "Tiles/Basic Tile", fileName = "Basic Tile")]
     public class BasicTile : ParallaxTileBase
     {
-        #region Fields
+        #region Editor
 
         [Title("Basic Tile Settings")]
         public Sprite sprite;
@@ -19,7 +19,7 @@ namespace Mapping
 
         public override void GetTileData(Vector3Int pos, ITilemap tilemap, ref TileData tile_data)
         {
-            tile_data.sprite = Application.isPlaying ? null : sprite;
+            tile_data.sprite = sprite;
         }
 
         #endregion

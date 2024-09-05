@@ -42,9 +42,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Ground
+  - name: Environment
     uniqueID: 3821391411
     locked: 0
-  - name: Objects
+  - name: Objects & Characters
     uniqueID: 4052596069
+    locked: 0
+  - name: Always on Top
+    uniqueID: 1498962395
     locked: 0
