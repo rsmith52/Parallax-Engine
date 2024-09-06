@@ -130,11 +130,13 @@ namespace Eventing
             //     else
             //         player_mover.MoveThroughWallsOff();
             // }
-            // if (Input.GetKeyDown(KeyCode.W))
-            //     player_mover.MoveLayerUp();
-            // else if (Input.GetKeyDown(KeyCode.S))
-            //     player_mover.MoveLayerDown();
-
+            if (Application.isEditor)
+            {
+                if (Input.GetKeyDown(Controls.SHIFT_LAYER_UP))
+                    player_mover.MoveLayerUp();
+                else if (Input.GetKeyDown(Controls.SHIFT_LAYER_DOWN))
+                    player_mover.MoveLayerDown();
+            }
         }
 
         private void StartRunning()
