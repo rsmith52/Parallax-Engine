@@ -16,9 +16,9 @@ MonoBehaviour:
   has_helper_tiles: 1
   allow_passage: 0
   up_passage: 0
+  left_passage: 0
   right_passage: 0
   down_passage: 0
-  left_passage: 0
   is_bush: 0
   is_counter: 0
   helper_tiles:

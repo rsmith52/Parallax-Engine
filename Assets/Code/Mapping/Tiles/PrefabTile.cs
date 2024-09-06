@@ -10,7 +10,7 @@ namespace Mapping
     public class PrefabTile : ParallaxTileBase
     {
         #region Editor
-
+        
         [Title("Prefab Tile Settings")]
         public Sprite preview_sprite;
         public GameObject prefab;

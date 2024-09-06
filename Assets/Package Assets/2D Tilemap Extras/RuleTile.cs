@@ -360,6 +360,14 @@ namespace UnityEngine
                     break;
                 }
             }
+
+            // Set original tile to be transparent (not shown)
+            bool no_prefab = ReferenceEquals(m_DefaultGameObject, null) ? false : (m_DefaultGameObject ? false : true);
+            if (Application.isPlaying && !no_prefab)
+            {
+                Tilemap map = tilemap.GetComponent<Tilemap>();
+                map.SetColor(position, Color.clear);
+            }
         }
 
         /// <summary>

@@ -180,6 +180,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Ground Tiles Base_4
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c5f03f12e1834f5c8308bffe8bbba67
+      internalID: -546035464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -195,6 +216,7 @@ TextureImporter:
       Ground Tiles Base_1: 1512365557
       Ground Tiles Base_2: 1347612635
       Ground Tiles Base_3: 305146637
+      Ground Tiles Base_4: -546035464
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
