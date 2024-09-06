@@ -36,12 +36,15 @@ namespace Eventing
         private void OnDisable()
         {
             StopRunning();
+            StopSneaking();
         }
 
         private void OnEnable()
         {
-            if (Input.GetKey(KeyCode.X))
+            if (Input.GetKey(Controls.RUN_BUTTON))
                 StartRunning();
+            else if (Input.GetKey(Controls.SNEAK_BUTTON))
+                StartSneaking();
         }
 
         private void Update()
@@ -63,11 +66,15 @@ namespace Eventing
             if (Input.GetKeyDown(Controls.ACTION_BUTTON))
                 player_mover.ActivateEvent();
 
-            // Handle Running Input
+            // Handle Running/Sneaking Input
             if (Input.GetKeyDown(Controls.RUN_BUTTON))
                 StartRunning();
+            else if (Input.GetKeyDown(Controls.SNEAK_BUTTON))
+                StartSneaking();
             else if (Input.GetKeyUp(Controls.RUN_BUTTON))
                 StopRunning();
+            else if (Input.GetKeyUp(Controls.SNEAK_BUTTON))
+                StopSneaking();
 
             // Handle Movement Input
             if (Input.GetKey(Controls.MOVE_UP) && current_pos == target_pos)
@@ -132,6 +139,7 @@ namespace Eventing
 
         private void StartRunning()
         {
+            StopSneaking();
             player_mover.ChangeSpeed(MovementSpeeds.VeryFast);
             // player_mover.animator.SetBool(Constants.RUN_ANIMATION, true);
         }
@@ -140,6 +148,19 @@ namespace Eventing
         {
             player_mover.ChangeSpeed(MovementSpeeds.Moderate);
             // player_mover.animator.SetBool(Constants.RUN_ANIMATION, false);
+        }
+
+        private void StartSneaking()
+        {
+            StopRunning();
+            player_mover.ChangeSpeed(MovementSpeeds.VerySlow);
+            // player_mover.animator.SetBool(Constants.SNEAK_ANIMATION, true);
+        }
+
+        private void StopSneaking()
+        {
+            player_mover.ChangeSpeed(MovementSpeeds.Moderate);
+            // player_mover.animator.SetBool(Constants.SNEAK_ANIMATION, false);
         }
 
         #endregion

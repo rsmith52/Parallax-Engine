@@ -90,7 +90,7 @@ namespace Eventing
 
         [TabGroup ("Movement")]
         [ReadOnly]
-        public bool moved;
+        public bool moving;
         [TabGroup ("Movement")]
         [ReadOnly]
         public bool other_moved;
@@ -169,7 +169,7 @@ namespace Eventing
             //animator = GetComponentInChildren<Animator>();
             sprites = GetComponentsInChildren<SpriteRenderer>();
             bush_mask = GetComponentInChildren<SpriteMask>();
-            moved = true;
+            moving = true;
             other_moved = false;
             in_move_route = false;
             tile_activated = false;
@@ -194,9 +194,12 @@ namespace Eventing
             // Update Animator
             // animator.SetInteger(Constants.DIRECTION_ANIMATION, (int)direction);
             // if (walking_animation && !stepping_animation)
-            //     animator.SetBool(Constants.WALK_ANIMATION, moved);
+            //     animator.SetBool(Constants.WALK_ANIMATION, moving);
             // else if (stepping_animation)
             //     animator.SetBool(Constants.WALK_ANIMATION, true);
+            
+            speed = Constants.SPEEDS[(int)movement_speed];
+
             if (invisible)
                     foreach (SpriteRenderer sprite in sprites)
                         sprite.enabled = false;
@@ -210,7 +213,7 @@ namespace Eventing
                 bush_mask.enabled = false;
 
             // Apply Movement
-            if (moved)
+            if (moving)
             {
                 // Activate the tile being moved onto
                 if (!tile_activated)
@@ -224,7 +227,7 @@ namespace Eventing
             }
 
             // Tilemap and Event awareness check
-            if ((other_moved || moved) && transform.position == target_pos)
+            if ((other_moved || moving) && transform.position == target_pos)
             {
                 // Get neighboring tiles
                 // ParallaxTileBase[] neighbor_tiles = map_manager.GetNeighborTiles(this);
@@ -263,7 +266,7 @@ namespace Eventing
                 //     }
                 // }
 
-                moved = false;
+                moving = false;
                 other_moved = false;
                 if (!tile_activated)
                 {
@@ -359,7 +362,7 @@ namespace Eventing
                         break;
                 }
 
-                yield return new WaitUntil(() => !moved);
+                yield return new WaitUntil(() => !moving);
             }
 
             in_move_route = false;
@@ -475,7 +478,7 @@ namespace Eventing
                 up_tile.allow_passage && up_tile.down_passage))
             {
                 target_pos += Vector3.up;
-                moved = true;
+                moving = true;
                 tile_activated = false;
             }
         }
@@ -487,7 +490,7 @@ namespace Eventing
                 left_tile.allow_passage && left_tile.right_passage))
             {
                 target_pos += Vector3.left;
-                moved = true;
+                moving = true;
                 tile_activated = false;
             }
         }
@@ -500,7 +503,7 @@ namespace Eventing
                 right_tile.allow_passage && right_tile.left_passage))
             {
                 target_pos += Vector3.right;
-                moved = true;
+                moving = true;
                 tile_activated = false;
             }
         }
@@ -512,7 +515,7 @@ namespace Eventing
                 down_tile.allow_passage && down_tile.up_passage))
             {
                 target_pos += Vector3.down;
-                moved = true;
+                moving = true;
                 tile_activated = false;
             }
         }
@@ -521,14 +524,14 @@ namespace Eventing
         {
             TurnLeft();
             target_pos += Vector3.up + Vector3.left;
-            moved = true;
+            moving = true;
             tile_activated = false;
         }
         public void MoveDownRight()
         {
             TurnRight();
             target_pos += Vector3.down + Vector3.right;
-            moved = true;
+            moving = true;
             tile_activated = false;
         }
 
@@ -551,7 +554,7 @@ namespace Eventing
                 default:
                     break;
             }
-            moved = true;
+            moving = true;
         }
         public void StepBackward()
         {
@@ -581,7 +584,7 @@ namespace Eventing
                 default:
                     break;
             }
-            moved = true;
+            moving = true;
         }
 
         public void MoveAtRandom()
@@ -605,7 +608,7 @@ namespace Eventing
                 default:
                     break;
             }
-            moved = true;
+            moving = true;
         }
 
         public void JumpInPlace() { }
@@ -620,13 +623,13 @@ namespace Eventing
         public void MoveLayerUp()
         {
             target_pos += (Constants.MAP_LAYER_HEIGHT * Vector3.back);
-            moved = true;
+            moving = true;
             tile_activated = false;
         }
         public void MoveLayerDown()
         {
             target_pos += (Constants.MAP_LAYER_HEIGHT * Vector3.forward);
-            moved = true;
+            moving = true;
             tile_activated = false;
         }
 
@@ -693,7 +696,6 @@ namespace Eventing
         public void ChangeSpeed(MovementSpeeds new_speed)
         {
             movement_speed = new_speed;
-            speed = Constants.SPEEDS[(int)movement_speed];
         }
 
         #endregion

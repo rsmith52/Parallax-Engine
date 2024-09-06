@@ -16,6 +16,7 @@ namespace Utilities
         public static readonly KeyCode OPEN_MENU = KeyCode.Space;
         public static readonly KeyCode ACTION_BUTTON = KeyCode.Z;
         public static readonly KeyCode RUN_BUTTON = KeyCode.X;
+        public static readonly KeyCode SNEAK_BUTTON = KeyCode.C;
 
         #endregion
     }

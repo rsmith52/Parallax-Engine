@@ -48,6 +48,9 @@ TagManager:
   - name: Objects & Characters
     uniqueID: 4052596069
     locked: 0
+  - name: Tree Tops
+    uniqueID: 2287711015
+    locked: 0
   - name: Always on Top
     uniqueID: 1498962395
     locked: 0
