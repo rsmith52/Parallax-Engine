@@ -6,6 +6,7 @@ using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Object = UnityEngine.Object;
+using Sirenix.OdinInspector;
 
 namespace UnityEditor
 {
@@ -82,7 +83,9 @@ namespace UnityEditor
         public const float k_SingleLineHeight = 16f;
         public const float k_LabelWidth = 80f;
 
-        // AdvancedTileBase Properties
+        // ParallaxTileBase Properties
+        SerializedProperty terrain_tag;
+        SerializedProperty has_helper_tiles;
         SerializedProperty allow_passage;
         SerializedProperty up_passage;
         SerializedProperty left_passage;
@@ -90,7 +93,8 @@ namespace UnityEditor
         SerializedProperty down_passage;
         SerializedProperty is_bush;
         SerializedProperty is_counter;
-        SerializedProperty terrain_tag;
+        SerializedProperty helper_tiles;
+        
 
         public virtual void OnEnable()
         {
@@ -101,7 +105,9 @@ namespace UnityEditor
             m_ReorderableList.onChangedCallback = ListUpdated;
             m_ReorderableList.onAddCallback = OnAddElement;
 
-            // AdvancedTileBase Properties
+            // ParallaxTileBase Properties
+            terrain_tag = serializedObject.FindProperty("terrain_tag");
+            has_helper_tiles = serializedObject.FindProperty("has_helper_tiles");
             allow_passage = serializedObject.FindProperty("allow_passage");
             up_passage = serializedObject.FindProperty("up_passage");
             left_passage = serializedObject.FindProperty("left_passage");
@@ -109,7 +115,7 @@ namespace UnityEditor
             down_passage = serializedObject.FindProperty("down_passage");
             is_bush = serializedObject.FindProperty("is_bush");
             is_counter = serializedObject.FindProperty("is_counter");
-            terrain_tag = serializedObject.FindProperty("terrain_tag");
+            helper_tiles = serializedObject.FindProperty("helper_tiles");
         }
 
         public virtual void OnDisable()
@@ -264,9 +270,12 @@ namespace UnityEditor
 
         public override void OnInspectorGUI()
         {
-            // AdvancedTileBase
+            // ParallaxTileBase
             serializedObject.Update();
 
+            EditorGUILayout.LabelField("Parallax Tile Settings", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(terrain_tag);
+            EditorGUILayout.PropertyField(has_helper_tiles);
             EditorGUILayout.PropertyField(allow_passage);
             EditorGUILayout.PropertyField(up_passage);
             EditorGUILayout.PropertyField(left_passage);
@@ -274,7 +283,7 @@ namespace UnityEditor
             EditorGUILayout.PropertyField(down_passage);
             EditorGUILayout.PropertyField(is_bush);
             EditorGUILayout.PropertyField(is_counter);
-            EditorGUILayout.PropertyField(terrain_tag);
+            EditorGUILayout.PropertyField(helper_tiles);
 
             serializedObject.ApplyModifiedProperties();
 

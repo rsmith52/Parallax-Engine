@@ -34,6 +34,8 @@ namespace Mapping
                 {
                     Tilemap map = tilemap.GetComponent<Tilemap>();
                     InstantiatePrefab(pos, map);
+                    // Set original tile to be transparent (not shown)
+                    map.SetColor(pos, Color.clear);
                 }
             }
         }
@@ -85,8 +87,12 @@ namespace Mapping
             instance.transform.localPosition = new Vector3(instance.transform.localPosition.x,
                 instance.transform.localPosition.y, prefab_local_z);
 
-            // Set original tile to be transparent (not shown)
-            map.SetColor(pos, Color.clear);
+            // Set proper layer ordering
+            TilemapRenderer renderer = map.GetComponent<TilemapRenderer>();
+            int layer = renderer.sortingOrder;
+            SpriteRenderer[] sprites = instance.GetComponentsInChildren<SpriteRenderer>();
+            foreach (SpriteRenderer sprite in sprites)
+                sprite.sortingOrder = layer;
         }
 
         #endregion

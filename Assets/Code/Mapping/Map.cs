@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using Sirenix.OdinInspector;
 
 namespace Mapping
@@ -31,13 +32,18 @@ namespace Mapping
         #endregion
         
 
-        #region Editor
+        #region Fields
 
         [Title("Basic Information")]
         public int map_id;
         [ValidateInput("NameMatchesGameObject", "Map's name must match the game object's name.")]
         public string map_name;
         public MapType map_type;
+
+        [Title("Layer Information")]
+        public int num_layers;
+        public TilemapRenderer[] map_layers;
+        private TilemapRenderer[] object_layers;
 
         #endregion
 

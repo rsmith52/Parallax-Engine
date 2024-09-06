@@ -345,6 +345,8 @@ namespace UnityEngine
             tileData.flags = TileFlags.LockTransform;
             tileData.transform = iden;
 
+            Tilemap map = tilemap.GetComponent<Tilemap>();
+
             foreach (TilingRule rule in m_TilingRules)
             {
                 Matrix4x4 transform = iden;
@@ -367,10 +369,19 @@ namespace UnityEngine
                     tileData.gameObject = rule.m_GameObject;
                     tileData.colliderType = rule.m_ColliderType;
 
-                    // Set original tile to be transparent (not shown)
-                    Tilemap map = tilemap.GetComponent<Tilemap>();
                     if (tileData.gameObject)
+                    {
+                        // Set proper layer ordering
+                        TilemapRenderer renderer = map.GetComponent<TilemapRenderer>();
+                        int layer = renderer.sortingOrder;
+                        //Debug.Log(layer);
+                        SpriteRenderer[] sprites = rule.m_GameObject.GetComponentsInChildren<SpriteRenderer>();
+                        foreach (SpriteRenderer sprite in sprites)
+                            sprite.sortingOrder = layer;
+                            
+                        // Set original tile to be transparent (not shown)
                         map.SetColor(position, Color.clear);
+                    }
                     
                     break;
                 }
