@@ -374,7 +374,6 @@ namespace UnityEngine
                         // Set proper layer ordering
                         TilemapRenderer renderer = map.GetComponent<TilemapRenderer>();
                         int layer = renderer.sortingOrder;
-                        //Debug.Log(layer);
                         SpriteRenderer[] sprites = rule.m_GameObject.GetComponentsInChildren<SpriteRenderer>();
                         foreach (SpriteRenderer sprite in sprites)
                             sprite.sortingOrder = layer;
