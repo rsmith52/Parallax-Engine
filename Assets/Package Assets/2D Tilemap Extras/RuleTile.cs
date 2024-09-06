@@ -277,6 +277,15 @@ namespace UnityEngine
         /// <returns>Whether StartUp was successful</returns>
         public override bool StartUp(Vector3Int location, ITilemap tilemap, GameObject instantiatedGameObject)
         {
+            // This prevents rogue prefab objects from appearing when the Tile palette is present
+            #if UNITY_EDITOR
+            if (instantiatedGameObject != null)
+            {
+                if (instantiatedGameObject.scene.name == null)
+                    DestroyImmediate(instantiatedGameObject);
+            }
+            #endif
+            
             if (instantiatedGameObject != null)
             {
                 Tilemap tmpMap = tilemap.GetComponent<Tilemap>();
@@ -357,16 +366,14 @@ namespace UnityEngine
                     tileData.transform = transform;
                     tileData.gameObject = rule.m_GameObject;
                     tileData.colliderType = rule.m_ColliderType;
+
+                    // Set original tile to be transparent (not shown)
+                    Tilemap map = tilemap.GetComponent<Tilemap>();
+                    if (tileData.gameObject)
+                        map.SetColor(position, Color.clear);
+                    
                     break;
                 }
-            }
-
-            // Set original tile to be transparent (not shown)
-            bool no_prefab = ReferenceEquals(m_DefaultGameObject, null) ? false : (m_DefaultGameObject ? false : true);
-            if (Application.isPlaying && !no_prefab)
-            {
-                Tilemap map = tilemap.GetComponent<Tilemap>();
-                map.SetColor(position, Color.clear);
             }
         }
 
