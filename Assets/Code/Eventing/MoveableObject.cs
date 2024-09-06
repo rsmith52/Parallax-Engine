@@ -70,6 +70,8 @@ namespace Eventing
         public MovementSpeeds movement_speed = MovementSpeeds.Moderate;
         [EnumPaging]
         public Directions direction = Directions.Down;
+        [ReadOnly]
+        public int layer = 0;
 
         private float speed;
         private Vector3 target_pos;
@@ -200,6 +202,9 @@ namespace Eventing
             
             speed = Constants.SPEEDS[(int)movement_speed];
 
+            foreach (SpriteRenderer sprite in sprites)
+                sprite.sortingOrder = layer;
+            
             if (invisible)
                     foreach (SpriteRenderer sprite in sprites)
                         sprite.enabled = false;
@@ -624,12 +629,14 @@ namespace Eventing
         {
             target_pos += (Constants.MAP_LAYER_HEIGHT * Vector3.back);
             moving = true;
+            layer += 1;
             tile_activated = false;
         }
         public void MoveLayerDown()
         {
             target_pos += (Constants.MAP_LAYER_HEIGHT * Vector3.forward);
             moving = true;
+            layer -= 1;
             tile_activated = false;
         }
 
