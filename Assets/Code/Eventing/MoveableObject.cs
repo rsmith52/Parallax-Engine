@@ -629,14 +629,14 @@ namespace Eventing
         {
             target_pos += (Constants.MAP_LAYER_HEIGHT * Vector3.back);
             moving = true;
-            layer += 1;
+            layer += Constants.SORTING_LAYERS_PER_MAP_LAYER;
             tile_activated = false;
         }
         public void MoveLayerDown()
         {
             target_pos += (Constants.MAP_LAYER_HEIGHT * Vector3.forward);
             moving = true;
-            layer -= 1;
+            layer -= Constants.SORTING_LAYERS_PER_MAP_LAYER;
             tile_activated = false;
         }
 

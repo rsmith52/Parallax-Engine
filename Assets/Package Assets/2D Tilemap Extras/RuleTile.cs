@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine.Tilemaps;
 using Mapping;
+using Utilities;
 
 namespace UnityEngine
 {
@@ -346,6 +347,8 @@ namespace UnityEngine
             tileData.transform = iden;
 
             Tilemap map = tilemap.GetComponent<Tilemap>();
+            TilemapRenderer renderer = map.GetComponent<TilemapRenderer>();
+            int layer = renderer.sortingOrder;
 
             foreach (TilingRule rule in m_TilingRules)
             {
@@ -372,12 +375,15 @@ namespace UnityEngine
                     if (tileData.gameObject)
                     {
                         // Set proper layer ordering
-                        TilemapRenderer renderer = map.GetComponent<TilemapRenderer>();
-                        int layer = renderer.sortingOrder;
                         SpriteRenderer[] sprites = rule.m_GameObject.GetComponentsInChildren<SpriteRenderer>();
                         foreach (SpriteRenderer sprite in sprites)
-                            sprite.sortingOrder = layer;
-                            
+                        {
+                            if (sprite.tag == Constants.PRIORITY_TILE_TAG)
+                                sprite.sortingOrder = layer + 1;
+                            else
+                                sprite.sortingOrder = layer;
+                        }
+                               
                         // Set original tile to be transparent (not shown)
                         map.SetColor(position, Color.clear);
                     }
