@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Sirenix.OdinInspector;
+using Utilities;
 
 namespace Mapping
 {
@@ -26,18 +27,17 @@ namespace Mapping
         public override void GetTileData(Vector3Int pos, ITilemap tilemap, ref TileData tile_data)
         {
             tile_data.sprite = preview_sprite;
+            Tilemap map = tilemap.GetComponent<Tilemap>();
             
-            if (prefab && tile_data.gameObject == null)
+            tile_data.gameObject = Application.isPlaying ? null : prefab;
+            if (Application.isPlaying && prefab)
             {
-                tile_data.gameObject = Application.isPlaying ? null : prefab;
-                if (Application.isPlaying && prefab)
-                {
-                    Tilemap map = tilemap.GetComponent<Tilemap>();
-                    InstantiatePrefab(pos, map);
-                    // Set original tile to be transparent (not shown)
-                    map.SetColor(pos, Color.clear);
-                }
-            }
+                InstantiatePrefab(pos, map);
+            }       
+
+            // Set original tile to be transparent (not shown))
+            if (tile_data.gameObject && tile_data.gameObject.scene.name != null)
+                map.SetColor(pos, Color.clear);
         }
 
         /*
@@ -61,6 +61,7 @@ namespace Mapping
                     pos.x + prefab_offset.x
                     , pos.y + prefab_offset.y
                     , pos.z);
+
                 // Set proper Z Offset
                 go.transform.localPosition = new Vector3(go.transform.localPosition.x,
                     go.transform.localPosition.y, prefab_local_z);
@@ -91,8 +92,12 @@ namespace Mapping
             TilemapRenderer renderer = map.GetComponent<TilemapRenderer>();
             int layer = renderer.sortingOrder;
             SpriteRenderer[] sprites = instance.GetComponentsInChildren<SpriteRenderer>();
+            
             foreach (SpriteRenderer sprite in sprites)
-                sprite.sortingOrder = layer;
+                if (sprite.tag == Constants.PRIORITY_TILE_TAG)
+                    sprite.sortingOrder = layer + 1;
+                else
+                    sprite.sortingOrder = layer;
         }
 
         #endregion
