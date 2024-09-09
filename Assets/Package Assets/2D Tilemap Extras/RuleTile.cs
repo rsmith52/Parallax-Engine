@@ -384,18 +384,11 @@ namespace UnityEngine
                                 sprite.sortingOrder = layer;
                         }
                                
-                        // Set original tile to be transparent (not shown)
-                        map.SetColor(position, Color.clear);
+                        tileData.sprite = null;
                     }
                     
                     break;
                 }
-
-                if (tileData.gameObject != null && !IsTilemapFromPalette(map))
-                {
-                    tileData.sprite = null;
-                }
-
             }
         }
 
