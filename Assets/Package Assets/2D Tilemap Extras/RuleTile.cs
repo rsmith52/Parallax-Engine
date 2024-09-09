@@ -391,7 +391,7 @@ namespace UnityEngine
                     break;
                 }
 
-                if (!IsTilemapFromPalette(map))
+                if (tileData.gameObject != null && !IsTilemapFromPalette(map))
                 {
                     tileData.sprite = null;
                 }
