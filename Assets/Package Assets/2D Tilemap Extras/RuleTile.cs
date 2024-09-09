@@ -390,6 +390,12 @@ namespace UnityEngine
                     
                     break;
                 }
+
+                if (!IsTilemapFromPalette(map))
+                {
+                    tileData.sprite = null;
+                }
+
             }
         }
 

@@ -32,12 +32,14 @@ namespace Mapping
             tile_data.gameObject = Application.isPlaying ? null : prefab;
             if (Application.isPlaying && prefab)
             {
-                InstantiatePrefab(pos, map);
+                // Only called in Runtime
+                InstantiatePrefab(pos, map, tile_data);
             }       
 
-            // Set original tile to be transparent (not shown))
-            if (tile_data.gameObject && tile_data.gameObject.scene.name != null)
-                map.SetColor(pos, Color.clear);
+            if (!IsTilemapFromPalette(map))
+            {
+                tile_data.sprite = null;
+            }
         }
 
         /*
@@ -61,7 +63,7 @@ namespace Mapping
                     pos.x + prefab_offset.x
                     , pos.y + prefab_offset.y
                     , pos.z);
-
+                
                 // Set proper Z Offset
                 go.transform.localPosition = new Vector3(go.transform.localPosition.x,
                     go.transform.localPosition.y, prefab_local_z);
@@ -73,7 +75,7 @@ namespace Mapping
         /*
         * Instantiate prefab in runtime.
         */
-        public void InstantiatePrefab(Vector3Int pos, Tilemap map)
+        public void InstantiatePrefab(Vector3Int pos, Tilemap map, TileData tile_data)
         {
             GameObject instance = Instantiate(prefab);
             instance.transform.SetParent(map.transform);
@@ -84,6 +86,7 @@ namespace Mapping
                 pos.y + prefab_offset.y,
                 pos.z
             );
+
             // Set proper Z Offset
             instance.transform.localPosition = new Vector3(instance.transform.localPosition.x,
                 instance.transform.localPosition.y, prefab_local_z);
