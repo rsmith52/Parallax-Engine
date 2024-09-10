@@ -2,7 +2,7 @@ using System;
 
 namespace Utilities
 {
-    public class Random
+    public static class Random
     {
         #region fields
 

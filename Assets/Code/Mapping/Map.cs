@@ -41,7 +41,6 @@ namespace Mapping
         public MapType map_type;
 
         [Title("Layer Information")]
-        public int num_layers;
         public TilemapRenderer[] map_layers;
         private TilemapRenderer[] object_layers;
 
