@@ -67,6 +67,20 @@ namespace Mapping
                 // Set proper Z Offset
                 go.transform.localPosition = new Vector3(go.transform.localPosition.x,
                     go.transform.localPosition.y, prefab_local_z);
+
+                // Set proper layer ordering
+                Tilemap map = tilemap.GetComponent<Tilemap>();
+                TilemapRenderer renderer = map.GetComponent<TilemapRenderer>();
+                int layer = renderer.sortingOrder;
+                SpriteRenderer[] sprites = go.GetComponentsInChildren<SpriteRenderer>();
+                
+                foreach (SpriteRenderer sprite in sprites)
+                    if (sprite.tag == Constants.PRIORITY_TILE_TAG)
+                        sprite.sortingOrder = layer + 1;
+                    else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG)
+                        sprite.sortingOrder = layer - 1;
+                    else
+                        sprite.sortingOrder = layer;
             }
 
             return true;
@@ -99,6 +113,8 @@ namespace Mapping
             foreach (SpriteRenderer sprite in sprites)
                 if (sprite.tag == Constants.PRIORITY_TILE_TAG)
                     sprite.sortingOrder = layer + 1;
+                else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG)
+                    sprite.sortingOrder = layer - 1;
                 else
                     sprite.sortingOrder = layer;
         }

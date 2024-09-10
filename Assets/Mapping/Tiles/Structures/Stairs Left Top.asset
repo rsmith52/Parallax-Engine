@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34a88e4cea08841649b5b7c5cc9b2938, type: 3}
+  m_Name: Stairs Left Top
+  m_EditorClassIdentifier: 
+  terrain_tag: 16
+  has_helper_tiles: 0
+  allow_passage: 1
+  up_passage: 1
+  left_passage: 1
+  right_passage: 1
+  down_passage: 1
+  is_bush: 0
+  is_counter: 0
+  helper_tiles: []
+  preview_sprite: {fileID: 1905809443, guid: 3d415827f081042308b997b8e3790536, type: 3}
+  prefab: {fileID: 4305383181339205343, guid: 41b61f34d0f9f491a8fa315a1445be32, type: 3}
+  prefab_offset: {x: 0.5, y: 0.5}
+  prefab_local_z: 0.5
