@@ -81,6 +81,10 @@ namespace Mapping
                         sprite.sortingOrder = layer - 1;
                     else
                         sprite.sortingOrder = layer;
+
+                // Trans tile handling
+                if (is_trans)
+                    map.SetColor(pos, new Color(1,1,1,Constants.TRANS_TILE_ALPHA));
             }
 
             return true;

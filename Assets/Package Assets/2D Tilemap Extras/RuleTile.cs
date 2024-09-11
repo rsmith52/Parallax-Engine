@@ -286,6 +286,12 @@ namespace UnityEngine
                     DestroyImmediate(instantiatedGameObject);
             }
             #endif
+
+            Tilemap map = tilemap.GetComponent<Tilemap>();
+
+            // Trans tile handling
+            if (is_trans)
+                map.SetColor(location, new Color(1,1,1,Constants.TRANS_TILE_ALPHA));
             
             if (instantiatedGameObject != null)
             {
@@ -299,7 +305,7 @@ namespace UnityEngine
 
                 bool ruleMatched = false;
                 foreach (TilingRule rule in m_TilingRules)
-                {
+                {   
                     Matrix4x4 transform = iden;
                     if (RuleMatches(rule, location, tilemap, ref transform))
                     {
@@ -327,7 +333,6 @@ namespace UnityEngine
                 instantiatedGameObject.transform.localScale = gameObjectScale;
 
                 // Set proper layer ordering
-                Tilemap map = tilemap.GetComponent<Tilemap>();
                 TilemapRenderer renderer = map.GetComponent<TilemapRenderer>();
                 int layer = renderer.sortingOrder;
                 SpriteRenderer[] sprites = instantiatedGameObject.GetComponentsInChildren<SpriteRenderer>();
@@ -385,6 +390,9 @@ namespace UnityEngine
                     tileData.transform = transform;
                     tileData.gameObject = rule.m_GameObject;
                     tileData.colliderType = rule.m_ColliderType;
+                    // Trans tile handling
+                    // if (is_trans)
+                    //     tileData.color = new Color(1,1,1,Constants.TRANS_TILE_ALPHA);
 
                     if (tileData.gameObject)
                     {

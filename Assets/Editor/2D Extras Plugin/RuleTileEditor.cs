@@ -93,6 +93,7 @@ namespace UnityEditor
         SerializedProperty down_passage;
         SerializedProperty is_bush;
         SerializedProperty is_counter;
+        SerializedProperty is_trans;
         SerializedProperty helper_tiles;
         
 
@@ -115,6 +116,7 @@ namespace UnityEditor
             down_passage = serializedObject.FindProperty("down_passage");
             is_bush = serializedObject.FindProperty("is_bush");
             is_counter = serializedObject.FindProperty("is_counter");
+            is_trans = serializedObject.FindProperty("is_trans");
             helper_tiles = serializedObject.FindProperty("helper_tiles");
         }
 
@@ -283,6 +285,7 @@ namespace UnityEditor
             EditorGUILayout.PropertyField(down_passage);
             EditorGUILayout.PropertyField(is_bush);
             EditorGUILayout.PropertyField(is_counter);
+            EditorGUILayout.PropertyField(is_trans);
             EditorGUILayout.PropertyField(helper_tiles);
 
             serializedObject.ApplyModifiedProperties();

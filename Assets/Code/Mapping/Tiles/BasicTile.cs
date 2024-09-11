@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Sirenix.OdinInspector;
+using Utilities;
 
 namespace Mapping
 {    
@@ -22,6 +23,17 @@ namespace Mapping
         public override void GetTileData(Vector3Int pos, ITilemap tilemap, ref TileData tile_data)
         {
             tile_data.sprite = sprite;
+        }
+
+        public override bool StartUp(Vector3Int pos, ITilemap tilemap, GameObject go)
+        {
+            Tilemap map = tilemap.GetComponent<Tilemap>();
+            
+            // Trans tile handling
+            if (is_trans)
+                    map.SetColor(pos, new Color(1,1,1,Constants.TRANS_TILE_ALPHA));
+
+            return true;
         }
 
         #endregion

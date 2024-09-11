@@ -40,6 +40,7 @@ namespace Mapping
         [Title("Flags")]
         public bool is_bush = false;
         public bool is_counter = false;
+        public bool is_trans = false;
 
         [Title("Helper Tiles")]
         [ShowIf("@this.has_helper_tiles")]
