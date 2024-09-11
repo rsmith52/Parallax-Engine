@@ -203,7 +203,12 @@ namespace Eventing
             speed = Constants.SPEEDS[(int)movement_speed];
 
             foreach (SpriteRenderer sprite in sprites)
-                sprite.sortingOrder = layer;
+                if (sprite.tag == Constants.PRIORITY_TILE_TAG)
+                    sprite.sortingOrder = layer + 1;
+                else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG)
+                    sprite.sortingOrder = layer - 1;
+                else
+                    sprite.sortingOrder = layer;
             
             if (invisible)
                     foreach (SpriteRenderer sprite in sprites)

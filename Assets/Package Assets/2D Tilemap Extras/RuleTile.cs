@@ -390,9 +390,6 @@ namespace UnityEngine
                     tileData.transform = transform;
                     tileData.gameObject = rule.m_GameObject;
                     tileData.colliderType = rule.m_ColliderType;
-                    // Trans tile handling
-                    // if (is_trans)
-                    //     tileData.color = new Color(1,1,1,Constants.TRANS_TILE_ALPHA);
 
                     if (tileData.gameObject)
                     {
