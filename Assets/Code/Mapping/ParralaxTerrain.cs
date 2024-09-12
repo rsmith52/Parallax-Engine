@@ -38,6 +38,7 @@ namespace Mapping
         Waterfall,
         WaterfallCrest,
         RockyLedge,
+        NoPassHelper,
         Ignore
     }
 

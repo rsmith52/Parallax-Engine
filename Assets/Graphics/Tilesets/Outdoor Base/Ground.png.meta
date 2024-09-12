@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Ground Tiles Base_0
+      name: Ground_0
       rect:
         serializedVersion: 2
         x: 0
@@ -111,14 +111,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a260ab8a47d1e4e17a3138d953f924e9
-      internalID: -493170416
+      spriteID: 9d4789d8f5226449799dde2a7b0745aa
+      internalID: -1041394698
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Tiles Base_1
+      name: Ground_1
       rect:
         serializedVersion: 2
         x: 16
@@ -132,14 +132,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4c5bb6573c5ac42c8aeeb7a92f56656b
-      internalID: 1512365557
+      spriteID: 95e33d247e17d44d2ae246ffaacf8957
+      internalID: 2130277202
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Tiles Base_2
+      name: Ground_2
       rect:
         serializedVersion: 2
         x: 32
@@ -153,14 +153,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 46d21c7ebd1ca4479a2971069781cb05
-      internalID: 1347612635
+      spriteID: 93ce92d48989d45ed9813affbf5cbe61
+      internalID: -331596273
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Tiles Base_3
+      name: Ground_3
       rect:
         serializedVersion: 2
         x: 48
@@ -174,14 +174,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b6981eb2a51e54fffbfb57a2bb6fbdf1
-      internalID: 305146637
+      spriteID: 13075aa2c549f4692b5bf4a99bc9700e
+      internalID: -1968121430
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground Tiles Base_4
+      name: Ground_4
       rect:
         serializedVersion: 2
         x: 64
@@ -195,8 +195,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8c5f03f12e1834f5c8308bffe8bbba67
-      internalID: -546035464
+      spriteID: 33fb76a459d174b23ae0fae8f612e8a1
+      internalID: -828529910
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ground_5
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea7c3fd2ba4f24df49ea2f6832547335
+      internalID: -1383163062
       vertices: []
       indices: 
       edges: []
@@ -212,11 +233,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Ground Tiles Base_0: -493170416
-      Ground Tiles Base_1: 1512365557
-      Ground Tiles Base_2: 1347612635
-      Ground Tiles Base_3: 305146637
-      Ground Tiles Base_4: -546035464
+      Ground_0: -1041394698
+      Ground_1: 2130277202
+      Ground_2: -331596273
+      Ground_3: -1968121430
+      Ground_4: -828529910
+      Ground_5: -1383163062
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

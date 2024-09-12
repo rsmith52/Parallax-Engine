@@ -24,7 +24,6 @@ namespace Mapping
 
         [Title("Tile Type")]
         public TerrainTags terrain_tag = TerrainTags.None;
-        public bool has_helper_tiles = false;
 
         [Title("Movement")]
         public bool allow_passage = true;
@@ -41,10 +40,6 @@ namespace Mapping
         public bool is_bush = false;
         public bool is_counter = false;
         public bool is_trans = false;
-
-        [Title("Helper Tiles")]
-        [ShowIf("@this.has_helper_tiles")]
-        public HelperTile[] helper_tiles;
 
         #endregion
 
