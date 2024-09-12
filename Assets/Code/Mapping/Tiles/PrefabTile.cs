@@ -75,16 +75,18 @@ namespace Mapping
                 SpriteRenderer[] sprites = go.GetComponentsInChildren<SpriteRenderer>();
                 
                 foreach (SpriteRenderer sprite in sprites)
+                {
+                    // Trans tile handling
+                    if (is_trans)
+                        sprite.color = new Color(1,1,1,Constants.TRANS_TILE_ALPHA);
+
                     if (sprite.tag == Constants.PRIORITY_TILE_TAG)
                         sprite.sortingOrder = layer + 1;
                     else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG)
                         sprite.sortingOrder = layer - 1;
                     else
                         sprite.sortingOrder = layer;
-
-                // Trans tile handling
-                if (is_trans)
-                    map.SetColor(pos, new Color(1,1,1,Constants.TRANS_TILE_ALPHA));
+                }
             }
 
             return true;

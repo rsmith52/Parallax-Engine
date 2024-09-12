@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Tall Grass Base_0
+      name: Tall Grass_0
       rect:
         serializedVersion: 2
         x: 0
@@ -111,14 +111,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f640dc8d3ccfe4e2c9fe47308c482889
-      internalID: 856295940
+      spriteID: a42a431b81c3c4a63bde80330a2097c4
+      internalID: -537428467
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tall Grass Base_1
+      name: Tall Grass_1
       rect:
         serializedVersion: 2
         x: 32
@@ -132,14 +132,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c6c983868ab814777bbb2c7126218a68
-      internalID: 642720565
+      spriteID: 5ef0fb341d5e345ef8e83eae7a76aa2b
+      internalID: 813637268
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tall Grass Base_2
+      name: Tall Grass_2
       rect:
         serializedVersion: 2
         x: 48
@@ -153,14 +153,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0dab7095623304a3fbb94109a65b047e
-      internalID: -1250727065
+      spriteID: 33e51f57234894afe86cab15da8770d4
+      internalID: 1599240718
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tall Grass Base_3
+      name: Tall Grass_3
       rect:
         serializedVersion: 2
         x: 64
@@ -174,14 +174,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 434e7878904974759a6702e10ce188ea
-      internalID: -89422944
+      spriteID: f8c7e5376168e4d28b19da2c6a827d95
+      internalID: -294560269
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tall Grass Base_4
+      name: Tall Grass_4
       rect:
         serializedVersion: 2
         x: 32
@@ -195,14 +195,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: db382ecb4f2ff43fd81e973c0ebefcd7
-      internalID: 759267796
+      spriteID: fca5fcf0e87464e87985773e2af7a757
+      internalID: 109040004
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tall Grass Base_5
+      name: Tall Grass_5
       rect:
         serializedVersion: 2
         x: 48
@@ -216,14 +216,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f1bf9136b230b461088bb72aeca49a51
-      internalID: 1770954934
+      spriteID: db8461df43dd241dbb86fb90be665c9d
+      internalID: 2093084449
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tall Grass Base_6
+      name: Tall Grass_6
       rect:
         serializedVersion: 2
         x: 64
@@ -237,14 +237,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: da745ca72462542a4ad51e4886aa98b7
-      internalID: 359651911
+      spriteID: 1ffc341af4de644b1b536f21548e577e
+      internalID: -1660258694
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tall Grass Base_7
+      name: Tall Grass_7
       rect:
         serializedVersion: 2
         x: 32
@@ -258,14 +258,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 17c3c3d20255b4cb5b97a6720c77d6a3
-      internalID: 1917158172
+      spriteID: b36c9931ca25c451d9f5110ebdc3849d
+      internalID: -788303751
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tall Grass Base_8
+      name: Tall Grass_8
       rect:
         serializedVersion: 2
         x: 48
@@ -279,14 +279,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b7dd6e7500a4c4a1db418fb61d4e47f0
-      internalID: -659306009
+      spriteID: b6da8cc74d4d645aa959f4c8278ad14b
+      internalID: -1440550061
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tall Grass Base_9
+      name: Tall Grass_9
       rect:
         serializedVersion: 2
         x: 64
@@ -300,14 +300,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a18f0e2e8a8724f7b8af3b395d22b35f
-      internalID: -208033872
+      spriteID: 22514ec1c6f8344a1b364b578c1a1bb9
+      internalID: -204741653
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tall Grass Base_10
+      name: Tall Grass_10
       rect:
         serializedVersion: 2
         x: 0
@@ -321,14 +321,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a45348fb136a64397b518b6f36cda99e
-      internalID: -610595709
+      spriteID: ec6f1045d40cb4aba8680bc61b268bd4
+      internalID: 2141710144
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tall Grass Base_11
+      name: Tall Grass_11
       rect:
         serializedVersion: 2
         x: 16
@@ -342,14 +342,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a6e40d4cab922427ab68204d854da9c2
-      internalID: -154257150
+      spriteID: b85761afb1e844683b8c8e279e86ce40
+      internalID: -1163477854
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tall Grass Base_12
+      name: Tall Grass_12
       rect:
         serializedVersion: 2
         x: 0
@@ -363,14 +363,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 78a9b7f3b42bf4aa68df07de55728080
-      internalID: 425085451
+      spriteID: aefb2c36a30844b8fbcc605d740f0647
+      internalID: 1010437468
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tall Grass Base_13
+      name: Tall Grass_13
       rect:
         serializedVersion: 2
         x: 16
@@ -384,8 +384,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8763a6f1b37bf42928ec8e95661784c2
-      internalID: -620868121
+      spriteID: 1c0a13ab1773544c69055e052a589247
+      internalID: 967087728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tall Grass_14
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e42e627ec1e1d40759ca0591a3faa0b3
+      internalID: -989899343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tall Grass_15
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b35317f0307a4e3981651b747c04b45
+      internalID: -2108810100
       vertices: []
       indices: 
       edges: []
@@ -401,20 +443,22 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Tall Grass Base_0: 856295940
-      Tall Grass Base_1: 642720565
-      Tall Grass Base_10: -610595709
-      Tall Grass Base_11: -154257150
-      Tall Grass Base_12: 425085451
-      Tall Grass Base_13: -620868121
-      Tall Grass Base_2: -1250727065
-      Tall Grass Base_3: -89422944
-      Tall Grass Base_4: 759267796
-      Tall Grass Base_5: 1770954934
-      Tall Grass Base_6: 359651911
-      Tall Grass Base_7: 1917158172
-      Tall Grass Base_8: -659306009
-      Tall Grass Base_9: -208033872
+      Tall Grass_0: -537428467
+      Tall Grass_1: 813637268
+      Tall Grass_10: 2141710144
+      Tall Grass_11: -1163477854
+      Tall Grass_12: 1010437468
+      Tall Grass_13: 967087728
+      Tall Grass_14: -989899343
+      Tall Grass_15: -2108810100
+      Tall Grass_2: 1599240718
+      Tall Grass_3: -294560269
+      Tall Grass_4: 109040004
+      Tall Grass_5: 2093084449
+      Tall Grass_6: -1660258694
+      Tall Grass_7: -788303751
+      Tall Grass_8: -1440550061
+      Tall Grass_9: -204741653
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
