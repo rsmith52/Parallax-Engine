@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Still Water
   m_EditorClassIdentifier: 
   terrain_tag: 19
-  has_helper_tiles: 0
   allow_passage: 1
   up_passage: 1
   left_passage: 1
@@ -22,9 +21,9 @@ MonoBehaviour:
   is_bush: 0
   is_counter: 0
   is_trans: 1
-  helper_tiles: []
   m_DefaultSprite: {fileID: 290075495, guid: 379f377ccf5b94cc2b5141620a027966, type: 3}
-  m_DefaultGameObject: {fileID: 0}
+  m_DefaultGameObject: {fileID: 8626972231468677178, guid: a2d80ed363ab34bd7954142e519cf46c,
+    type: 3}
   m_DefaultColliderType: 1
   m_TilingRules:
   - m_Id: 15
@@ -266,7 +265,8 @@ MonoBehaviour:
   - m_Id: 9
     m_Sprites:
     - {fileID: 290075495, guid: 379f377ccf5b94cc2b5141620a027966, type: 3}
-    m_GameObject: {fileID: 0}
+    m_GameObject: {fileID: 8626972231468677178, guid: a2d80ed363ab34bd7954142e519cf46c,
+      type: 3}
     m_AnimationSpeed: 1
     m_PerlinScale: 0.5
     m_Output: 0
