@@ -21,5 +21,6 @@ MonoBehaviour:
   down_passage: 1
   is_bush: 0
   is_counter: 0
+  is_trans: 0
   helper_tiles: []
-  sprite: {fileID: -18177134, guid: 0f6f6d8b13d3f487f80f0dd81d4eb94a, type: 3}
+  sprite: {fileID: 1706462780, guid: 2d8c25e8bd2fc4afbb6b5f479f5d0137, type: 3}

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: fe47c6edebc8c426eac187709e138399
+guid: 379f377ccf5b94cc2b5141620a027966
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Water_0
+      name: Water - New_0
       rect:
         serializedVersion: 2
         x: 0
@@ -111,14 +111,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c7444ac39274c4398aa0268b1e680a93
-      internalID: 321434644
+      spriteID: 90bb07965dfb14b1594e145065db7ee3
+      internalID: 290075495
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Water_1
+      name: Water - New_1
       rect:
         serializedVersion: 2
         x: 16
@@ -132,14 +132,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0819a3906c77f4e5080de6f8899f260b
-      internalID: -786920402
+      spriteID: 1644a2cf33a9d46478239cb636920fd1
+      internalID: 697873070
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Water_2
+      name: Water - New_2
       rect:
         serializedVersion: 2
         x: 48
@@ -153,14 +153,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 13aaf680fb0b446f5829a7b01a40ecc9
-      internalID: -284195214
+      spriteID: 3d19decb6e1b2493f98d32c52a8b28ea
+      internalID: -1524381128
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Water_3
+      name: Water - New_3
       rect:
         serializedVersion: 2
         x: 64
@@ -174,14 +174,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a8d0f7f52f44245a8b6c1976f57788a0
-      internalID: -1723665225
+      spriteID: 69eb4baa5362c4d43aec62534940746f
+      internalID: -1931138936
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Water_4
+      name: Water - New_4
       rect:
         serializedVersion: 2
         x: 0
@@ -195,14 +195,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c949915e879504c4c93999f18fac358e
-      internalID: -1852906048
+      spriteID: d26211ded975e43aea6921fcfc1a4e6f
+      internalID: 974441261
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Water_5
+      name: Water - New_5
       rect:
         serializedVersion: 2
         x: 16
@@ -216,14 +216,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 87621f714605e4eef96a4a3aa10cacd5
-      internalID: -392106707
+      spriteID: e664cd93e98ce4e19b399b911c0741cd
+      internalID: 1110104028
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Water_6
+      name: Water - New_6
       rect:
         serializedVersion: 2
         x: 32
@@ -237,14 +237,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9fceea31806a347c7b56463466b8cdfb
-      internalID: -1183666176
+      spriteID: 397303a1afded410c9d0804a44cfada9
+      internalID: -1867257099
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Water_7
+      name: Water - New_7
       rect:
         serializedVersion: 2
         x: 48
@@ -258,14 +258,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f8f8df926394f4e9c86a388bacdd090f
-      internalID: -640392685
+      spriteID: 9ad7a6c3d79054f85b92a5ea300ecfb1
+      internalID: -865008038
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Water_8
+      name: Water - New_8
       rect:
         serializedVersion: 2
         x: 64
@@ -279,14 +279,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7d7a56940b7704522a35aa608b52cc1d
-      internalID: 1578502689
+      spriteID: ca9a5a2ec67fa47479fb4eb3f23da272
+      internalID: 1645832436
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Water_9
+      name: Water - New_9
       rect:
         serializedVersion: 2
         x: 0
@@ -300,14 +300,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 06f8ae9a28cc04e90a7e65534c51bf7f
-      internalID: -1527513770
+      spriteID: 20c23687546004896b0dc48b7d8c0f12
+      internalID: -325147658
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Water_10
+      name: Water - New_10
       rect:
         serializedVersion: 2
         x: 16
@@ -321,14 +321,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2c8627afc6c554ea596a6b6b43a98e23
-      internalID: -1406195941
+      spriteID: 488396241a3c549cb8ad62cf149c3282
+      internalID: 1443396627
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Water_11
+      name: Water - New_11
       rect:
         serializedVersion: 2
         x: 32
@@ -342,14 +342,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 88ec19aea20c24fbc92e9941d09baaa9
-      internalID: -645311613
+      spriteID: 983b9f204863e44408b327339211a036
+      internalID: 1973255856
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Water_12
+      name: Water - New_12
       rect:
         serializedVersion: 2
         x: 48
@@ -363,14 +363,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1069c991de7ec425988c8460cc66165a
-      internalID: -856895463
+      spriteID: 3fad82deea2ab49ee8aa5fed1660f188
+      internalID: -1241706034
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Water_13
+      name: Water - New_13
       rect:
         serializedVersion: 2
         x: 64
@@ -384,14 +384,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c99f72e9c65af4f0ebdeac320dcfd9d4
-      internalID: -1433686794
+      spriteID: c60dd25f434c847aea244ccae6d5ffc3
+      internalID: -530292704
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Water_14
+      name: Water - New_14
       rect:
         serializedVersion: 2
         x: 0
@@ -405,14 +405,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6db31abd4fe864e889f2b8dac4c474ff
-      internalID: 2012069438
+      spriteID: 42f74de5e3c4c4955a6a960c7645b29d
+      internalID: 1488896124
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Water_15
+      name: Water - New_15
       rect:
         serializedVersion: 2
         x: 16
@@ -426,14 +426,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 40dd4655b4bd24756bc0208403a8868b
-      internalID: -1432443599
+      spriteID: fac6a527bc9c94b9ca133ab501f450b7
+      internalID: -1767893564
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Water_16
+      name: Water - New_16
       rect:
         serializedVersion: 2
         x: 32
@@ -447,14 +447,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ac53617a78bf34c1dbc9354a8eaba6c9
-      internalID: -906002972
+      spriteID: 684e82c8136544b659169040519f860d
+      internalID: 1074848955
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Water_17
+      name: Water - New_17
       rect:
         serializedVersion: 2
         x: 48
@@ -468,14 +468,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3f83febe39c9b4b1eb356163110b6d3e
-      internalID: 1192060755
+      spriteID: 46839a7d8595541bd8e3ea2f53535e40
+      internalID: -520378456
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Water_18
+      name: Water - New_18
       rect:
         serializedVersion: 2
         x: 64
@@ -489,8 +489,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aeb2331a2c7c84c21a99fda796814883
-      internalID: -423292956
+      spriteID: 7299c27c520024671a33ba68d3a5ec27
+      internalID: 1958130310
       vertices: []
       indices: 
       edges: []
@@ -506,25 +506,25 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Water_0: 321434644
-      Water_1: -786920402
-      Water_10: -1406195941
-      Water_11: -645311613
-      Water_12: -856895463
-      Water_13: -1433686794
-      Water_14: 2012069438
-      Water_15: -1432443599
-      Water_16: -906002972
-      Water_17: 1192060755
-      Water_18: -423292956
-      Water_2: -284195214
-      Water_3: -1723665225
-      Water_4: -1852906048
-      Water_5: -392106707
-      Water_6: -1183666176
-      Water_7: -640392685
-      Water_8: 1578502689
-      Water_9: -1527513770
+      Water - New_0: 290075495
+      Water - New_1: 697873070
+      Water - New_10: 1443396627
+      Water - New_11: 1973255856
+      Water - New_12: -1241706034
+      Water - New_13: -530292704
+      Water - New_14: 1488896124
+      Water - New_15: -1767893564
+      Water - New_16: 1074848955
+      Water - New_17: -520378456
+      Water - New_18: 1958130310
+      Water - New_2: -1524381128
+      Water - New_3: -1931138936
+      Water - New_4: 974441261
+      Water - New_5: 1110104028
+      Water - New_6: -1867257099
+      Water - New_7: -865008038
+      Water - New_8: 1645832436
+      Water - New_9: -325147658
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

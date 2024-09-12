@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0f6f6d8b13d3f487f80f0dd81d4eb94a
+guid: 2d8c25e8bd2fc4afbb6b5f479f5d0137
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Hill Base_0
+      name: Hill - New_0
       rect:
         serializedVersion: 2
         x: 0
@@ -111,14 +111,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c18ef102fb188496da05c10fee7e4221
-      internalID: -2111742916
+      spriteID: d4cccfa25afc2439db1f14cb5051f6fc
+      internalID: 830567656
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hill Base_1
+      name: Hill - New_1
       rect:
         serializedVersion: 2
         x: 16
@@ -132,14 +132,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a071873cdfeb84971950e7c34f0e1c4f
-      internalID: -1592913906
+      spriteID: f528317395f6c488b8d30cc578d6a419
+      internalID: 625949810
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hill Base_2
+      name: Hill - New_2
       rect:
         serializedVersion: 2
         x: 32
@@ -153,14 +153,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3d90fca7185cf418ab44aa90f6afcc73
-      internalID: -82742821
+      spriteID: f7e795e1a598842479d339768e985dee
+      internalID: -1670614926
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hill Base_3
+      name: Hill - New_3
       rect:
         serializedVersion: 2
         x: 0
@@ -174,14 +174,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 96e6390d7d0e847d6b21124ac4b48c74
-      internalID: 17765616
+      spriteID: 46f7cdecb30054215ae6207544ed0a55
+      internalID: 278127306
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hill Base_4
+      name: Hill - New_4
       rect:
         serializedVersion: 2
         x: 16
@@ -195,14 +195,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fbff5e35bde1741c2afd12362a11e45b
-      internalID: -750305600
+      spriteID: 0e527a9c3062543f7a6614f024f143c6
+      internalID: -831633950
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hill Base_5
+      name: Hill - New_5
       rect:
         serializedVersion: 2
         x: 32
@@ -216,14 +216,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2c38ca384a3c64420a34964c6ebd5621
-      internalID: 643143912
+      spriteID: bcefc765791b54b2e811c9555001da32
+      internalID: -611487365
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hill Base_6
+      name: Hill - New_6
       rect:
         serializedVersion: 2
         x: 0
@@ -237,14 +237,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9718fee1c8d8c4c729b2e60f88fe58e2
-      internalID: 1376261715
+      spriteID: 646bd52dbb41e4e2e8548f506d2f2e25
+      internalID: -1954303003
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hill Base_7
+      name: Hill - New_7
       rect:
         serializedVersion: 2
         x: 32
@@ -258,8 +258,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bf3339ad0c9a048d5bb9b484c9d043fc
-      internalID: -18177134
+      spriteID: 6881b8d282f9b40908e4f594a6ffd251
+      internalID: 1706462780
       vertices: []
       indices: 
       edges: []
@@ -275,14 +275,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Hill Base_0: -2111742916
-      Hill Base_1: -1592913906
-      Hill Base_2: -82742821
-      Hill Base_3: 17765616
-      Hill Base_4: -750305600
-      Hill Base_5: 643143912
-      Hill Base_6: 1376261715
-      Hill Base_7: -18177134
+      Hill - New_0: 830567656
+      Hill - New_1: 625949810
+      Hill - New_2: -1670614926
+      Hill - New_3: 278127306
+      Hill - New_4: -831633950
+      Hill - New_5: -611487365
+      Hill - New_6: -1954303003
+      Hill - New_7: 1706462780
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
