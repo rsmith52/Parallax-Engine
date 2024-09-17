@@ -412,7 +412,10 @@ namespace UnityEngine
                                 sprite.sortingOrder = layer;
                         }
                                
-                        tileData.sprite = null;
+                        if (!IsTilemapFromPalette(map))
+                        {
+                            tileData.sprite = null;
+                        }
                     }
                     
                     break;

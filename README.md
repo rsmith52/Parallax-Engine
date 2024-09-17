@@ -1,16 +1,67 @@
 # Parallax-Engine
 Unity Project for 2.5d Parallax RPG Engine
 
+
+
+# Notes To Remember TODOs
+## Tile Replacements / Credits
+* Switch grass & tree tiles / find credit for them
+* Same with rocks/misc. minor decorations
+
+## Tile object coding
+* "No Pass" tag tiles - should be easy to show in editor but not in runtime
+* 2nd Black tile, on cover layer always, probably doable with terrain tag
+* Reflections on ice, still water, etc.
+* Slide on ice
+* Ice ramps?
+* Sand ramps / landslides?
+
+## Map Managing Code
+* Map awareness can just go in Map object - get positions (pos including Z and or layer as params)
+* Need sight of layers up and down
+* Buttons calling to methods (maybe static) to create new layers above/below
+* Buttons for static functions to load/save maps as well
+* New layers could be full or empty by default? Nice to have
+* Map layers stored in Dict rather than array
+* Map object stores map size? background music
+* Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
+
+## Eventing Code
+* Look into tasks/jobs instead of coroutines
+* Diagonal movement... maybe
+
+## Other things to do
+* Region map - Melanite Style, LoP Region Concept
+* Improve comments / documentation in code
+* Message system - UI should have separate border / fill elements so opacity can be set differently
+* Consider white outlines on characters / events
+
+## Mechanics
+* Level caps -> Store excess XP
+
+
+
+# Ideas
+## Map Regions
+* Dragon area as beautiful valleys, white stone, green grass, maybe some brown mountain mixed in or as caves. Rive/lake that is a dragon shap with island cave?
+* Rome/Greece area should have fall colors
+
+
+
 # Credits
 ## Tilesets
-* Pokemon Umbra Rips
 * PeekyChew
-** The-Red-eX
-** EVoLiNa
+* The-Red-eX
+* EVoLiNa
 * Magiscarf
 * KingTapir
 * Phyromatical
-** zetavares852
+* zetavares852
 * KKKaito
-** BoOmxBiG
+* BoOmxBiG
 * WesleyFG
+* Kyle-Dove
+* zerudez
+
+## Asset Packs
+* Odin Inspector
