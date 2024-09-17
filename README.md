@@ -62,6 +62,8 @@ Unity Project for 2.5d Parallax RPG Engine
 * WesleyFG
 * Kyle-Dove
 * zerudez
+* Hydragirium
+* Alistair
 
 ## Asset Packs
 * Odin Inspector
