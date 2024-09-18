@@ -8,6 +8,16 @@ Unity Project for 2.5d Parallax RPG Engine
 * Switch grass & tree tiles / find credit for them
 * Same with rocks/misc. minor decorations
 
+## Tile Additions / Edits
+* Sand for Beach
+* Mountains
+* Beach Water / Shore
+* Update hills / mountain prefabs to fill in surface as well
+* Update hills / mountains prefabs to auto account for tile gaps when floor doesn't match
+* Enable thin hills / mountains
+* Fix hill / mountain edge by water
+* Switch water & bridges to be ground, not objects
+
 ## Tile object coding
 * "No Pass" tag tiles - should be easy to show in editor but not in runtime
 * 2nd Black tile, on cover layer always, probably doable with terrain tag
@@ -38,6 +48,7 @@ Unity Project for 2.5d Parallax RPG Engine
 
 ## Mechanics
 * Level caps -> Store excess XP
+* Additional pokedex info / research levels like in arceus
 
 
 

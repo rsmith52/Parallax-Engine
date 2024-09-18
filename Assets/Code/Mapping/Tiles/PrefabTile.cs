@@ -81,9 +81,9 @@ namespace Mapping
                         sprite.color = new Color(1,1,1,Constants.TRANS_TILE_ALPHA);
 
                     if (sprite.tag == Constants.PRIORITY_TILE_TAG)
-                        sprite.sortingOrder = layer + 1;
+                        sprite.sortingOrder = layer + Constants.PRIORITY_TILE_OFFSET;
                     else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG)
-                        sprite.sortingOrder = layer - 1;
+                        sprite.sortingOrder = layer - Constants.PRIORITY_TILE_OFFSET;
                     else
                         sprite.sortingOrder = layer;
                 }
@@ -118,9 +118,9 @@ namespace Mapping
             
             foreach (SpriteRenderer sprite in sprites)
                 if (sprite.tag == Constants.PRIORITY_TILE_TAG)
-                    sprite.sortingOrder = layer + 1;
+                    sprite.sortingOrder = layer + Constants.PRIORITY_TILE_OFFSET;
                 else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG)
-                    sprite.sortingOrder = layer - 1;
+                    sprite.sortingOrder = layer - Constants.PRIORITY_TILE_OFFSET;
                 else
                     sprite.sortingOrder = layer;
         }
