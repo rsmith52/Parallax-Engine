@@ -10,13 +10,11 @@ Unity Project for 2.5d Parallax RPG Engine
 
 ## Tile Additions / Edits
 * Sand for Beach
-* Mountains
 * Beach Water / Shore
-* Update hills / mountain prefabs to fill in surface as well
-* Update hills / mountains prefabs to auto account for tile gaps when floor doesn't match
 * Enable thin hills / mountains
 * Fix hill / mountain edge by water
-* Switch water & bridges to be ground, not objects
+* Should bridges be ground of objects? New layer altogether?
+* Fix up stairs
 
 ## Tile object coding
 * "No Pass" tag tiles - should be easy to show in editor but not in runtime
@@ -25,6 +23,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Slide on ice
 * Ice ramps?
 * Sand ramps / landslides?
+* Utility code for calculating sorting layer to not have repeat code in a bunch of places
 
 ## Map Managing Code
 * Map awareness can just go in Map object - get positions (pos including Z and or layer as params)

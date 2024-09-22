@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: -473575885
   m_SortingLayer: 1
   m_SortingOrder: -4
-  m_Sprite: {fileID: -1886870731, guid: 8f7f5dfa7a87b4519b9520393faf5779, type: 3}
+  m_Sprite: {fileID: 625949810, guid: 2d8c25e8bd2fc4afbb6b5f479f5d0137, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 666170992054649941}
   m_Layer: 0
-  m_Name: Mountain Surface Edge
+  m_Name: Hill Surface Edge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

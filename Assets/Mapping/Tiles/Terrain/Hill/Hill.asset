@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Hill
   m_EditorClassIdentifier: 
   terrain_tag: 0
-  has_helper_tiles: 0
   allow_passage: 0
   up_passage: 0
   left_passage: 0
@@ -22,7 +21,6 @@ MonoBehaviour:
   is_bush: 0
   is_counter: 0
   is_trans: 0
-  helper_tiles: []
   m_DefaultSprite: {fileID: 259116524, guid: 3861c6b942ce04f12b0f4d22e709e204, type: 3}
   m_DefaultGameObject: {fileID: 453676825057425070, guid: 6771710127e0e4ac9b78ff2b9b46d26a,
     type: 3}
@@ -273,14 +271,37 @@ MonoBehaviour:
     m_RuleTransform: 0
   - m_Id: 4
     m_Sprites:
-    - {fileID: 0}
-    m_GameObject: {fileID: 0}
+    - {fileID: -831633950, guid: 2d8c25e8bd2fc4afbb6b5f479f5d0137, type: 3}
+    m_GameObject: {fileID: 3498981955474978773, guid: f22efc9b7d0fe49e69057b8b120583a7,
+      type: 3}
     m_AnimationSpeed: 1
     m_PerlinScale: 0.5
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 01000000
+    m_Neighbors: 0100000001000000010000000100000001000000010000000100000001000000
     m_NeighborPositions:
     - {x: 0, y: -1, z: 0}
+    - {x: -1, y: 0, z: 0}
+    - {x: -1, y: 1, z: 0}
+    - {x: 0, y: 1, z: 0}
+    - {x: 1, y: 1, z: 0}
+    - {x: 1, y: 0, z: 0}
+    - {x: 1, y: -1, z: 0}
+    - {x: -1, y: -1, z: 0}
+    m_RuleTransform: 0
+  - m_Id: 14
+    m_Sprites:
+    - {fileID: 625949810, guid: 2d8c25e8bd2fc4afbb6b5f479f5d0137, type: 3}
+    m_GameObject: {fileID: 3498981955474978773, guid: 00130350fea84489f808fb94ed1022f9,
+      type: 3}
+    m_AnimationSpeed: 1
+    m_PerlinScale: 0.5
+    m_Output: 0
+    m_ColliderType: 1
+    m_RandomTransform: 0
+    m_Neighbors: 0100000001000000
+    m_NeighborPositions:
+    - {x: 1, y: 0, z: 0}
+    - {x: -1, y: 0, z: 0}
     m_RuleTransform: 0
