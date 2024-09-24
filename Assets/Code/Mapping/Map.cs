@@ -140,19 +140,33 @@ namespace Mapping
                 0
             );
 
-            // on tile
-            neighbor_tiles.on_tile = (ParallaxTileBase)neighbor_maps.objects.GetTile(int_pos);
-            if (neighbor_tiles.on_tile == null)
-                neighbor_tiles.on_tile = (ParallaxTileBase)neighbor_maps.ground.GetTile(int_pos);
-            if (neighbor_tiles.on_tile == null && neighbor_maps.objects_down != null)
-                neighbor_tiles.on_tile = (ParallaxTileBase)neighbor_maps.objects_down.GetTile(int_pos);
-            if (neighbor_tiles.on_tile == null && neighbor_maps.layer_down != null)
-                neighbor_tiles.on_tile = (ParallaxTileBase)neighbor_maps.layer_down.GetTile(int_pos);
-
-            // up tile
-            // Vector3Int.up
+            neighbor_tiles.on_tile = GetTileAtPosition (neighbor_maps, int_pos);
+            neighbor_tiles.up_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up);
+            neighbor_tiles.left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.left);
+            neighbor_tiles.right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.right);
+            neighbor_tiles.down_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down);
 
             return neighbor_tiles;
+        }
+
+        private ParallaxTileBase GetTileAtPosition (NeighborTilemaps neighbor_maps, Vector3Int pos)
+        {
+            ParallaxTileBase tile = null;
+            
+            if (neighbor_maps.objects_up != null)
+                tile = (ParallaxTileBase)neighbor_maps.objects_up.GetTile(pos);
+            if (tile == null && neighbor_maps.layer_up != null)
+                tile = (ParallaxTileBase)neighbor_maps.layer_up.GetTile(pos);
+            if (tile == null && neighbor_maps.objects != null)
+                tile = (ParallaxTileBase)neighbor_maps.objects.GetTile(pos);
+            if (tile == null && neighbor_maps.ground != null)
+                tile = (ParallaxTileBase)neighbor_maps.ground.GetTile(pos);
+            if (tile == null && neighbor_maps.objects_down != null)
+                tile = (ParallaxTileBase)neighbor_maps.objects_down.GetTile(pos);
+            if (tile == null && neighbor_maps.layer_down != null)
+                tile = (ParallaxTileBase)neighbor_maps.layer_down.GetTile(pos);
+
+            return tile;
         }
 
         #endregion
