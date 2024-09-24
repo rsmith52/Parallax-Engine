@@ -264,6 +264,69 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Mountain Front_8
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c50506a2b984147069842899f57a6732
+      internalID: -1288850714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mountain Front_9
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a28a3bb34bbf14a3a8b7ecf4c4fbf6bd
+      internalID: 1686874952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mountain Front_10
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2dd72250d7e841bb8c29d502a478bc2
+      internalID: -1105732823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -277,12 +340,15 @@ TextureImporter:
     nameFileIdTable:
       Mountain Front_0: -317925349
       Mountain Front_1: 2065115049
+      Mountain Front_10: -1105732823
       Mountain Front_2: 398653671
       Mountain Front_3: 1931621272
       Mountain Front_4: 316072078
       Mountain Front_5: -539074891
       Mountain Front_6: -2092015568
       Mountain Front_7: -1543816474
+      Mountain Front_8: -1288850714
+      Mountain Front_9: 1686874952
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

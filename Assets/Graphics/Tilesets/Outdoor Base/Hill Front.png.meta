@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Hill Front - New_0
+      name: Hill Front_0
       rect:
         serializedVersion: 2
         x: 0
@@ -111,14 +111,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4471022cab1c94a4298e93c8096d4240
-      internalID: 377532164
+      spriteID: d310c7d4a131645018f9b2032605b057
+      internalID: -57828084
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hill Front - New_1
+      name: Hill Front_1
       rect:
         serializedVersion: 2
         x: 16
@@ -132,14 +132,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e743da16284034dbdbda8b4e97d871fb
-      internalID: 259116524
+      spriteID: 5f730c85768094406877a7fca7065fd4
+      internalID: 526506562
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hill Front - New_2
+      name: Hill Front_2
       rect:
         serializedVersion: 2
         x: 32
@@ -153,14 +153,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e0817d4f9c12e4b2e93a242c446d9f62
-      internalID: -219847091
+      spriteID: 5fd068d723a384101a45f242b25e1d52
+      internalID: -1429604827
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hill Front - New_3
+      name: Hill Front_3
       rect:
         serializedVersion: 2
         x: 64
@@ -174,14 +174,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 51a60e6fe0e6a4034933fea2367b876c
-      internalID: 281206968
+      spriteID: 30d362cbe5d7a4792950320efbb7bc89
+      internalID: 521612660
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hill Front - New_4
+      name: Hill Front_4
       rect:
         serializedVersion: 2
         x: 80
@@ -195,14 +195,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 358e5e9825f8c496b8b0a59f55a4364c
-      internalID: -904154377
+      spriteID: 921f7f7cf15204d4a8a1780212be9ad0
+      internalID: -206932791
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hill Front - New_5
+      name: Hill Front_5
       rect:
         serializedVersion: 2
         x: 0
@@ -216,14 +216,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 87192f820c6c148ba88bdab5b162b99d
-      internalID: 728842705
+      spriteID: 18c5905bdc6f84643abf4ac8ed4be64d
+      internalID: 195020121
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hill Front - New_6
+      name: Hill Front_6
       rect:
         serializedVersion: 2
         x: 16
@@ -237,14 +237,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e79e14cc5abf141b9bfdbde0228dbf46
-      internalID: 1071374948
+      spriteID: 95213cea513974a92ba9ff1d319e508a
+      internalID: 119317993
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hill Front - New_7
+      name: Hill Front_7
       rect:
         serializedVersion: 2
         x: 32
@@ -258,8 +258,71 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8fd50f492e257437aa82797cdcbc150c
-      internalID: -980233099
+      spriteID: 664d5a5c29ba94746830ded118ce8bad
+      internalID: 348471811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hill Front_8
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9be8d7a08c177489d930e73d0a0ea63c
+      internalID: 1585611748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hill Front_9
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1792cae48db3044ee9d3fb78ec5c84a2
+      internalID: 158913277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hill Front_10
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 022184634881d4f239cf4043af807b38
+      internalID: 1471750369
       vertices: []
       indices: 
       edges: []
@@ -275,14 +338,17 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Hill Front - New_0: 377532164
-      Hill Front - New_1: 259116524
-      Hill Front - New_2: -219847091
-      Hill Front - New_3: 281206968
-      Hill Front - New_4: -904154377
-      Hill Front - New_5: 728842705
-      Hill Front - New_6: 1071374948
-      Hill Front - New_7: -980233099
+      Hill Front_0: -57828084
+      Hill Front_1: 526506562
+      Hill Front_10: 1471750369
+      Hill Front_2: -1429604827
+      Hill Front_3: 521612660
+      Hill Front_4: -206932791
+      Hill Front_5: 195020121
+      Hill Front_6: 119317993
+      Hill Front_7: 348471811
+      Hill Front_8: 1585611748
+      Hill Front_9: 158913277
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
