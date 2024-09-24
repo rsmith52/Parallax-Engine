@@ -94,7 +94,8 @@ namespace UnityEditor
         SerializedProperty is_counter;
         SerializedProperty is_trans;
         SerializedProperty is_reflective;
-        
+        SerializedProperty is_terrain;
+        SerializedProperty surface_tile;
 
         public virtual void OnEnable()
         {
@@ -116,6 +117,8 @@ namespace UnityEditor
             is_counter = serializedObject.FindProperty("is_counter");
             is_trans = serializedObject.FindProperty("is_trans");
             is_reflective = serializedObject.FindProperty("is_reflective");
+            is_terrain = serializedObject.FindProperty("is_terrain");
+            surface_tile = serializedObject.FindProperty("surface_tile");
         }
 
         public virtual void OnDisable()
@@ -284,7 +287,8 @@ namespace UnityEditor
             EditorGUILayout.PropertyField(is_counter);
             EditorGUILayout.PropertyField(is_trans);
             EditorGUILayout.PropertyField(is_reflective);
-
+            EditorGUILayout.PropertyField(is_terrain);
+            EditorGUILayout.PropertyField(surface_tile);
 
             serializedObject.ApplyModifiedProperties();
 

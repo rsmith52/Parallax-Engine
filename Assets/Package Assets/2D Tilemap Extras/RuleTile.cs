@@ -49,6 +49,10 @@ namespace UnityEngine
         public virtual int m_RotationAngle => 90;
         public int m_RotationCount => 360 / m_RotationAngle;
 
+        // Terrain rule tiles for parallax mapping base layer material
+        public bool is_terrain;
+        public ParallaxTileBase surface_tile;
+
         /// <summary>
         /// The data structure holding the Rule information for matching Rule Tiles with
         /// its neighbors.
