@@ -47,6 +47,9 @@ namespace Mapping
         public ParallaxTileBase left_tile;
         public ParallaxTileBase right_tile;
         public ParallaxTileBase down_tile;
+
+        public ParallaxTileBase above_tile;
+        public ParallaxTileBase below_tile;
     }
 
     #endregion
@@ -72,6 +75,7 @@ namespace Mapping
 
         [Title("Layer Information")]
         public Tilemap[] map_layers;
+        [ReadOnly]
         public Tilemap[] object_layers;
 
         #endregion

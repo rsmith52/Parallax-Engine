@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
   m_Name: Hill
   m_EditorClassIdentifier: 
-  terrain_tag: 0
+  terrain_tag: 1
   allow_passage: 0
   up_passage: 0
   left_passage: 0
@@ -21,10 +21,13 @@ MonoBehaviour:
   is_bush: 0
   is_counter: 0
   is_trans: 0
+  is_reflective: 0
   m_DefaultSprite: {fileID: 526506562, guid: 3861c6b942ce04f12b0f4d22e709e204, type: 3}
   m_DefaultGameObject: {fileID: 453676825057425070, guid: 6771710127e0e4ac9b78ff2b9b46d26a,
     type: 3}
   m_DefaultColliderType: 1
+  is_terrain: 1
+  surface_tile: {fileID: 11400000, guid: cb041f2c091af40a8ad5a531e0af77a5, type: 2}
   m_TilingRules:
   - m_Id: 10
     m_Sprites:

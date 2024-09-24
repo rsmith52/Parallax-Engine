@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
   m_Name: Mountain
   m_EditorClassIdentifier: 
-  terrain_tag: 0
+  terrain_tag: 3
   allow_passage: 0
   up_passage: 0
   left_passage: 0
@@ -21,10 +21,13 @@ MonoBehaviour:
   is_bush: 0
   is_counter: 0
   is_trans: 0
+  is_reflective: 0
   m_DefaultSprite: {fileID: 2065115049, guid: 92b8842731e424c25abb4f2c82df2a11, type: 3}
   m_DefaultGameObject: {fileID: 453676825057425070, guid: 1d86a864ac1c84332bcafed9f812281d,
     type: 3}
   m_DefaultColliderType: 1
+  is_terrain: 1
+  surface_tile: {fileID: 11400000, guid: c0c5852891cb0406394312990390cc25, type: 2}
   m_TilingRules:
   - m_Id: 10
     m_Sprites:
