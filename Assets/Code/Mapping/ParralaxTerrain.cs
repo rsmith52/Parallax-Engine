@@ -18,6 +18,7 @@ namespace Mapping
         Ice,
         Puddle,
         Shore,
+        Underwater,
         // Encounters
         TallGrass,
         ExtraTallGrass,

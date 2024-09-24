@@ -30,6 +30,8 @@ Unity Project for 2.5d Parallax RPG Engine
 * Map layers stored in Dict rather than array
 * Map object stores map size? background music
 * Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
+* Map object holding music reference to play
+* Use terrain of tile below if top tile has none
 
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines
