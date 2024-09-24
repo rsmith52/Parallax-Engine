@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
   m_Name: Flower - White
   m_EditorClassIdentifier: 
-  terrain_tag: 1
-  has_helper_tiles: 0
+  terrain_tag: 0
   allow_passage: 1
   up_passage: 1
   left_passage: 1
@@ -21,7 +20,8 @@ MonoBehaviour:
   down_passage: 1
   is_bush: 0
   is_counter: 0
-  helper_tiles: []
+  is_trans: 0
+  is_reflective: 0
   m_DefaultSprite: {fileID: 327956902, guid: 02ee3aea76d8d48848a5e9b322dbd0bb, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06acc72d434f245648b6d2d5e6d686fe, type: 3}
   m_Name: No Passage
   m_EditorClassIdentifier: 
-  terrain_tag: 25
+  terrain_tag: 26
   allow_passage: 0
   up_passage: 1
   left_passage: 1
@@ -21,4 +21,5 @@ MonoBehaviour:
   is_bush: 0
   is_counter: 0
   is_trans: 0
+  is_reflective: 0
   sprite: {fileID: 2130277202, guid: d6831084ae5c94b2aac9c8473b693a75, type: 3}

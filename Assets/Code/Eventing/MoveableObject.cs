@@ -71,10 +71,12 @@ namespace Eventing
         [EnumPaging]
         public Directions direction = Directions.Down;
         [ReadOnly]
-        public int layer = 0;
+        public int layer;
 
         private float speed;
+        private Map map;
         private Vector3 target_pos;
+
         private SpriteRenderer[] sprites;
         private SpriteMask bush_mask;
 
@@ -106,19 +108,7 @@ namespace Eventing
         //private MapManager map_manager;
         [TabGroup ("Tiles")]
         [ReadOnly]
-        public ParallaxTileBase on_tile;
-        [TabGroup ("Tiles")]
-        [ReadOnly]
-        public ParallaxTileBase up_tile;
-        [TabGroup ("Tiles")]
-        [ReadOnly]
-        public ParallaxTileBase left_tile;
-        [TabGroup ("Tiles")]
-        [ReadOnly]
-        public ParallaxTileBase right_tile;
-        [TabGroup ("Tiles")]
-        [ReadOnly]
-        public ParallaxTileBase down_tile;
+        public NeighborTiles neighbor_tiles;
 
         //private EventManager event_manager;
         [TabGroup ("Events")]
@@ -177,7 +167,7 @@ namespace Eventing
             tile_activated = false;
 
             // Map Awareness Setup
-            // map_manager = FindObjectOfType<MapManager>();
+            map = FindObjectOfType<Map>(); // TODO - better way to find map
             // event_manager = FindObjectOfType<EventManager>();
 
             // Update Animator
@@ -240,12 +230,7 @@ namespace Eventing
             if ((other_moved || moving) && transform.position == target_pos)
             {
                 // Get neighboring tiles
-                // ParallaxTileBase[] neighbor_tiles = map_manager.GetNeighborTiles(this);
-                // on_tile = neighbor_tiles[0];
-                // up_tile = neighbor_tiles[1];
-                // left_tile = neighbor_tiles[2];
-                // right_tile = neighbor_tiles[3];
-                // down_tile = neighbor_tiles[4];
+                neighbor_tiles = map.GetNeighborTiles(this);
 
                 // Notify old neighbor events
                 // foreach (Event e in neighbor_events)
@@ -280,7 +265,7 @@ namespace Eventing
                 other_moved = false;
                 if (!tile_activated)
                 {
-                    tile_activated = ActivateTile(on_tile);
+                    tile_activated = ActivateTile(neighbor_tiles.on_tile);
                 }     
             }
         }
@@ -293,7 +278,7 @@ namespace Eventing
         [Button("Activate Current Tile")]
         private void ManualActivateTile()
         {
-            ActivateTile(on_tile);
+            ActivateTile(neighbor_tiles.on_tile);
         }
 
         private bool ActivateTile(ParallaxTileBase tile)
@@ -483,9 +468,9 @@ namespace Eventing
         public void MoveUp()
         {
             TurnUp();
-            if (move_through_walls || (on_tile != null && up_tile != null &&
-                (up_event == null || up_event.IsPassable()) && on_tile.up_passage &&
-                up_tile.allow_passage && up_tile.down_passage))
+            if (move_through_walls || (neighbor_tiles.on_tile != null && neighbor_tiles.up_tile != null &&
+                (up_event == null || up_event.IsPassable()) && neighbor_tiles.on_tile.up_passage &&
+                neighbor_tiles.up_tile.allow_passage && neighbor_tiles.up_tile.down_passage))
             {
                 target_pos += Vector3.up;
                 moving = true;
@@ -495,9 +480,9 @@ namespace Eventing
         public void MoveLeft()
         {
             TurnLeft();
-            if (move_through_walls || (on_tile != null && left_tile != null &&
-                (left_event == null || left_event.IsPassable()) && on_tile.left_passage &&
-                left_tile.allow_passage && left_tile.right_passage))
+            if (move_through_walls || (neighbor_tiles.on_tile != null && neighbor_tiles.left_tile != null &&
+                (left_event == null || left_event.IsPassable()) && neighbor_tiles.on_tile.left_passage &&
+                neighbor_tiles.left_tile.allow_passage && neighbor_tiles.left_tile.right_passage))
             {
                 target_pos += Vector3.left;
                 moving = true;
@@ -507,10 +492,10 @@ namespace Eventing
         public void MoveRight()
         {
             TurnRight();
-            if (move_through_walls || on_tile.terrain_tag == TerrainTags.StairLeft ||
-                (on_tile != null && right_tile != null &&
-                (right_event == null || right_event.IsPassable()) && on_tile.right_passage &&
-                right_tile.allow_passage && right_tile.left_passage))
+            if (move_through_walls || neighbor_tiles.on_tile.terrain_tag == TerrainTags.StairLeft ||
+                (neighbor_tiles.on_tile != null && neighbor_tiles.right_tile != null &&
+                (right_event == null || right_event.IsPassable()) && neighbor_tiles.on_tile.right_passage &&
+                neighbor_tiles.right_tile.allow_passage && neighbor_tiles.right_tile.left_passage))
             {
                 target_pos += Vector3.right;
                 moving = true;
@@ -520,9 +505,9 @@ namespace Eventing
         public void MoveDown()
         {
             TurnDown();
-            if (move_through_walls || (on_tile != null && down_tile != null &&
-                (down_event == null || down_event.IsPassable()) && on_tile.down_passage &&
-                down_tile.allow_passage && down_tile.up_passage))
+            if (move_through_walls || (neighbor_tiles.on_tile != null && neighbor_tiles.down_tile != null &&
+                (down_event == null || down_event.IsPassable()) && neighbor_tiles.on_tile.down_passage &&
+                neighbor_tiles.down_tile.allow_passage && neighbor_tiles.down_tile.up_passage))
             {
                 target_pos += Vector3.down;
                 moving = true;

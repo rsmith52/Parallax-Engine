@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34a88e4cea08841649b5b7c5cc9b2938, type: 3}
   m_Name: Stairs Right Top
   m_EditorClassIdentifier: 
-  terrain_tag: 17
-  has_helper_tiles: 0
+  terrain_tag: 18
   allow_passage: 1
   up_passage: 1
   left_passage: 1
@@ -22,7 +21,7 @@ MonoBehaviour:
   is_bush: 0
   is_counter: 0
   is_trans: 0
-  helper_tiles: []
+  is_reflective: 0
   preview_sprite: {fileID: -494740107, guid: 3d415827f081042308b997b8e3790536, type: 3}
   prefab: {fileID: 5068168987801625299, guid: 3ca6a45f879614fcd81ea111f5c20b21, type: 3}
   prefab_offset: {x: 0.5, y: 0.5}

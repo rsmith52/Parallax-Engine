@@ -23,7 +23,6 @@ Unity Project for 2.5d Parallax RPG Engine
 
 ### Map Managing Code
 * Map awareness can just go in Map object - get positions (pos including Z and or layer as params)
-* Need sight of layers up and down
 * Buttons calling to methods (maybe static) to create new layers above/below
 * Buttons for static functions to load/save maps as well
 * New layers could be full or empty by default? Nice to have
@@ -37,6 +36,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Look into tasks/jobs instead of coroutines
 * Diagonal movement... maybe
 * Consider what script sprite appearance and layer handling is owned by... moveable object may not make the most sense
+* Better way to find current map
 
 ### Other things to do
 * Region map - Melanite Style, LoP Region Concept

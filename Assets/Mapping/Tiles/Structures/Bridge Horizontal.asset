@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
   m_Name: Bridge Horizontal
   m_EditorClassIdentifier: 
-  terrain_tag: 18
-  has_helper_tiles: 0
+  terrain_tag: 19
   allow_passage: 1
   up_passage: 1
   left_passage: 1
@@ -21,7 +20,8 @@ MonoBehaviour:
   down_passage: 1
   is_bush: 0
   is_counter: 0
-  helper_tiles: []
+  is_trans: 0
+  is_reflective: 0
   m_DefaultSprite: {fileID: 705819770, guid: 3b9d1cbcc5ea848b39f78e050d29b1c3, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
