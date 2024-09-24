@@ -12,9 +12,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Sand for Beach
 * Beach Water / Shore
 * Enable thin hills / mountains
-* Fix hill / mountain edge by water
 * Should bridges be ground of objects? New layer altogether?
-* Fix up stairs
 
 ### Tile object coding
 * "No Pass" tag tiles - should be easy to show in editor but not in runtime
