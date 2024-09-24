@@ -93,6 +93,7 @@ namespace UnityEditor
         SerializedProperty is_bush;
         SerializedProperty is_counter;
         SerializedProperty is_trans;
+        SerializedProperty is_reflective;
         
 
         public virtual void OnEnable()
@@ -114,6 +115,7 @@ namespace UnityEditor
             is_bush = serializedObject.FindProperty("is_bush");
             is_counter = serializedObject.FindProperty("is_counter");
             is_trans = serializedObject.FindProperty("is_trans");
+            is_reflective = serializedObject.FindProperty("is_reflective");
         }
 
         public virtual void OnDisable()
@@ -281,6 +283,7 @@ namespace UnityEditor
             EditorGUILayout.PropertyField(is_bush);
             EditorGUILayout.PropertyField(is_counter);
             EditorGUILayout.PropertyField(is_trans);
+            EditorGUILayout.PropertyField(is_reflective);
 
 
             serializedObject.ApplyModifiedProperties();

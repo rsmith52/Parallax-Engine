@@ -22,7 +22,10 @@ namespace Mapping
 
         public override void GetTileData(Vector3Int pos, ITilemap tilemap, ref TileData tile_data)
         {
-            tile_data.sprite = sprite;
+            if (terrain_tag == TerrainTags.NoPassHelper && Application.isPlaying)
+                tile_data.sprite = null;
+            else
+                tile_data.sprite = sprite;
         }
 
         public override bool StartUp(Vector3Int pos, ITilemap tilemap, GameObject go)

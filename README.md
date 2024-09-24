@@ -15,13 +15,11 @@ Unity Project for 2.5d Parallax RPG Engine
 * Should bridges be ground of objects? New layer altogether?
 
 ### Tile object coding
-* "No Pass" tag tiles - should be easy to show in editor but not in runtime
 * 2nd Black tile, on cover layer always, probably doable with terrain tag
 * Reflections on ice, still water, etc.
 * Slide on ice
 * Ice ramps?
 * Sand ramps / landslides?
-* Utility code for calculating sorting layer to not have repeat code in a bunch of places
 
 ### Map Managing Code
 * Map awareness can just go in Map object - get positions (pos including Z and or layer as params)
@@ -36,6 +34,7 @@ Unity Project for 2.5d Parallax RPG Engine
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines
 * Diagonal movement... maybe
+* Consider what script sprite appearance and layer handling is owned by... moveable object may not make the most sense
 
 ### Other things to do
 * Region map - Melanite Style, LoP Region Concept

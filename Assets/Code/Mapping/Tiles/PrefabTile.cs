@@ -68,25 +68,7 @@ namespace Mapping
                 go.transform.localPosition = new Vector3(go.transform.localPosition.x,
                     go.transform.localPosition.y, prefab_local_z);
 
-                // Set proper layer ordering
-                Tilemap map = tilemap.GetComponent<Tilemap>();
-                TilemapRenderer renderer = map.GetComponent<TilemapRenderer>();
-                int layer = renderer.sortingOrder;
-                SpriteRenderer[] sprites = go.GetComponentsInChildren<SpriteRenderer>();
-                
-                foreach (SpriteRenderer sprite in sprites)
-                {
-                    // Trans tile handling
-                    if (is_trans)
-                        sprite.color = new Color(1,1,1,Constants.TRANS_TILE_ALPHA);
-
-                    if (sprite.tag == Constants.PRIORITY_TILE_TAG)
-                        sprite.sortingOrder = layer + Constants.PRIORITY_TILE_OFFSET;
-                    else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG)
-                        sprite.sortingOrder = layer - Constants.PRIORITY_TILE_OFFSET;
-                    else
-                        sprite.sortingOrder = layer;
-                }
+                SpriteUtils.ConfigurePrefabTileSprites(tilemap.GetComponent<Tilemap>(), go, is_trans);
             }
 
             return true;
@@ -111,18 +93,7 @@ namespace Mapping
             instance.transform.localPosition = new Vector3(instance.transform.localPosition.x,
                 instance.transform.localPosition.y, prefab_local_z);
 
-            // Set proper layer ordering
-            TilemapRenderer renderer = map.GetComponent<TilemapRenderer>();
-            int layer = renderer.sortingOrder;
-            SpriteRenderer[] sprites = instance.GetComponentsInChildren<SpriteRenderer>();
-            
-            foreach (SpriteRenderer sprite in sprites)
-                if (sprite.tag == Constants.PRIORITY_TILE_TAG)
-                    sprite.sortingOrder = layer + Constants.PRIORITY_TILE_OFFSET;
-                else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG)
-                    sprite.sortingOrder = layer - Constants.PRIORITY_TILE_OFFSET;
-                else
-                    sprite.sortingOrder = layer;
+            SpriteUtils.ConfigurePrefabTileSprites(map, instance, is_trans);
         }
 
         #endregion

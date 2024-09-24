@@ -332,25 +332,7 @@ namespace UnityEngine
                 instantiatedGameObject.transform.localRotation = gameObjectRotation;
                 instantiatedGameObject.transform.localScale = gameObjectScale;
 
-                // Set proper layer ordering
-                TilemapRenderer renderer = map.GetComponent<TilemapRenderer>();
-                int layer = renderer.sortingOrder;
-                SpriteRenderer[] sprites = instantiatedGameObject.GetComponentsInChildren<SpriteRenderer>();
-                
-                foreach (SpriteRenderer sprite in sprites)
-                {
-                    // Trans tile handling
-                    if (is_trans)
-                        sprite.color = new Color(1,1,1,Constants.TRANS_TILE_ALPHA);
-
-                    // Priority layer
-                    if (sprite.tag == Constants.PRIORITY_TILE_TAG)
-                        sprite.sortingOrder = layer + Constants.PRIORITY_TILE_OFFSET;
-                    else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG)
-                        sprite.sortingOrder = layer - Constants.PRIORITY_TILE_OFFSET;
-                    else
-                        sprite.sortingOrder = layer;
-                }
+                SpriteUtils.ConfigurePrefabTileSprites(map, instantiatedGameObject, is_trans);
             }
 
             return true;
@@ -371,10 +353,6 @@ namespace UnityEngine
             tileData.colliderType = m_DefaultColliderType;
             tileData.flags = TileFlags.LockTransform;
             tileData.transform = iden;
-
-            Tilemap map = tilemap.GetComponent<Tilemap>();
-            TilemapRenderer renderer = map.GetComponent<TilemapRenderer>();
-            int layer = renderer.sortingOrder;
 
             foreach (TilingRule rule in m_TilingRules)
             {
@@ -398,20 +376,12 @@ namespace UnityEngine
                     tileData.gameObject = rule.m_GameObject;
                     tileData.colliderType = rule.m_ColliderType;
 
+                    Tilemap map = tilemap.GetComponent<Tilemap>();
                     if (tileData.gameObject)
                     {
-                        // Set proper layer ordering
-                        SpriteRenderer[] sprites = rule.m_GameObject.GetComponentsInChildren<SpriteRenderer>();
-                        foreach (SpriteRenderer sprite in sprites)
-                        {
-                            if (sprite.tag == Constants.PRIORITY_TILE_TAG)
-                                sprite.sortingOrder = layer + Constants.PRIORITY_TILE_OFFSET;
-                            else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG)
-                                sprite.sortingOrder = layer - Constants.PRIORITY_TILE_OFFSET;
-                            else
-                                sprite.sortingOrder = layer;
-                        }
+                        SpriteUtils.ConfigurePrefabTileSprites(map, rule.m_GameObject, is_trans);
                                
+                        // Properly hide preview sprites in editor but not in the palette
                         if (!IsTilemapFromPalette(map))
                         {
                             tileData.sprite = null;
