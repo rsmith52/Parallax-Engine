@@ -77,3 +77,6 @@ Unity Project for 2.5d Parallax RPG Engine
 
 ## Asset Packs
 * Odin Inspector
+
+## Music
+* Andrew LiVecchi (MasterOfRevels)
