@@ -61,7 +61,7 @@ namespace Eventing
     #endregion
 
 
-    public class MoveableObject : MonoBehaviour
+    public class MoveableObject : SerializedMonoBehaviour
     {
         #region Fields
 
@@ -70,7 +70,6 @@ namespace Eventing
         public MovementSpeeds movement_speed = MovementSpeeds.Moderate;
         [EnumPaging]
         public Directions direction = Directions.Down;
-        [ReadOnly]
         public int layer;
 
         private float speed;

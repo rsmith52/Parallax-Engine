@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -56,7 +57,7 @@ namespace Mapping
 
 
     [Serializable]
-    public class Map : MonoBehaviour
+    public class Map : SerializedMonoBehaviour
     {
         #region Global
 
@@ -74,9 +75,9 @@ namespace Mapping
         public MapType map_type;
 
         [Title("Layer Information")]
-        public Tilemap[] map_layers;
+        public Dictionary<int, Tilemap> map_layers;
         [ReadOnly]
-        public Tilemap[] object_layers;
+        public Dictionary<int, Tilemap[]> object_layers;
 
         #endregion
 
@@ -95,10 +96,36 @@ namespace Mapping
 
         private void Start()
         {
-            object_layers = new Tilemap[map_layers.Length];
-            for (int i = 0; i < map_layers.Length; i++)
+            object_layers = new Dictionary<int, Tilemap[]>();
+            foreach (KeyValuePair<int, Tilemap> layer in map_layers)
             {
-                object_layers[i] = map_layers[i].GetComponentsInChildren<Tilemap>()[1];
+                int sorting_layer = layer.Value.GetComponent<TilemapRenderer>().sortingOrder;
+                object_layers[layer.Key] = layer.Value.GetComponentsInChildren<Tilemap>().Skip(1).ToArray();
+                for (int i = 0; i < object_layers[layer.Key].Length; i++)
+                {
+                    Tilemap object_layer = object_layers[layer.Key][i];
+                    
+                    // Dynamic set sorting layers
+                    TilemapRenderer renderer = object_layer.GetComponent<TilemapRenderer>();
+                    renderer.sortingOrder = sorting_layer + i;
+
+                    // Instantiate Prefab Tiles
+                    foreach (Vector3Int pos in object_layer.cellBounds.allPositionsWithin)
+                    {
+                        Vector3Int local_place = new Vector3Int(pos.x, pos.y, pos.z);
+
+                        if (object_layer.HasTile(local_place))
+                        {
+                            // Get PrefabTile for this tile
+                            PrefabTile prefab_tile = object_layer.GetTile<PrefabTile>(local_place);
+                            if (!prefab_tile)
+                                continue;
+
+                            // Instantiate prefab game object
+                            prefab_tile.InstantiatePrefab(local_place, object_layer);
+                        }
+                    }
+                }
             }
         }
         
@@ -106,7 +133,7 @@ namespace Mapping
         {
             NeighborTilemaps neighbor_maps = new NeighborTilemaps{};
 
-            foreach (Tilemap map in map_layers)
+            foreach (Tilemap map in map_layers.Values)
             {
                 if (map.transform.position.z == pos.z)
                 {

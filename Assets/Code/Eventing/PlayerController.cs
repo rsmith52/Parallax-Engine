@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using Utilities;
 
 namespace Eventing
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : SerializedMonoBehaviour
     {
         #region Fields
 

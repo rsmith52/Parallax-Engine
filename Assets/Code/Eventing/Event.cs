@@ -18,7 +18,7 @@ namespace Eventing
     #endregion
 
     [Serializable]
-    public class Event : MonoBehaviour
+    public class Event : SerializedMonoBehaviour
     {
         #region Fields
 

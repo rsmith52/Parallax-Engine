@@ -28,13 +28,7 @@ namespace Mapping
         {
             tile_data.sprite = preview_sprite;
             Tilemap map = tilemap.GetComponent<Tilemap>();
-            
             tile_data.gameObject = Application.isPlaying ? null : prefab;
-            if (Application.isPlaying && prefab)
-            {
-                // Only called in Runtime
-                InstantiatePrefab(pos, map, tile_data);
-            }       
 
             if (!IsTilemapFromPalette(map))
             {
@@ -77,7 +71,7 @@ namespace Mapping
         /*
         * Instantiate prefab in runtime.
         */
-        public void InstantiatePrefab(Vector3Int pos, Tilemap map, TileData tile_data)
+        public void InstantiatePrefab(Vector3Int pos, Tilemap map)
         {
             GameObject instance = Instantiate(prefab);
             instance.transform.SetParent(map.transform);

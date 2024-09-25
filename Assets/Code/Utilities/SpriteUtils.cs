@@ -39,7 +39,7 @@ namespace Utilities
             SpriteRenderer[] sprites = go.GetComponentsInChildren<SpriteRenderer>();
             
             foreach (SpriteRenderer sprite in sprites)
-            {
+            {   
                 // Trans tile handling
                 if (is_trans)
                     sprite.color = new Color(1,1,1,Constants.TRANS_TILE_ALPHA);

@@ -22,16 +22,12 @@ Unity Project for 2.5d Parallax RPG Engine
 * Sand ramps / landslides?
 
 ### Map Managing Code
-* Buttons calling to methods (maybe static) to create new layers above/below
+* Buttons calling to methods (maybe static) to create new layers above/below (also delete top/bottom layer)
 * Buttons for static functions to load/save maps as well
 * New layers could be full or empty by default? Nice to have
-* Map layers stored in Dict rather than array
 * Map object stores map size? background music
 * Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
-* Map object holding music reference to play
 * Use terrain of tile below if top tile has none
-* Terrain should be base map layer, with objects / decorations on top.
-* Definitely need 2 layers on top as options
 
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines
