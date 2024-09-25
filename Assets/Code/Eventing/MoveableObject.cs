@@ -193,11 +193,11 @@ namespace Eventing
 
             foreach (SpriteRenderer sprite in sprites)
                 if (sprite.tag == Constants.PRIORITY_TILE_TAG)
-                    sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.OBJECT_SORTING_LAYER_OFFSET + Constants.PRIORITY_TILE_OFFSET;
+                    sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.EVENT_SORTING_LAYER_OFFSET + Constants.PRIORITY_TILE_OFFSET;
                 else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG)
-                    sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.OBJECT_SORTING_LAYER_OFFSET - Constants.PRIORITY_TILE_OFFSET;
+                    sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.EVENT_SORTING_LAYER_OFFSET - Constants.PRIORITY_TILE_OFFSET;
                 else
-                    sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.OBJECT_SORTING_LAYER_OFFSET;
+                    sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.EVENT_SORTING_LAYER_OFFSET;
             
             if (invisible)
                     foreach (SpriteRenderer sprite in sprites)

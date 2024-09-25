@@ -33,11 +33,9 @@ namespace Mapping
     {
         public Tilemap ground;
         public Tilemap layer_up;
-        public Tilemap layer_down;
 
-        public Tilemap objects;
-        public Tilemap objects_up;
-        public Tilemap objects_down;
+        public Tilemap[] objects;
+        public Tilemap[] objects_up;
     }
 
     [Serializable]
@@ -49,8 +47,15 @@ namespace Mapping
         public ParallaxTileBase right_tile;
         public ParallaxTileBase down_tile;
 
-        public ParallaxTileBase above_tile;
-        public ParallaxTileBase below_tile;
+        // public ParallaxTileBase above_tile;
+        // public ParallaxTileBase below_tile;
+    }
+
+    [Serializable]
+    public struct MatchedTile
+    {
+        public ParallaxTileBase tile;
+        public Tilemap map;
     }
 
     #endregion
@@ -128,27 +133,28 @@ namespace Mapping
                 }
             }
         }
+
+        #endregion
+
+
+        #region Map Awareness
         
         private NeighborTilemaps GetNeighborTileMaps (Vector3 pos)
         {
             NeighborTilemaps neighbor_maps = new NeighborTilemaps{};
 
-            foreach (Tilemap map in map_layers.Values)
+            foreach (KeyValuePair<int, Tilemap> layer in map_layers)
             {
+                Tilemap map = layer.Value;
                 if (map.transform.position.z == pos.z)
                 {
                     neighbor_maps.ground = map;
-                    neighbor_maps.objects = map.GetComponentsInChildren<Tilemap>()[1];
+                    neighbor_maps.objects = object_layers[layer.Key];
                 }
                 else if (map.transform.position.z == pos.z - Constants.MAP_LAYER_HEIGHT)
                 {
                     neighbor_maps.layer_up = map;
-                    neighbor_maps.objects_up = map.GetComponentsInChildren<Tilemap>()[1];
-                }
-                else if (map.transform.position.z == pos.z + Constants.MAP_LAYER_HEIGHT)
-                {
-                    neighbor_maps.layer_down = map;
-                    neighbor_maps.objects_down = map.GetComponentsInChildren<Tilemap>()[1];
+                    neighbor_maps.objects_up = object_layers[layer.Key];
                 }
             }
             
@@ -182,22 +188,56 @@ namespace Mapping
 
         private ParallaxTileBase GetTileAtPosition (NeighborTilemaps neighbor_maps, Vector3Int pos)
         {
-            ParallaxTileBase tile = null;
+            MatchedTile matched_tile = new MatchedTile{};
             
-            if (neighbor_maps.objects_up != null)
-                tile = (ParallaxTileBase)neighbor_maps.objects_up.GetTile(pos);
-            if (tile == null && neighbor_maps.layer_up != null)
-                tile = (ParallaxTileBase)neighbor_maps.layer_up.GetTile(pos);
-            if (tile == null && neighbor_maps.objects != null)
-                tile = (ParallaxTileBase)neighbor_maps.objects.GetTile(pos);
-            if (tile == null && neighbor_maps.ground != null)
-                tile = (ParallaxTileBase)neighbor_maps.ground.GetTile(pos);
-            if (tile == null && neighbor_maps.objects_down != null)
-                tile = (ParallaxTileBase)neighbor_maps.objects_down.GetTile(pos);
-            if (tile == null && neighbor_maps.layer_down != null)
-                tile = (ParallaxTileBase)neighbor_maps.layer_down.GetTile(pos);
+            // Check Layer Up
+            matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.layer_up, neighbor_maps.objects_up);
+            
+            // Check Current Layer
+            if (matched_tile.tile == null)
+                matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.ground, neighbor_maps.objects);
+            
+            // Handle terrain tiles
+            if (matched_tile.tile != null)
+            {
+                RuleTile ruletile = matched_tile.tile as RuleTile;
+                if (ruletile != null)
+                {
+                    matched_tile.tile = ConvertTerrainRuleTile(ruletile, matched_tile.map, pos);
+                }
+            }
+            return matched_tile.tile;
+        }
 
-            return tile;
+        private MatchedTile CheckTilePositionOnLayer (MatchedTile matched_tile, Vector3Int pos, Tilemap layer, Tilemap[] objects)
+        {
+            if (matched_tile.tile == null && objects != null)
+            {
+                for (int i = objects.Length - 1; i >= 0; i--)
+                {
+                    if (matched_tile.tile)
+                        break;
+                    matched_tile.tile = (ParallaxTileBase)objects[i].GetTile(pos);
+                    matched_tile.map = objects[i];
+                }
+            }
+            if (matched_tile.tile == null && layer != null)
+            {
+                matched_tile.tile = (ParallaxTileBase)layer.GetTile(pos);
+                matched_tile.map = layer;
+            }
+
+            return matched_tile;
+        }
+
+        private ParallaxTileBase ConvertTerrainRuleTile(RuleTile ruletile, Tilemap matched_map, Vector3Int pos)
+        {
+            if (!ruletile.is_terrain) return ruletile;
+            
+            if (matched_map.GetTile(pos).Equals(ruletile))
+                Debug.Log(ruletile.name);
+
+            return ruletile;
         }
 
         #endregion
