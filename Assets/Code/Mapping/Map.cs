@@ -186,7 +186,7 @@ namespace Mapping
             return neighbor_tiles;
         }
 
-        private ParallaxTileBase GetTileAtPosition (NeighborTilemaps neighbor_maps, Vector3Int pos)
+        private ParallaxTileBase GetTileAtPosition (NeighborTilemaps neighbor_maps, Vector3Int pos, bool recursive = false)
         {
             MatchedTile matched_tile = new MatchedTile{};
             
@@ -202,8 +202,13 @@ namespace Mapping
             {
                 RuleTile ruletile = matched_tile.tile as RuleTile;
                 if (ruletile != null)
-                {
                     matched_tile.tile = ConvertTerrainRuleTile(ruletile, matched_tile.map, pos);
+                if (!recursive)
+                {
+                    ParallaxTileBase up_tile = GetTileAtPosition(neighbor_maps, pos + Vector3Int.up, true);
+                    RuleTile up_ruletile = up_tile as RuleTile;
+                    if (up_ruletile != null && up_ruletile.is_terrain && up_ruletile.is_double_tall)
+                        matched_tile.tile = up_ruletile;
                 }
             }
             return matched_tile.tile;

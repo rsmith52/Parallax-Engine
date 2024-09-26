@@ -95,6 +95,7 @@ namespace UnityEditor
         SerializedProperty is_trans;
         SerializedProperty is_reflective;
         SerializedProperty is_terrain;
+        SerializedProperty is_double_tall;
         SerializedProperty surface_tile;
         SerializedProperty surface_edge;
 
@@ -119,6 +120,7 @@ namespace UnityEditor
             is_trans = serializedObject.FindProperty("is_trans");
             is_reflective = serializedObject.FindProperty("is_reflective");
             is_terrain = serializedObject.FindProperty("is_terrain");
+            is_double_tall = serializedObject.FindProperty("is_double_tall");
             surface_tile = serializedObject.FindProperty("surface_tile");
             surface_edge = serializedObject.FindProperty("surface_edge");
         }
@@ -290,6 +292,7 @@ namespace UnityEditor
             EditorGUILayout.PropertyField(is_trans);
             EditorGUILayout.PropertyField(is_reflective);
             EditorGUILayout.PropertyField(is_terrain);
+            EditorGUILayout.PropertyField(is_double_tall);
             EditorGUILayout.PropertyField(surface_tile);
             EditorGUILayout.PropertyField(surface_edge);
 
