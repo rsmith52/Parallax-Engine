@@ -28,6 +28,7 @@ MonoBehaviour:
   m_DefaultColliderType: 1
   is_terrain: 1
   surface_tile: {fileID: 11400000, guid: c0c5852891cb0406394312990390cc25, type: 2}
+  surface_edge: {fileID: 11400000, guid: fa833066b00ff40069872d116146f303, type: 2}
   m_TilingRules:
   - m_Id: 10
     m_Sprites:

@@ -96,6 +96,7 @@ namespace UnityEditor
         SerializedProperty is_reflective;
         SerializedProperty is_terrain;
         SerializedProperty surface_tile;
+        SerializedProperty surface_edge;
 
         public virtual void OnEnable()
         {
@@ -119,6 +120,7 @@ namespace UnityEditor
             is_reflective = serializedObject.FindProperty("is_reflective");
             is_terrain = serializedObject.FindProperty("is_terrain");
             surface_tile = serializedObject.FindProperty("surface_tile");
+            surface_edge = serializedObject.FindProperty("surface_edge");
         }
 
         public virtual void OnDisable()
@@ -289,6 +291,7 @@ namespace UnityEditor
             EditorGUILayout.PropertyField(is_reflective);
             EditorGUILayout.PropertyField(is_terrain);
             EditorGUILayout.PropertyField(surface_tile);
+            EditorGUILayout.PropertyField(surface_edge);
 
             serializedObject.ApplyModifiedProperties();
 

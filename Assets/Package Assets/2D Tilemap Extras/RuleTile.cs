@@ -52,6 +52,7 @@ namespace UnityEngine
         // Terrain rule tiles for parallax mapping base layer material
         public bool is_terrain;
         public ParallaxTileBase surface_tile;
+        public ParallaxTileBase surface_edge;
 
         /// <summary>
         /// The data structure holding the Rule information for matching Rule Tiles with

@@ -29,6 +29,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
 * Use terrain of tile below if top tile has none
 * Above/below tile awareness for diving
+* Auto place no movement tile below terrain
 
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines

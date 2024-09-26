@@ -172,8 +172,8 @@ namespace Mapping
             NeighborTiles neighbor_tiles = new NeighborTiles{};
 
             Vector3Int int_pos = new Vector3Int (
-                (int)(pos.x - 0.5f),
-                (int)(pos.y - 0.5f),
+                (int)(pos.x),
+                (int)(pos.y),
                 0
             );
 
@@ -233,11 +233,38 @@ namespace Mapping
         private ParallaxTileBase ConvertTerrainRuleTile(RuleTile ruletile, Tilemap matched_map, Vector3Int pos)
         {
             if (!ruletile.is_terrain) return ruletile;
-            
-            if (matched_map.GetTile(pos).Equals(ruletile))
-                Debug.Log(ruletile.name);
+            string tile_name = ruletile.name;
+            ParallaxTileBase check_tile;
 
-            return ruletile;
+            // Check Left
+            check_tile = (ParallaxTileBase)matched_map.GetTile(pos + Vector3Int.left);
+            if (check_tile == null || check_tile.name != tile_name) return ruletile;
+            
+            // Check Right
+            check_tile = (ParallaxTileBase)matched_map.GetTile(pos + Vector3Int.right);
+            if (check_tile == null || check_tile.name != tile_name) return ruletile;
+
+            // Check Down
+            check_tile = (ParallaxTileBase)matched_map.GetTile(pos + Vector3Int.down);
+            if (check_tile == null || check_tile.name != tile_name) return ruletile;
+
+            // Check Lower Corners
+            check_tile = (ParallaxTileBase)matched_map.GetTile(pos + Vector3Int.down + Vector3Int.left);
+            if (check_tile == null || check_tile.name != tile_name) return ruletile;
+            check_tile = (ParallaxTileBase)matched_map.GetTile(pos + Vector3Int.down + Vector3Int.right);
+            if (check_tile == null || check_tile.name != tile_name) return ruletile;
+
+            // Check Up
+            check_tile = (ParallaxTileBase)matched_map.GetTile(pos + Vector3Int.up);
+            if (check_tile == null || check_tile.name != tile_name) return ruletile.surface_edge;
+
+            // Check Upper Corners
+            check_tile = (ParallaxTileBase)matched_map.GetTile(pos + Vector3Int.up + Vector3Int.left);
+            if (check_tile == null || check_tile.name != tile_name) return ruletile.surface_edge;
+            check_tile = (ParallaxTileBase)matched_map.GetTile(pos + Vector3Int.up + Vector3Int.right);
+            if (check_tile == null || check_tile.name != tile_name) return ruletile.surface_edge;
+
+            return ruletile.surface_tile;
         }
 
         #endregion
