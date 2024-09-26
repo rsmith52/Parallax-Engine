@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Mapping
@@ -47,6 +48,20 @@ namespace Mapping
 
     public class ParallaxTerrain
     {
-        
+        #region Static Methods
+
+        public static bool IsStairTile(TerrainTags terrain_tag)
+        {
+            TerrainTags[] stair_tags = new TerrainTags[] { TerrainTags.StairUp, TerrainTags.StairLeft, TerrainTags.StairRight };
+            return stair_tags.Contains(terrain_tag);
+        }
+
+        public static bool IsWaterTile(TerrainTags terrain_tag)
+        {
+            TerrainTags[] water_tags = new TerrainTags[] { TerrainTags.WaterStill, TerrainTags.WaterOcean, TerrainTags.DeepWater };
+            return water_tags.Contains(terrain_tag);
+        }
+
+        #endregion
     }
 }

@@ -29,6 +29,8 @@ Unity Project for 2.5d Parallax RPG Engine
 * Map object stores map size? background music
 * Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
 * Above/below tile awareness for diving
+* Detection for while on water looking at edges
+* Detection for under water in general
 
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines

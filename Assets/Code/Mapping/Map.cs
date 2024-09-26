@@ -33,9 +33,11 @@ namespace Mapping
     {
         public Tilemap ground;
         public Tilemap layer_up;
+        public Tilemap layer_down;
 
         public Tilemap[] objects;
         public Tilemap[] objects_up;
+        public Tilemap[] objects_down;
     }
 
     [Serializable]
@@ -47,8 +49,8 @@ namespace Mapping
         public ParallaxTileBase right_tile;
         public ParallaxTileBase down_tile;
 
-        // public ParallaxTileBase above_tile;
-        // public ParallaxTileBase below_tile;
+        public ParallaxTileBase above_tile;
+        public ParallaxTileBase below_tile;
     }
 
     [Serializable]
@@ -56,6 +58,7 @@ namespace Mapping
     {
         public ParallaxTileBase tile;
         public Tilemap map;
+        public bool object_match;
     }
 
     #endregion
@@ -156,6 +159,11 @@ namespace Mapping
                     neighbor_maps.layer_up = map;
                     neighbor_maps.objects_up = object_layers[layer.Key];
                 }
+                else if (map.transform.position.z == pos.z + Constants.MAP_LAYER_HEIGHT)
+                {
+                    neighbor_maps.layer_down = map;
+                    neighbor_maps.objects_down = object_layers[layer.Key];
+                }
             }
             
             return neighbor_maps;
@@ -170,6 +178,8 @@ namespace Mapping
         {
             NeighborTilemaps neighbor_maps = GetNeighborTileMaps(pos);
             NeighborTiles neighbor_tiles = new NeighborTiles{};
+            bool on_stairs = false;
+            bool on_water = false;
 
             Vector3Int int_pos = new Vector3Int (
                 (int)(pos.x),
@@ -178,17 +188,29 @@ namespace Mapping
             );
 
             neighbor_tiles.on_tile = GetTileAtPosition (neighbor_maps, int_pos).tile;
+            if (neighbor_tiles.on_tile != null)
+            {
+                on_stairs = (neighbor_tiles.on_tile != null && ParallaxTerrain.IsStairTile(neighbor_tiles.on_tile.terrain_tag));
+                on_water = (neighbor_tiles.on_tile != null && ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile.terrain_tag));
+            }
+        
             neighbor_tiles.up_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up).tile;
-            neighbor_tiles.left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.left).tile;
-            neighbor_tiles.right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.right).tile;
-            neighbor_tiles.down_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down).tile;
+            neighbor_tiles.left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.left, on_stairs).tile;
+            neighbor_tiles.right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.right, on_stairs).tile;
+            neighbor_tiles.down_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down, on_stairs).tile;
+
+            neighbor_tiles.above_tile = CheckTilePositionOnLayer (new MatchedTile{}, int_pos + Vector3Int.up, neighbor_maps.layer_up, neighbor_maps.objects_up).tile;
+            if (on_water && neighbor_tiles.down_tile != null && ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile.terrain_tag))
+                neighbor_tiles.below_tile = CheckTilePositionOnLayer (new MatchedTile{}, int_pos + Vector3Int.down, neighbor_maps.layer_down, neighbor_maps.objects_down).tile;
 
             return neighbor_tiles;
         }
 
-        private MatchedTile GetTileAtPosition (NeighborTilemaps neighbor_maps, Vector3Int pos)
+        private MatchedTile GetTileAtPosition (NeighborTilemaps neighbor_maps, Vector3Int pos,
+                                                bool on_stairs = false, bool on_water = false)
         {
             MatchedTile matched_tile = new MatchedTile{};
+            matched_tile.object_match = false;
             
             // Check Layer Up
             matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.layer_up, neighbor_maps.objects_up, true);
@@ -196,38 +218,24 @@ namespace Mapping
             // Check Current Layer
             if (matched_tile.tile == null)
                 matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.ground, neighbor_maps.objects);
+
+            // Check Layer Down in special cases
+            if (on_stairs && matched_tile.tile == null)
+                matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.layer_down, neighbor_maps.objects_down);
             
             // Handle terrain tiles
-            if (matched_tile.tile != null)
+            if (matched_tile.tile != null && !matched_tile.object_match)
             {
-                // Detect proper surface / edge
                 RuleTile ruletile = matched_tile.tile as RuleTile;
                 if (ruletile != null)
                 {
+                    // Detect proper surface / edge
                     matched_tile.tile = ConvertTerrainRuleTile(ruletile, matched_tile.map, pos);
                     
                     // Handle stairs
-                    MatchedTile down_tile = new MatchedTile{};
-                    down_tile = CheckTilePositionOnLayer(down_tile, pos + Vector3Int.down, neighbor_maps.ground, neighbor_maps.objects);
-                    if (down_tile.tile != null && down_tile.tile.terrain_tag == TerrainTags.StairUp && ruletile.surface_tile != null)
-                    {
-                        matched_tile.tile = ruletile.surface_tile;
-                        return matched_tile;
-                    }
-                    down_tile = new MatchedTile{};
-                    down_tile = CheckTilePositionOnLayer(down_tile, pos + Vector3Int.down + Vector3Int.left, neighbor_maps.ground, neighbor_maps.objects);
-                    if (down_tile.tile != null && down_tile.tile.terrain_tag == TerrainTags.StairUp && ruletile.surface_tile != null)
-                    {
-                        matched_tile.tile = ruletile.surface_tile;
-                        return matched_tile;
-                    }
-                    down_tile = new MatchedTile{};
-                    down_tile = CheckTilePositionOnLayer(down_tile, pos + Vector3Int.down + Vector3Int.right, neighbor_maps.ground, neighbor_maps.objects);
-                    if (down_tile.tile != null && down_tile.tile.terrain_tag == TerrainTags.StairUp && ruletile.surface_tile != null)
-                    {
-                        matched_tile.tile = ruletile.surface_tile;
-                        return matched_tile;
-                    }
+                    matched_tile = StairTileHelper(matched_tile, ruletile, pos + Vector3Int.down, neighbor_maps.ground, neighbor_maps.objects);
+                    matched_tile = StairTileHelper(matched_tile, ruletile, pos + Vector3Int.down + Vector3Int.left, neighbor_maps.ground, neighbor_maps.objects);
+                    matched_tile = StairTileHelper(matched_tile, ruletile, pos + Vector3Int.down + Vector3Int.right, neighbor_maps.ground, neighbor_maps.objects);
                 }
 
                 // Extend double tall terrain front edges
@@ -259,6 +267,7 @@ namespace Mapping
                     {
                         matched_tile.tile = checked_tile;
                         matched_tile.map = objects[i];
+                        matched_tile.object_match = true;
                     }
 
                     // Ignore bridges on layer above, see the ground on current level instead
@@ -317,6 +326,16 @@ namespace Mapping
             if (check_tile == null || check_tile.name != tile_name) return ruletile.surface_edge;
 
             return ruletile.surface_tile;
+        }
+
+        private MatchedTile StairTileHelper(MatchedTile matched_tile, RuleTile ruletile, Vector3Int offset_pos, Tilemap layer, Tilemap[] objects)
+        {
+            MatchedTile down_tile = new MatchedTile{};
+            down_tile = CheckTilePositionOnLayer(down_tile, offset_pos, layer, objects);
+            if (down_tile.tile != null && down_tile.tile.terrain_tag == TerrainTags.StairUp && ruletile.surface_tile != null)
+                matched_tile.tile = ruletile.surface_tile;
+
+            return matched_tile;
         }
 
         #endregion

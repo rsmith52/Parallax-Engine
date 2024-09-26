@@ -26,6 +26,10 @@ MonoBehaviour:
   m_DefaultGameObject: {fileID: 8626972231468677178, guid: a2d80ed363ab34bd7954142e519cf46c,
     type: 3}
   m_DefaultColliderType: 1
+  is_terrain: 0
+  is_double_tall: 0
+  surface_tile: {fileID: 0}
+  surface_edge: {fileID: 0}
   m_TilingRules:
   - m_Id: 15
     m_Sprites:
@@ -79,7 +83,7 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 0100000001000000010000000100000002000000020000000200000002000000
+    m_Neighbors: 01000000010000000100000001000000020000000200000002000000
     m_NeighborPositions:
     - {x: -1, y: 1, z: 0}
     - {x: 0, y: 1, z: 0}
@@ -87,7 +91,6 @@ MonoBehaviour:
     - {x: 1, y: 0, z: 0}
     - {x: -1, y: 0, z: 0}
     - {x: -1, y: -1, z: 0}
-    - {x: 1, y: -1, z: 0}
     - {x: 0, y: -1, z: 0}
     m_RuleTransform: 0
   - m_Id: 16
@@ -100,13 +103,12 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 0100000001000000010000000100000002000000020000000200000002000000
+    m_Neighbors: 01000000010000000100000001000000020000000200000002000000
     m_NeighborPositions:
     - {x: 1, y: 1, z: 0}
     - {x: 0, y: 1, z: 0}
     - {x: -1, y: 1, z: 0}
     - {x: -1, y: 0, z: 0}
-    - {x: -1, y: -1, z: 0}
     - {x: 0, y: -1, z: 0}
     - {x: 1, y: -1, z: 0}
     - {x: 1, y: 0, z: 0}

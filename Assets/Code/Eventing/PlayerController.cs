@@ -124,19 +124,28 @@ namespace Eventing
             }
 
             // Handle Debug Inputs
-            // if (Input.GetKeyDown(KeyCode.Space))
-            // {
-            //     if (player_mover.move_through_walls)
-            //         player_mover.MoveThroughWallsOn();
-            //     else
-            //         player_mover.MoveThroughWallsOff();
-            // }
             if (Application.isEditor)
             {
+                // Move through walls
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    if (player_mover.move_through_walls)
+                        player_mover.MoveThroughWallsOn();
+                    else
+                        player_mover.MoveThroughWallsOff();
+                }
+
+                // Shift layers
                 if (Input.GetKeyDown(Controls.SHIFT_LAYER_UP))
+                {
                     player_mover.MoveLayerUp();
+                    player_mover.MoveUp();
+                }
                 else if (Input.GetKeyDown(Controls.SHIFT_LAYER_DOWN))
+                {
                     player_mover.MoveLayerDown();
+                    player_mover.MoveDown();
+                }
             }
         }
 
