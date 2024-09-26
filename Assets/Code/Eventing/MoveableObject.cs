@@ -104,7 +104,6 @@ namespace Eventing
         [ReadOnly]
         public bool tile_activated;
 
-        //private MapManager map_manager;
         [TabGroup ("Tiles")]
         [ReadOnly]
         public NeighborTiles neighbor_tiles;
@@ -282,14 +281,107 @@ namespace Eventing
 
         private bool ActivateTile(ParallaxTileBase tile)
         {
-            // TODO
+            // No tile, must be moving through walls
+            if (tile == null)
+                return true;
+
+            // Bush Flag
+            if (tile.is_bush)
+                in_bush = true; // TODO - bush animation
+            else
+                in_bush = false;
+
             return true;
         }
 
         private bool ActivateTile(Vector3 move_dir)
         {
-            // TODO
-            return true;
+            // Skip activation while in debug
+            if (move_dir == null || move_through_walls)
+                return true;
+
+            if (Mathf.Abs(move_dir.x) > 0)
+            {
+                // Move Right
+                if (move_dir.x > 0)
+                {
+                    // Move Onto Right Stairs
+                    if (neighbor_tiles.right_tile.terrain_tag == TerrainTags.StairRight)
+                    {
+                        CancelMovement();
+                        MoveLayerUp();
+                        MoveUpRight();
+                        return ActivateTile(neighbor_tiles.up_right_tile);
+                    }
+                    // Move Off Left Stairs
+                    else if (neighbor_tiles.on_tile.terrain_tag == TerrainTags.StairLeft)
+                    {
+                        CancelMovement();
+                        MoveLayerDown();
+                        MoveDownRight();
+                        return ActivateTile(neighbor_tiles.down_right_tile);
+                    }
+                    return ActivateTile(neighbor_tiles.right_tile);
+                }
+                // Move Left
+                else if (move_dir.x < 0)
+                {
+                    // Move Onto Left Stairs
+                    if (neighbor_tiles.left_tile.terrain_tag == TerrainTags.StairLeft)
+                    {
+                        CancelMovement();
+                        MoveLayerUp();
+                        MoveUpLeft();
+                        return ActivateTile(neighbor_tiles.up_left_tile);
+                    }
+                    // Move Off Right Stairs
+                    else if (neighbor_tiles.on_tile.terrain_tag == TerrainTags.StairRight)
+                    {
+                        CancelMovement();
+                        MoveLayerDown();
+                        MoveDownLeft();
+                        return ActivateTile(neighbor_tiles.down_left_tile);
+                    }
+                    return ActivateTile(neighbor_tiles.left_tile);
+                }
+            }
+            else if (Mathf.Abs(move_dir.y) > 0)
+            {
+                // Move Up
+                if (move_dir.y > 0)
+                {
+                    // Move Into Bush
+                    if (neighbor_tiles.up_tile.is_bush && move_dir.y == 0)
+                        return ActivateTile(neighbor_tiles.up_tile);
+                    // Move Out of Bush
+                    else if (neighbor_tiles.on_tile.is_bush && !neighbor_tiles.up_tile.is_bush && move_dir.y < 0.5f)
+                        return ActivateTile(neighbor_tiles.up_tile);
+                    // Move Off Up Stairs
+                    else if (neighbor_tiles.on_tile.terrain_tag == TerrainTags.StairUp)
+                    {
+                        MoveLayerUp();
+                        return ActivateTile(neighbor_tiles.up_tile);
+                    }
+                }
+                // Move Down
+                else if (move_dir.y < 0)
+                {
+                    // Move Into Bush
+                    if (neighbor_tiles.down_tile.is_bush && move_dir.y > -0.5f)
+                        return ActivateTile(neighbor_tiles.down_tile);
+                    // Move Out of Bush
+                    else if (neighbor_tiles.on_tile.is_bush && !neighbor_tiles.down_tile.is_bush && move_dir.y > -0.5f)
+                        return ActivateTile(neighbor_tiles.down_tile);
+                    // Move Onto Up Stairs
+                    else if (neighbor_tiles.down_tile.terrain_tag == TerrainTags.StairUp)
+                    {
+                        MoveLayerDown();
+                        return ActivateTile(neighbor_tiles.down_tile);
+                    }
+                }
+            }
+
+            return false;
         }
 
         [Button("Activate Event")]
@@ -518,6 +610,20 @@ namespace Eventing
         {
             TurnLeft();
             target_pos += Vector3.up + Vector3.left;
+            moving = true;
+            tile_activated = false;
+        }
+        public void MoveUpRight()
+        {
+            TurnRight();
+            target_pos += Vector3.up + Vector3.right;
+            moving = true;
+            tile_activated = false;
+        }
+        public void MoveDownLeft()
+        {
+            TurnLeft();
+            target_pos += Vector3.down + Vector3.left;
             moving = true;
             tile_activated = false;
         }

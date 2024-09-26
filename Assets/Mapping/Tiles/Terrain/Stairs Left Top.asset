@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   terrain_tag: 17
   allow_passage: 1
-  up_passage: 1
+  up_passage: 0
   left_passage: 1
-  right_passage: 1
+  right_passage: 0
   down_passage: 1
   is_bush: 0
   is_counter: 0

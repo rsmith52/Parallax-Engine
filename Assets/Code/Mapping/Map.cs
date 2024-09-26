@@ -44,10 +44,16 @@ namespace Mapping
     public struct NeighborTiles
     {
         public ParallaxTileBase on_tile;
+
         public ParallaxTileBase up_tile;
         public ParallaxTileBase left_tile;
         public ParallaxTileBase right_tile;
         public ParallaxTileBase down_tile;
+
+        public ParallaxTileBase up_left_tile;
+        public ParallaxTileBase up_right_tile;
+        public ParallaxTileBase down_left_tile;
+        public ParallaxTileBase down_right_tile;
 
         public ParallaxTileBase above_tile;
         public ParallaxTileBase below_tile;
@@ -187,6 +193,7 @@ namespace Mapping
                 0
             );
 
+            // Current Tile - modifies some behavior of neighbor tile detection/perception
             neighbor_tiles.on_tile = GetTileAtPosition (neighbor_maps, int_pos).tile;
             if (neighbor_tiles.on_tile != null)
             {
@@ -194,11 +201,19 @@ namespace Mapping
                 on_water = (neighbor_tiles.on_tile != null && ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile.terrain_tag));
             }
         
-            neighbor_tiles.up_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up).tile;
+            // Same Level Neighbors
+            neighbor_tiles.up_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up, on_stairs).tile;
             neighbor_tiles.left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.left, on_stairs).tile;
             neighbor_tiles.right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.right, on_stairs).tile;
             neighbor_tiles.down_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down, on_stairs).tile;
 
+            // Corner Neighbors
+            neighbor_tiles.up_left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up + Vector3Int.left, on_stairs).tile;
+            neighbor_tiles.up_right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up + Vector3Int.right, on_stairs).tile;
+            neighbor_tiles.down_left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down + Vector3Int.left, on_stairs).tile;
+            neighbor_tiles.down_right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down + Vector3Int.right, on_stairs).tile;
+
+            // Above / Below Level Neighbors - primarily bridge & water use
             neighbor_tiles.above_tile = CheckTilePositionOnLayer (new MatchedTile{}, int_pos + Vector3Int.up, neighbor_maps.layer_up, neighbor_maps.objects_up).tile;
             if (on_water && neighbor_tiles.down_tile != null && ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile.terrain_tag))
                 neighbor_tiles.below_tile = CheckTilePositionOnLayer (new MatchedTile{}, int_pos + Vector3Int.down, neighbor_maps.layer_down, neighbor_maps.objects_down).tile;
@@ -206,8 +221,7 @@ namespace Mapping
             return neighbor_tiles;
         }
 
-        private MatchedTile GetTileAtPosition (NeighborTilemaps neighbor_maps, Vector3Int pos,
-                                                bool on_stairs = false, bool on_water = false)
+        private MatchedTile GetTileAtPosition (NeighborTilemaps neighbor_maps, Vector3Int pos, bool on_stairs = false)
         {
             MatchedTile matched_tile = new MatchedTile{};
             matched_tile.object_match = false;
@@ -275,6 +289,7 @@ namespace Mapping
                     {
                         matched_tile.tile = null;
                         matched_tile.map = null;
+                        matched_tile.object_match = false;
                     }
                 }
             }

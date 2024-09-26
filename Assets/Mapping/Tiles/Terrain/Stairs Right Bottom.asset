@@ -16,8 +16,8 @@ MonoBehaviour:
   allow_passage: 1
   up_passage: 1
   left_passage: 1
-  right_passage: 1
-  down_passage: 1
+  right_passage: 0
+  down_passage: 0
   is_bush: 0
   is_counter: 0
   is_trans: 0

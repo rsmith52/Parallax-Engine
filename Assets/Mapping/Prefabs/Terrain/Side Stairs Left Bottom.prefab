@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 1465922847159699039}
   m_Layer: 0
   m_Name: Bottom
-  m_TagString: DePriority Tile
+  m_TagString: Priority Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -104,7 +104,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -473575885
   m_SortingLayer: 1
-  m_SortingOrder: 1
+  m_SortingOrder: 11
   m_Sprite: {fileID: 1709018158, guid: 3d415827f081042308b997b8e3790536, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

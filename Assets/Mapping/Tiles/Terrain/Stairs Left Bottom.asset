@@ -15,9 +15,9 @@ MonoBehaviour:
   terrain_tag: 17
   allow_passage: 1
   up_passage: 1
-  left_passage: 1
+  left_passage: 0
   right_passage: 1
-  down_passage: 1
+  down_passage: 0
   is_bush: 0
   is_counter: 0
   is_trans: 0

@@ -11,11 +11,8 @@ Unity Project for 2.5d Parallax RPG Engine
 ### Tile Additions / Edits
 * Sand for Beach
 * Beach Water / Shore
-* Enable thin hills / mountains
-* Should bridges be ground of objects? New layer altogether?
 
 ### Tile object coding
-* 2nd Black tile, on cover layer always, probably doable with terrain tag
 * Reflections on ice, still water, etc.
 * Slide on ice
 * Ice ramps?
@@ -28,16 +25,17 @@ Unity Project for 2.5d Parallax RPG Engine
 * New layers could be full or empty by default? Nice to have
 * Map object stores map size? background music
 * Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
-* Above/below tile awareness for diving
-* Detection for while on water looking at edges
-* Detection for under water in general
+* Detection for while on water or near water looking at edges
+* Awareness - looking while on stairs should look at a slightly different tile in certain directions
 
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines
+* Proper movement restrictions
 * Diagonal movement... maybe
 * Consider what script sprite appearance and layer handling is owned by... moveable object may not make the most sense
-* Better way to find current map
+* Better way to find current map in MoveableObject
 * Player should be child of map?
+* When a flag gets set as a side effect temporarily, rather than turn it off after, it should reset to it's previous status
 
 ### Other things to do
 * Region map - Melanite Style, LoP Region Concept

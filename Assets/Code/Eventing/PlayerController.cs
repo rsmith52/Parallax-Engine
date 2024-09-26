@@ -129,7 +129,7 @@ namespace Eventing
                 // Move through walls
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    if (player_mover.move_through_walls)
+                    if (!player_mover.move_through_walls)
                         player_mover.MoveThroughWallsOn();
                     else
                         player_mover.MoveThroughWallsOff();
@@ -138,13 +138,17 @@ namespace Eventing
                 // Shift layers
                 if (Input.GetKeyDown(Controls.SHIFT_LAYER_UP))
                 {
+                    player_mover.MoveThroughWallsOn();
                     player_mover.MoveLayerUp();
                     player_mover.MoveUp();
+                    player_mover.MoveThroughWallsOff();
                 }
                 else if (Input.GetKeyDown(Controls.SHIFT_LAYER_DOWN))
                 {
+                    player_mover.MoveThroughWallsOn();
                     player_mover.MoveLayerDown();
                     player_mover.MoveDown();
+                    player_mover.MoveThroughWallsOff();
                 }
             }
         }
