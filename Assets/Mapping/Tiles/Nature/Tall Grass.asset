@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
   m_Name: Tall Grass
   m_EditorClassIdentifier: 
-  terrain_tag: 9
+  terrain_tag: 10
   allow_passage: 1
   up_passage: 1
   left_passage: 1
@@ -21,9 +21,14 @@ MonoBehaviour:
   is_bush: 1
   is_counter: 0
   is_trans: 0
+  is_reflective: 0
   m_DefaultSprite: {fileID: -537428467, guid: 6006f828f18dc4b7f987c49627088784, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
+  is_terrain: 0
+  is_double_tall: 0
+  surface_tile: {fileID: 0}
+  surface_edge: {fileID: 0}
   m_TilingRules:
   - m_Id: 14
     m_Sprites:

@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34a88e4cea08841649b5b7c5cc9b2938, type: 3}
   m_Name: Tree 2
   m_EditorClassIdentifier: 
-  terrain_tag: 0
-  has_helper_tiles: 1
+  terrain_tag: 1
   allow_passage: 0
   up_passage: 0
   left_passage: 0
@@ -21,13 +20,8 @@ MonoBehaviour:
   down_passage: 0
   is_bush: 0
   is_counter: 0
-  helper_tiles:
-  - tile: {fileID: 11400000, guid: 94fd2298d4f704744abeb29626c12e83, type: 2}
-    offsets: {x: 1, y: 0}
-  - tile: {fileID: 11400000, guid: 94fd2298d4f704744abeb29626c12e83, type: 2}
-    offsets: {x: 0, y: 1}
-  - tile: {fileID: 11400000, guid: 94fd2298d4f704744abeb29626c12e83, type: 2}
-    offsets: {x: 1, y: 1}
+  is_trans: 0
+  is_reflective: 0
   preview_sprite: {fileID: -1227706556, guid: 870d992e647b440e99c292b9bf1a608d, type: 3}
   prefab: {fileID: 5973297930683649550, guid: 2a51f96a5028447b4ac7e0e677e9062b, type: 3}
   prefab_offset: {x: 1, y: 1.5}

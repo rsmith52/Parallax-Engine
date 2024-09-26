@@ -177,16 +177,16 @@ namespace Mapping
                 0
             );
 
-            neighbor_tiles.on_tile = GetTileAtPosition (neighbor_maps, int_pos);
-            neighbor_tiles.up_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up);
-            neighbor_tiles.left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.left);
-            neighbor_tiles.right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.right);
-            neighbor_tiles.down_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down);
+            neighbor_tiles.on_tile = GetTileAtPosition (neighbor_maps, int_pos).tile;
+            neighbor_tiles.up_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up).tile;
+            neighbor_tiles.left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.left).tile;
+            neighbor_tiles.right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.right).tile;
+            neighbor_tiles.down_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down).tile;
 
             return neighbor_tiles;
         }
 
-        private ParallaxTileBase GetTileAtPosition (NeighborTilemaps neighbor_maps, Vector3Int pos, bool recursive = false)
+        private MatchedTile GetTileAtPosition (NeighborTilemaps neighbor_maps, Vector3Int pos)
         {
             MatchedTile matched_tile = new MatchedTile{};
             
@@ -200,30 +200,43 @@ namespace Mapping
             // Handle terrain tiles
             if (matched_tile.tile != null)
             {
+                // Detect proper surface / edge
                 RuleTile ruletile = matched_tile.tile as RuleTile;
                 if (ruletile != null)
                     matched_tile.tile = ConvertTerrainRuleTile(ruletile, matched_tile.map, pos);
-                if (!recursive)
-                {
-                    ParallaxTileBase up_tile = GetTileAtPosition(neighbor_maps, pos + Vector3Int.up, true);
-                    RuleTile up_ruletile = up_tile as RuleTile;
-                    if (up_ruletile != null && up_ruletile.is_terrain && up_ruletile.is_double_tall)
-                        matched_tile.tile = up_ruletile;
-                }
+
+                // Extend double tall terrain front edges
+                MatchedTile up_tile = new MatchedTile{};
+                up_tile = CheckTilePositionOnLayer (up_tile, pos + Vector3Int.up, neighbor_maps.layer_up, neighbor_maps.objects_up, true);
+                RuleTile up_ruletile = up_tile.tile as RuleTile;
+                if (up_ruletile != null && up_ruletile.is_terrain && up_ruletile.is_double_tall)
+                    matched_tile.tile = up_ruletile;
+                    matched_tile.map = up_tile.map;
+                // MatchedTile up_tile = GetTileAtPosition(neighbor_maps, pos + Vector3Int.up, true);
+                // RuleTile up_ruletile = up_tile.tile as RuleTile;
+                // if (up_ruletile != null && up_ruletile.is_terrain && up_ruletile.is_double_tall)
+                //     matched_tile.tile = up_ruletile;
             }
-            return matched_tile.tile;
+            return matched_tile;
         }
 
         private MatchedTile CheckTilePositionOnLayer (MatchedTile matched_tile, Vector3Int pos, Tilemap layer, Tilemap[] objects, bool up = false)
         {
+            ParallaxTileBase checked_tile;
+            
             if (matched_tile.tile == null && objects != null)
             {
                 for (int i = objects.Length - 1; i >= 0; i--)
                 {
                     if (matched_tile.tile)
                         break;
-                    matched_tile.tile = (ParallaxTileBase)objects[i].GetTile(pos);
-                    matched_tile.map = objects[i];
+
+                    checked_tile = (ParallaxTileBase)objects[i].GetTile(pos);
+                    if (checked_tile && checked_tile.terrain_tag != TerrainTags.None)
+                    {
+                        matched_tile.tile = checked_tile;
+                        matched_tile.map = objects[i];
+                    }
 
                     // Ignore bridges on layer above, see the ground on current level instead
                     if (up && matched_tile.tile && matched_tile.tile.terrain_tag == TerrainTags.Bridge)
@@ -235,8 +248,12 @@ namespace Mapping
             }
             if (matched_tile.tile == null && layer != null)
             {
-                matched_tile.tile = (ParallaxTileBase)layer.GetTile(pos);
-                matched_tile.map = layer;
+                checked_tile = (ParallaxTileBase)layer.GetTile(pos);
+                if (checked_tile && checked_tile.terrain_tag != TerrainTags.None)
+                    {
+                        matched_tile.tile = checked_tile;
+                        matched_tile.map = layer;
+                    }
             }
 
             return matched_tile;
