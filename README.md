@@ -36,6 +36,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Better way to find current map in MoveableObject
 * Player should be child of map?
 * When a flag gets set as a side effect temporarily, rather than turn it off after, it should reset to it's previous status
+* Weird visual overlap with objects on up layer as player moves down to lower layer
 
 ### Other things to do
 * Region map - Melanite Style, LoP Region Concept

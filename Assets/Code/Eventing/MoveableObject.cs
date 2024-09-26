@@ -190,6 +190,21 @@ namespace Eventing
             
             speed = Constants.SPEEDS[(int)movement_speed];
 
+            // Apply Movement
+            if (moving)
+            {
+                // Activate the tile being moved onto
+                if (!tile_activated)
+                {
+                    Vector3 move_dir = target_pos - transform.position;
+                    tile_activated = ActivateTile(move_dir);
+                }
+
+                // Move in that direction
+                transform.position = Vector3.MoveTowards(transform.position, target_pos, Time.deltaTime * speed);
+            }
+
+            // Update Sprites & Sorting Order
             foreach (SpriteRenderer sprite in sprites)
                 if (sprite.tag == Constants.PRIORITY_TILE_TAG)
                     sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.EVENT_SORTING_LAYER_OFFSET + Constants.PRIORITY_TILE_OFFSET;
@@ -209,20 +224,6 @@ namespace Eventing
                 bush_mask.enabled = true;
             else
                 bush_mask.enabled = false;
-
-            // Apply Movement
-            if (moving)
-            {
-                // Activate the tile being moved onto
-                if (!tile_activated)
-                {
-                    Vector3 move_dir = target_pos - transform.position;
-                    tile_activated = ActivateTile(move_dir);
-                }
-
-                // Move in that direction
-                transform.position = Vector3.MoveTowards(transform.position, target_pos, Time.deltaTime * speed);
-            }
 
             // Tilemap and Event awareness check
             if ((other_moved || moving) && transform.position == target_pos)
@@ -296,10 +297,6 @@ namespace Eventing
 
         private bool ActivateTile(Vector3 move_dir)
         {
-            // Skip activation while in debug
-            if (move_dir == null || move_through_walls)
-                return true;
-
             if (Mathf.Abs(move_dir.x) > 0)
             {
                 // Move Right

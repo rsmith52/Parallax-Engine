@@ -140,14 +140,14 @@ namespace Eventing
                 {
                     player_mover.MoveThroughWallsOn();
                     player_mover.MoveLayerUp();
-                    player_mover.MoveUp();
+                    // player_mover.MoveUp();
                     player_mover.MoveThroughWallsOff();
                 }
                 else if (Input.GetKeyDown(Controls.SHIFT_LAYER_DOWN))
                 {
                     player_mover.MoveThroughWallsOn();
                     player_mover.MoveLayerDown();
-                    player_mover.MoveDown();
+                    // player_mover.MoveDown();
                     player_mover.MoveThroughWallsOff();
                 }
             }
