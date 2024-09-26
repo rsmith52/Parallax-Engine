@@ -350,34 +350,28 @@ namespace Eventing
                 // Move Up
                 if (move_dir.y > 0)
                 {
-                    // Move Into Bush
-                    if (neighbor_tiles.up_tile.is_bush && move_dir.y == 0)
-                        return ActivateTile(neighbor_tiles.up_tile);
-                    // Move Out of Bush
-                    else if (neighbor_tiles.on_tile.is_bush && !neighbor_tiles.up_tile.is_bush && move_dir.y < 0.5f)
-                        return ActivateTile(neighbor_tiles.up_tile);
                     // Move Off Up Stairs
-                    else if (neighbor_tiles.on_tile.terrain_tag == TerrainTags.StairUp)
+                    if (neighbor_tiles.on_tile.terrain_tag == TerrainTags.StairUp)
                     {
+                        CancelMovement();
+                        MoveUp();
                         MoveLayerUp();
                         return ActivateTile(neighbor_tiles.up_tile);
                     }
+                    return ActivateTile(neighbor_tiles.up_tile);
                 }
                 // Move Down
                 else if (move_dir.y < 0)
                 {
-                    // Move Into Bush
-                    if (neighbor_tiles.down_tile.is_bush && move_dir.y > -0.5f)
-                        return ActivateTile(neighbor_tiles.down_tile);
-                    // Move Out of Bush
-                    else if (neighbor_tiles.on_tile.is_bush && !neighbor_tiles.down_tile.is_bush && move_dir.y > -0.5f)
-                        return ActivateTile(neighbor_tiles.down_tile);
                     // Move Onto Up Stairs
-                    else if (neighbor_tiles.down_tile.terrain_tag == TerrainTags.StairUp)
+                    if (neighbor_tiles.down_tile.terrain_tag == TerrainTags.StairUp)
                     {
+                        CancelMovement();
+                        MoveDown();
                         MoveLayerDown();
                         return ActivateTile(neighbor_tiles.down_tile);
                     }
+                    return ActivateTile(neighbor_tiles.down_tile);
                 }
             }
 
