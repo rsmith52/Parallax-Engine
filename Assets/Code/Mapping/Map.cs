@@ -203,19 +203,42 @@ namespace Mapping
                 // Detect proper surface / edge
                 RuleTile ruletile = matched_tile.tile as RuleTile;
                 if (ruletile != null)
+                {
                     matched_tile.tile = ConvertTerrainRuleTile(ruletile, matched_tile.map, pos);
+                    
+                    // Handle stairs
+                    MatchedTile down_tile = new MatchedTile{};
+                    down_tile = CheckTilePositionOnLayer(down_tile, pos + Vector3Int.down, neighbor_maps.ground, neighbor_maps.objects);
+                    if (down_tile.tile != null && down_tile.tile.terrain_tag == TerrainTags.StairUp && ruletile.surface_tile != null)
+                    {
+                        matched_tile.tile = ruletile.surface_tile;
+                        return matched_tile;
+                    }
+                    down_tile = new MatchedTile{};
+                    down_tile = CheckTilePositionOnLayer(down_tile, pos + Vector3Int.down + Vector3Int.left, neighbor_maps.ground, neighbor_maps.objects);
+                    if (down_tile.tile != null && down_tile.tile.terrain_tag == TerrainTags.StairUp && ruletile.surface_tile != null)
+                    {
+                        matched_tile.tile = ruletile.surface_tile;
+                        return matched_tile;
+                    }
+                    down_tile = new MatchedTile{};
+                    down_tile = CheckTilePositionOnLayer(down_tile, pos + Vector3Int.down + Vector3Int.right, neighbor_maps.ground, neighbor_maps.objects);
+                    if (down_tile.tile != null && down_tile.tile.terrain_tag == TerrainTags.StairUp && ruletile.surface_tile != null)
+                    {
+                        matched_tile.tile = ruletile.surface_tile;
+                        return matched_tile;
+                    }
+                }
 
                 // Extend double tall terrain front edges
                 MatchedTile up_tile = new MatchedTile{};
                 up_tile = CheckTilePositionOnLayer (up_tile, pos + Vector3Int.up, neighbor_maps.layer_up, neighbor_maps.objects_up, true);
                 RuleTile up_ruletile = up_tile.tile as RuleTile;
                 if (up_ruletile != null && up_ruletile.is_terrain && up_ruletile.is_double_tall)
+                {
                     matched_tile.tile = up_ruletile;
                     matched_tile.map = up_tile.map;
-                // MatchedTile up_tile = GetTileAtPosition(neighbor_maps, pos + Vector3Int.up, true);
-                // RuleTile up_ruletile = up_tile.tile as RuleTile;
-                // if (up_ruletile != null && up_ruletile.is_terrain && up_ruletile.is_double_tall)
-                //     matched_tile.tile = up_ruletile;
+                }
             }
             return matched_tile;
         }

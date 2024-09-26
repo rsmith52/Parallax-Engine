@@ -20,6 +20,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Slide on ice
 * Ice ramps?
 * Sand ramps / landslides?
+* Prefab tiles should properly place tiles in full space
 
 ### Map Managing Code
 * Buttons calling to methods (maybe static) to create new layers above/below (also delete top/bottom layer)
@@ -27,15 +28,14 @@ Unity Project for 2.5d Parallax RPG Engine
 * New layers could be full or empty by default? Nice to have
 * Map object stores map size? background music
 * Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
-* Use terrain of tile below if top tile has none
 * Above/below tile awareness for diving
-* Auto place no movement tile below terrain
 
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines
 * Diagonal movement... maybe
 * Consider what script sprite appearance and layer handling is owned by... moveable object may not make the most sense
 * Better way to find current map
+* Player should be child of map?
 
 ### Other things to do
 * Region map - Melanite Style, LoP Region Concept
