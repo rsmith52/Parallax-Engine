@@ -191,7 +191,7 @@ namespace Mapping
             MatchedTile matched_tile = new MatchedTile{};
             
             // Check Layer Up
-            matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.layer_up, neighbor_maps.objects_up);
+            matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.layer_up, neighbor_maps.objects_up, true);
             
             // Check Current Layer
             if (matched_tile.tile == null)
@@ -209,7 +209,7 @@ namespace Mapping
             return matched_tile.tile;
         }
 
-        private MatchedTile CheckTilePositionOnLayer (MatchedTile matched_tile, Vector3Int pos, Tilemap layer, Tilemap[] objects)
+        private MatchedTile CheckTilePositionOnLayer (MatchedTile matched_tile, Vector3Int pos, Tilemap layer, Tilemap[] objects, bool up = false)
         {
             if (matched_tile.tile == null && objects != null)
             {
@@ -219,6 +219,13 @@ namespace Mapping
                         break;
                     matched_tile.tile = (ParallaxTileBase)objects[i].GetTile(pos);
                     matched_tile.map = objects[i];
+
+                    // Ignore bridges on layer above, see the ground on current level instead
+                    if (up && matched_tile.tile && matched_tile.tile.terrain_tag == TerrainTags.Bridge)
+                    {
+                        matched_tile.tile = null;
+                        matched_tile.map = null;
+                    }
                 }
             }
             if (matched_tile.tile == null && layer != null)
