@@ -26,7 +26,6 @@ Unity Project for 2.5d Parallax RPG Engine
 * New layers could be full or empty by default? Nice to have
 * Map object stores map size? background music
 * Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
-* Detection for while on water or near water looking at edges
 * Ground layer "objects" like paths & seabed need a separate "environment" layer, not objects
 
 ### Eventing Code
@@ -41,6 +40,8 @@ Unity Project for 2.5d Parallax RPG Engine
 * Tile activation might be one off
 * Implement falling physics?
 * Make shadow not jump
+* Settings for jump / swim enabled - can be unlocked?
+* Setting for allow jumping up ledges / over rocks? again can be unlocked?
 
 ### Other things to do
 * Region map - Melanite Style, LoP Region Concept

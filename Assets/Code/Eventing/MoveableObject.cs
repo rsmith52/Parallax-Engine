@@ -423,6 +423,20 @@ namespace Eventing
                         if (JumpForward(2))
                             return ActivateTile(neighbor_tiles.look_ahead_tile);
                     }
+                    // Move Onto Water Right
+                    else if (!ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.right_tile))
+                    {
+                        CancelMovement();
+                        if (JumpForward(2, true))
+                            return ActivateTile(neighbor_tiles.look_ahead_tile);
+                    }
+                    // Move Off Water Right
+                    else if (ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile))
+                    {
+                        CancelMovement();
+                        if (JumpForward(2, true))
+                            return ActivateTile(neighbor_tiles.look_ahead_tile);
+                    }
                     return ActivateTile(neighbor_tiles.right_tile);
                 }
                 // Move Left
@@ -456,6 +470,20 @@ namespace Eventing
                         if (JumpForward(2))
                             return ActivateTile(neighbor_tiles.look_ahead_tile);
                     }
+                    // Move Onto Water Left
+                    else if (!ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.left_tile))
+                    {
+                        CancelMovement();
+                        if (JumpForward(2, true))
+                            return ActivateTile(neighbor_tiles.look_ahead_tile);
+                    }
+                    // Move Off Water Left
+                    else if (ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile))
+                    {
+                        CancelMovement();
+                        if (JumpForward(2, true))
+                            return ActivateTile(neighbor_tiles.look_ahead_tile);
+                    }
                     return ActivateTile(neighbor_tiles.left_tile);
                 }
             }
@@ -482,6 +510,22 @@ namespace Eventing
                         if (JumpForward(2))
                             return ActivateTile(neighbor_tiles.look_ahead_tile);
                     }
+                    // Move Onto Water Up
+                    else if (!ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) &&
+                            ParallaxTerrain.IsWaterTile(neighbor_tiles.up_left_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.up_right_tile))
+                    {
+                        CancelMovement();
+                        if (JumpForward(1, true))
+                            return ActivateTile(neighbor_tiles.up_tile);
+                    }
+                    // Move Off Water Up
+                    else if (ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) &&
+                            ParallaxTerrain.IsWaterTile(neighbor_tiles.left_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.right_tile))
+                    {
+                        CancelMovement();
+                        if (JumpForward(1, true))
+                            return ActivateTile(neighbor_tiles.up_tile);
+                    }
                     return ActivateTile(neighbor_tiles.up_tile);
                 }
                 // Move Down
@@ -504,6 +548,22 @@ namespace Eventing
                         CancelMovement();
                         if (JumpForward(2))
                             return ActivateTile(neighbor_tiles.look_ahead_tile);
+                    }
+                    // Move Onto Water Down
+                    else if (!ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile) &&
+                            ParallaxTerrain.IsWaterTile(neighbor_tiles.down_left_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.down_right_tile))
+                    {
+                        CancelMovement();
+                        if (JumpForward(1, true))
+                            return ActivateTile(neighbor_tiles.down_tile);
+                    }
+                    // Move Off Water Down
+                    else if (ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile) &&
+                            ParallaxTerrain.IsWaterTile(neighbor_tiles.left_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.right_tile))
+                    {
+                        CancelMovement();
+                        if (JumpForward(1, true))
+                            return ActivateTile(neighbor_tiles.down_tile);
                     }
                     return ActivateTile(neighbor_tiles.down_tile);
                 }
@@ -708,9 +768,13 @@ namespace Eventing
         public bool MoveUp()
         {
             TurnUp();
-            if (move_through_walls || (neighbor_tiles.on_tile != null && neighbor_tiles.up_tile != null &&
-                (up_event == null || up_event.IsPassable()) && neighbor_tiles.on_tile.up_passage &&
-                neighbor_tiles.up_tile.allow_passage && neighbor_tiles.up_tile.down_passage))
+            if (move_through_walls || 
+                (neighbor_tiles.on_tile != null && neighbor_tiles.up_tile != null &&
+                (up_event == null || up_event.IsPassable()) && neighbor_tiles.up_tile.allow_passage &&
+                neighbor_tiles.up_tile.down_passage && 
+                (neighbor_tiles.on_tile.up_passage || (ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) && !neighbor_tiles.facing_other_level)) &&
+                (!ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) || neighbor_tiles.up_left_tile == null || (neighbor_tiles.up_left_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.up_left_tile)))) &&
+                (!ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) || neighbor_tiles.up_right_tile == null || (neighbor_tiles.up_right_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.up_right_tile))))))
             {
                 target_pos += Vector3.up;
                 moving = true;
@@ -763,7 +827,10 @@ namespace Eventing
             TurnDown();
             if (move_through_walls || (neighbor_tiles.on_tile != null && neighbor_tiles.down_tile != null &&
                 (down_event == null || down_event.IsPassable()) && neighbor_tiles.on_tile.down_passage &&
-                neighbor_tiles.down_tile.allow_passage && neighbor_tiles.down_tile.up_passage))
+                neighbor_tiles.down_tile.allow_passage && 
+                (neighbor_tiles.down_tile.up_passage || (ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && !neighbor_tiles.facing_other_level)) &&
+                (!ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile) || neighbor_tiles.down_left_tile == null || (neighbor_tiles.down_left_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.down_left_tile)))) &&
+                (!ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile) || neighbor_tiles.down_right_tile == null || (neighbor_tiles.down_right_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.down_right_tile))))))
             {
                 target_pos += Vector3.down;
                 moving = true;
@@ -935,16 +1002,16 @@ namespace Eventing
         
         [BoxGroup("Debug Actions/Split/Right/Movement")]
         [Button("Jump Forward")]
-        public bool JumpForward(int num_tiles = 1)
+        public bool JumpForward(int num_tiles = 1, bool onto_water = false)
         {
             if (num_tiles < 1) return false;
             // TODO Check for Events
             // TODO Check more than 2 tiles ahead
             ParallaxTileBase check_tile = neighbor_tiles.facing_tile;
-            if (move_through_walls || (neighbor_tiles.on_tile != null && !neighbor_tiles.facing_other_level &&
+            if (move_through_walls || (neighbor_tiles.on_tile != null &&
                 ((num_tiles >2) ||
-                (num_tiles == 1 && check_tile != null && check_tile.allow_passage && check_tile.terrain_tag != TerrainTags.Ledge) ||
-                (num_tiles == 2 && neighbor_tiles.look_ahead_tile != null && neighbor_tiles.look_ahead_tile.allow_passage && neighbor_tiles.look_ahead_tile.terrain_tag != TerrainTags.Ledge)
+                (num_tiles == 1 && check_tile != null && check_tile.allow_passage && check_tile.terrain_tag != TerrainTags.Ledge && !neighbor_tiles.facing_other_level) ||
+                (num_tiles == 2 && neighbor_tiles.look_ahead_tile != null && neighbor_tiles.look_ahead_tile.allow_passage && neighbor_tiles.look_ahead_tile.terrain_tag != TerrainTags.Ledge && !neighbor_tiles.look_ahead_other_level)
             )))
             {
                 float height = Constants.JUMP_HEIGHT * num_tiles;

@@ -51,6 +51,7 @@ namespace Mapping
         public ParallaxTileBase down_tile;
 
         public bool facing_other_level;
+        public bool look_ahead_other_level;
         public ParallaxTileBase facing_tile;
         public ParallaxTileBase look_ahead_tile;
         public ParallaxTileBase above_tile;
@@ -253,12 +254,16 @@ namespace Mapping
                 default:
                     break;
             }
-            neighbor_tiles.look_ahead_tile = GetTileAtPosition (neighbor_maps, int_pos + (2 * dir_vector), on_stairs).tile;
 
             MatchedTile facing_tile = GetTileAtPosition (neighbor_maps, int_pos + dir_vector, on_stairs);
             neighbor_tiles.facing_tile = facing_tile.tile;
             neighbor_tiles.facing_other_level = ((on_tile.layer == null && facing_tile.layer != null) || (on_tile.layer != null && facing_tile.layer == null) ||
                 (on_tile.layer != null && facing_tile.layer != null && on_tile.layer.name != facing_tile.layer.name));
+
+            MatchedTile look_ahead_tile = GetTileAtPosition (neighbor_maps, int_pos + (2 * dir_vector), on_stairs);
+            neighbor_tiles.look_ahead_tile = look_ahead_tile.tile;
+            neighbor_tiles.look_ahead_other_level = ((on_tile.layer == null && look_ahead_tile.layer != null) || (on_tile.layer != null && look_ahead_tile.layer == null) ||
+                (on_tile.layer != null && look_ahead_tile.layer != null && on_tile.layer.name != look_ahead_tile.layer.name));
             
             return neighbor_tiles;
         }
