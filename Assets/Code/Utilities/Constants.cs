@@ -24,13 +24,14 @@ namespace Utilities
         // Movement Speeds and Turn Sensitivity
         public static readonly float[] SPEEDS = new float[]
         {
-            2f,         // VerySlow
+            2f,         // VerySlow (Sneak Speed)
             3f,         // Slow
-            3.5f,       // Moderate
-            6f,         // Fast
-            8f          // VeryFast
+            3.5f,       // Moderate (Jump in Place Speed)
+            6f,         // Fast     (Jump Speed)
+            8f          // VeryFast (Run Speed)
         };
         public static readonly float TAP_VS_HOLD_TIME = 0.075f;
+        public static readonly float JUMP_HEIGHT = 0.5f;
 
         #endregion
     }

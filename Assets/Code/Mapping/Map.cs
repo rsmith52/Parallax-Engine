@@ -50,6 +50,11 @@ namespace Mapping
         public ParallaxTileBase right_tile;
         public ParallaxTileBase down_tile;
 
+        public ParallaxTileBase facing_tile;
+        public ParallaxTileBase look_ahead_tile;
+        public ParallaxTileBase above_tile;
+        public ParallaxTileBase below_tile;
+
         [HideInInspector]
         public ParallaxTileBase up_left_tile;
         [HideInInspector]
@@ -58,9 +63,6 @@ namespace Mapping
         public ParallaxTileBase down_left_tile;
         [HideInInspector]
         public ParallaxTileBase down_right_tile;
-
-        public ParallaxTileBase above_tile;
-        public ParallaxTileBase below_tile;
     }
 
     [Serializable]
@@ -179,15 +181,20 @@ namespace Mapping
             return neighbor_maps;
         }
 
-        public NeighborTiles GetNeighborTiles (MoveableObject character)
+        public NeighborTiles GetNeighborTiles (MoveableObject character, bool look_only = false)
         {
-            return GetNeighborTiles(character.transform.position);
-        }
-
-        public NeighborTiles GetNeighborTiles (Vector3 pos)
-        {
+            Vector3 pos = character.transform.position;
             NeighborTilemaps neighbor_maps = GetNeighborTileMaps(pos);
             NeighborTiles neighbor_tiles = new NeighborTiles{};
+            if (look_only)
+                neighbor_tiles = character.neighbor_tiles;
+
+            return GetNeighborTiles(pos, character.direction, look_only, neighbor_maps, neighbor_tiles);
+        }
+
+        public NeighborTiles GetNeighborTiles (Vector3 pos, Directions direction, bool look_only,
+                                                NeighborTilemaps neighbor_maps, NeighborTiles neighbor_tiles)
+        {
             bool on_stairs = false;
             bool on_water = false;
             bool on_bridge = false;
@@ -198,32 +205,53 @@ namespace Mapping
                 0
             );
 
-            // Current Tile - modifies some behavior of neighbor tile detection/perception
-            neighbor_tiles.on_tile = GetTileAtPosition (neighbor_maps, int_pos).tile;
-            if (neighbor_tiles.on_tile != null)
+            if (!look_only)
             {
-                on_stairs = (neighbor_tiles.on_tile != null && ParallaxTerrain.IsStairTile(neighbor_tiles.on_tile));
-                on_water = (neighbor_tiles.on_tile != null && ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile));
-                on_bridge = (neighbor_tiles.on_tile != null && ParallaxTerrain.IsBridgeTile(neighbor_tiles.on_tile));
+                // Current Tile - modifies some behavior of neighbor tile detection/perception
+                neighbor_tiles.on_tile = GetTileAtPosition (neighbor_maps, int_pos).tile;
+                if (neighbor_tiles.on_tile != null)
+                {
+                    on_stairs = (neighbor_tiles.on_tile != null && ParallaxTerrain.IsStairTile(neighbor_tiles.on_tile));
+                    on_water = (neighbor_tiles.on_tile != null && ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile));
+                    on_bridge = (neighbor_tiles.on_tile != null && ParallaxTerrain.IsBridgeTile(neighbor_tiles.on_tile));
+                }
+            
+                // Same Level Neighbors
+                neighbor_tiles.up_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up, on_stairs).tile;
+                neighbor_tiles.left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.left, on_stairs).tile;
+                neighbor_tiles.right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.right, on_stairs).tile;
+                neighbor_tiles.down_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down, on_stairs).tile;
+
+                // Above / Below Level Neighbors - primarily bridge & water use
+                neighbor_tiles.above_tile = CheckTilePositionOnLayer (new MatchedTile{}, int_pos + Vector3Int.up, neighbor_maps.layer_up, neighbor_maps.objects_up).tile;
+                if (on_bridge || (on_water && neighbor_tiles.down_tile != null && ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile)))
+                    neighbor_tiles.below_tile = CheckTilePositionOnLayer (new MatchedTile{}, int_pos + Vector3Int.down, neighbor_maps.layer_down, neighbor_maps.objects_down).tile;
+
+                // Corner Neighbors
+                neighbor_tiles.up_left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up + Vector3Int.left, on_stairs).tile;
+                neighbor_tiles.up_right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up + Vector3Int.right, on_stairs).tile;
+                neighbor_tiles.down_left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down + Vector3Int.left, on_stairs).tile;
+                neighbor_tiles.down_right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down + Vector3Int.right, on_stairs).tile;
             }
-        
-            // Same Level Neighbors
-            neighbor_tiles.up_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up, on_stairs).tile;
-            neighbor_tiles.left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.left, on_stairs).tile;
-            neighbor_tiles.right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.right, on_stairs).tile;
-            neighbor_tiles.down_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down, on_stairs).tile;
 
-            // Corner Neighbors
-            neighbor_tiles.up_left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up + Vector3Int.left, on_stairs).tile;
-            neighbor_tiles.up_right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up + Vector3Int.right, on_stairs).tile;
-            neighbor_tiles.down_left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down + Vector3Int.left, on_stairs).tile;
-            neighbor_tiles.down_right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down + Vector3Int.right, on_stairs).tile;
-
-            // Above / Below Level Neighbors - primarily bridge & water use
-            neighbor_tiles.above_tile = CheckTilePositionOnLayer (new MatchedTile{}, int_pos + Vector3Int.up, neighbor_maps.layer_up, neighbor_maps.objects_up).tile;
-            if (on_bridge || (on_water && neighbor_tiles.down_tile != null && ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile)))
-                neighbor_tiles.below_tile = CheckTilePositionOnLayer (new MatchedTile{}, int_pos + Vector3Int.down, neighbor_maps.layer_down, neighbor_maps.objects_down).tile;
-
+            // Facing & Look Ahead Tile
+            Vector3Int dir_vector = new Vector3Int();
+            switch (direction)
+            {
+                case Directions.Up:
+                    dir_vector = Vector3Int.up; break;
+                case Directions.Left:
+                    dir_vector = Vector3Int.left; break;
+                case Directions.Right:
+                    dir_vector = Vector3Int.right; break;
+                case Directions.Down:
+                    dir_vector = Vector3Int.down; break;
+                default:
+                    break;
+            }
+            neighbor_tiles.facing_tile = GetTileAtPosition (neighbor_maps, int_pos + dir_vector, on_stairs).tile;
+            neighbor_tiles.look_ahead_tile = GetTileAtPosition (neighbor_maps, int_pos + (2 * dir_vector), on_stairs).tile;
+            
             return neighbor_tiles;
         }
 

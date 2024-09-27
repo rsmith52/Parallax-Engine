@@ -67,6 +67,10 @@ namespace Eventing
             if (Input.GetKeyDown(Controls.ACTION_BUTTON))
                 player_mover.ActivateEvent();
 
+            // Handle Jump Input
+            if (Input.GetKeyDown(Controls.JUMP))
+                player_mover.JumpInPlace();
+
             // Handle Running/Sneaking Input
             if (Input.GetKeyDown(Controls.RUN_BUTTON))
                 StartRunning();
@@ -80,7 +84,7 @@ namespace Eventing
             // Handle Movement Input
             if (Input.GetKey(Controls.MOVE_UP) && current_pos == target_pos)
             {
-                if (!player_mover.fix_direction && direction != Directions.Up)
+                if (!player_mover.lock_direction && direction != Directions.Up)
                 {
                     player_mover.TurnUp();
                 }
@@ -91,7 +95,7 @@ namespace Eventing
             }
             else if (Input.GetKey(Controls.MOVE_LEFT) && current_pos == target_pos)
             {
-                if (!player_mover.fix_direction && direction != Directions.Left)
+                if (!player_mover.lock_direction && direction != Directions.Left)
                 {
                     player_mover.TurnLeft();
                 }
@@ -102,7 +106,7 @@ namespace Eventing
             }
             else if (Input.GetKey(Controls.MOVE_RIGHT) && current_pos == target_pos)
             {
-                if (!player_mover.fix_direction && direction != Directions.Right)
+                if (!player_mover.lock_direction && direction != Directions.Right)
                 {
                     player_mover.TurnRight();
                 }
@@ -113,7 +117,7 @@ namespace Eventing
             }
             else if (Input.GetKey(Controls.MOVE_DOWN) && current_pos == target_pos)
             {
-                if (!player_mover.fix_direction && direction != Directions.Down)
+                if (!player_mover.lock_direction && direction != Directions.Down)
                 {
                     player_mover.TurnDown();
                 }
@@ -127,7 +131,7 @@ namespace Eventing
             if (Application.isEditor)
             {
                 // Move through walls
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (Input.GetKeyDown(Controls.MOVE_THROUGH_WALLS))
                 {
                     if (!player_mover.move_through_walls)
                         player_mover.MoveThroughWallsOn();
@@ -140,20 +144,22 @@ namespace Eventing
                 {
                     if (player_mover.neighbor_tiles.above_tile != null)
                     {
+                        bool move_through_walls = player_mover.move_through_walls;
                         player_mover.MoveThroughWallsOn();
                         player_mover.MoveLayerUp();
                         player_mover.MoveUp();
-                        player_mover.MoveThroughWallsOff();
+                        if (!move_through_walls) player_mover.MoveThroughWallsOff();
                     }
                 }
                 else if (Input.GetKeyDown(Controls.SHIFT_LAYER_DOWN))
                 {
                     if (player_mover.neighbor_tiles.below_tile != null)
                     {
+                        bool move_through_walls = player_mover.move_through_walls;
                         player_mover.MoveThroughWallsOn();
                         player_mover.MoveLayerDown();
                         player_mover.MoveDown();
-                        player_mover.MoveThroughWallsOff();
+                        if (!move_through_walls) player_mover.MoveThroughWallsOff();
                     }
                 }
             }

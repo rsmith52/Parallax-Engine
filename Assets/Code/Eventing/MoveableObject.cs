@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -51,11 +52,31 @@ namespace Eventing
         MoveLayerDown,
         SetInvisibleFlag,
         SetThroughFlag,
-        SetFixDirectionFlag,
+        SetLockDirectionFlag,
         SetWalkingFlag,
         SetSteppingFlag,
         Wait,
         ChangeSpeed
+    }
+
+    #endregion
+
+
+    #region Structs
+
+    [Serializable]
+    public struct JumpData
+    {
+        public float height;
+        public Vector3 direction;
+        public int num_tiles;
+
+        public JumpData(float height, Vector3 direction, int num_tiles)
+        {
+            this.height = height;
+            this.direction = direction;
+            this.num_tiles = num_tiles;
+        }
     }
 
     #endregion
@@ -82,7 +103,7 @@ namespace Eventing
         [Title("Static Flags")]
         public bool invisible = false;
         public bool move_through_walls = false;
-        public bool fix_direction = false;
+        public bool lock_direction = false;
         public bool walking_animation = true;
         public bool stepping_animation = false;
         public bool always_on_top = false;
@@ -96,6 +117,18 @@ namespace Eventing
         [TabGroup ("Movement")]
         [ReadOnly]
         public bool moving;
+        [TabGroup ("Movement")]
+        [ReadOnly]
+        public bool looked;
+        [TabGroup ("Movement")]
+        [ReadOnly]
+        public bool jumping;
+        [TabGroup ("Movement")]
+        [ReadOnly]
+        public bool falling;
+        [TabGroup ("Movement")]
+        [ReadOnly]
+        public JumpData jump_data;
         [TabGroup ("Movement")]
         [ReadOnly]
         public bool other_moved;
@@ -162,6 +195,10 @@ namespace Eventing
             sprites = GetComponentsInChildren<SpriteRenderer>();
             bush_mask = GetComponentInChildren<SpriteMask>();
             moving = true;
+            looked = true;
+            jumping = false;
+            jump_data = new JumpData{};
+            falling = false;
             other_moved = false;
             in_move_route = false;
             tile_activated = false;
@@ -190,13 +227,15 @@ namespace Eventing
             // else if (stepping_animation)
             //     animator.SetBool(Constants.WALK_ANIMATION, true);
             
-            speed = Constants.SPEEDS[(int)movement_speed];
+            speed = (jumping || falling) ? (
+                jump_data.num_tiles > 0 ? Constants.SPEEDS[(int)MovementSpeeds.Fast] : Constants.SPEEDS[(int)MovementSpeeds.Moderate]) : 
+                Constants.SPEEDS[(int)movement_speed];
 
             // Apply Movement
             if (moving)
             {
                 // Activate the tile being moved onto
-                if (!tile_activated)
+                if (!tile_activated && !jumping && !falling)
                 {
                     Vector3 move_dir = target_pos - transform.position;
                     tile_activated = ActivateTile(move_dir);
@@ -222,7 +261,7 @@ namespace Eventing
                 foreach (SpriteRenderer sprite in sprites)
                     sprite.enabled = true;
                      
-            if (in_bush)
+            if (in_bush && !jumping)
                 bush_mask.enabled = true;
             else
                 bush_mask.enabled = false;
@@ -230,44 +269,62 @@ namespace Eventing
             // Tilemap and Event awareness check
             if ((other_moved || moving) && transform.position == target_pos)
             {
-                // Get neighboring tiles
-                neighbor_tiles = map.GetNeighborTiles(this);
-
-                // Notify old neighbor events
-                // foreach (Event e in neighbor_events)
-                // {
-                //     if (e != null)
-                //     {
-                //         MoveableCharacter character = e.GetComponent<MoveableCharacter>();
-                //         if (character != null)
-                //             character.other_moved = true;
-                //     }
-                // }
-
-                // Get neighboring events
-                // neighbor_events = event_manager.GetNeighborEvents(this);
-                // on_event = neighbor_events[0];
-                // up_event = neighbor_events[1];
-                // left_event = neighbor_events[2];
-                // right_event = neighbor_events[3];
-                // down_event = neighbor_events[4];
-
-                // Notify new neighbor events
-                // foreach (Event e in neighbor_events) {
-                //     if (e != null)
-                //     {
-                //         MoveableCharacter character = e.GetComponent<MoveableCharacter>();
-                //         if (character != null)
-                //             character.other_moved = true;
-                //     }
-                // }
-
-                moving = false;
-                other_moved = false;
-                if (!tile_activated)
+                if (jumping)
                 {
-                    tile_activated = ActivateTile(neighbor_tiles.on_tile);
-                }     
+                    target_pos += (jump_data.height * Vector3.forward) + (jump_data.height * Vector3.down) + (jump_data.direction * (float)jump_data.num_tiles / 2);
+                    jumping = false;
+                    falling = true;
+                }
+                else
+                {
+                    // Get neighboring tiles
+                    neighbor_tiles = map.GetNeighborTiles(this);
+
+                    // Notify old neighbor events
+                    // foreach (Event e in neighbor_events)
+                    // {
+                    //     if (e != null)
+                    //     {
+                    //         MoveableCharacter character = e.GetComponent<MoveableCharacter>();
+                    //         if (character != null)
+                    //             character.other_moved = true;
+                    //     }
+                    // }
+
+                    // Get neighboring events
+                    // neighbor_events = event_manager.GetNeighborEvents(this);
+                    // on_event = neighbor_events[0];
+                    // up_event = neighbor_events[1];
+                    // left_event = neighbor_events[2];
+                    // right_event = neighbor_events[3];
+                    // down_event = neighbor_events[4];
+
+                    // Notify new neighbor events
+                    // foreach (Event e in neighbor_events) {
+                    //     if (e != null)
+                    //     {
+                    //         MoveableCharacter character = e.GetComponent<MoveableCharacter>();
+                    //         if (character != null)
+                    //             character.other_moved = true;
+                    //     }
+                    // }
+
+                    moving = false;
+                    looked = false;
+                    falling = false;
+                    jump_data = new JumpData{};
+                    other_moved = false;
+                    if (!tile_activated)
+                    {
+                        tile_activated = ActivateTile(neighbor_tiles.on_tile);
+                    }  
+                }   
+            }
+            else if (looked)
+            {
+                // Update look ahead tile
+                neighbor_tiles = map.GetNeighborTiles(this, true);
+                looked = false;
             }
         }
 
@@ -293,6 +350,10 @@ namespace Eventing
             // No tile, must be moving through walls
             if (tile == null)
                 return true;
+
+            // Don't activate tile until jump has ended
+            if (jumping)
+                return false;
 
             // Bush Flag
             if (tile.is_bush)
@@ -336,6 +397,13 @@ namespace Eventing
                             return ActivateTile(neighbor_tiles.down_right_tile);
                         }
                     }
+                    // Move Onto Right Ledge
+                    else if (neighbor_tiles.right_tile.terrain_tag == TerrainTags.Ledge)
+                    {
+                        CancelMovement();
+                        if (JumpForward(2))
+                            return ActivateTile(neighbor_tiles.look_ahead_tile);
+                    }
                     return ActivateTile(neighbor_tiles.right_tile);
                 }
                 // Move Left
@@ -361,6 +429,13 @@ namespace Eventing
                             return ActivateTile(neighbor_tiles.down_left_tile);
                         }
                     }
+                    // Move Onto Left Ledge
+                    else if (neighbor_tiles.left_tile.terrain_tag == TerrainTags.Ledge)
+                    {
+                        CancelMovement();
+                        if (JumpForward(2))
+                            return ActivateTile(neighbor_tiles.look_ahead_tile);
+                    }
                     return ActivateTile(neighbor_tiles.left_tile);
                 }
             }
@@ -379,6 +454,13 @@ namespace Eventing
                             return ActivateTile(neighbor_tiles.up_tile);
                         }
                     }
+                    // Move Onto Up Ledge
+                    else if (neighbor_tiles.up_tile.terrain_tag == TerrainTags.Ledge)
+                    {
+                        CancelMovement();
+                        if (JumpForward(2))
+                            return ActivateTile(neighbor_tiles.look_ahead_tile);
+                    }
                     return ActivateTile(neighbor_tiles.up_tile);
                 }
                 // Move Down
@@ -393,6 +475,13 @@ namespace Eventing
                             MoveLayerDown();
                             return ActivateTile(neighbor_tiles.down_tile);
                         }
+                    }
+                    // Move Onto Down Ledge
+                    else if (neighbor_tiles.down_tile.terrain_tag == TerrainTags.Ledge)
+                    {
+                        CancelMovement();
+                        if (JumpForward(2))
+                            return ActivateTile(neighbor_tiles.look_ahead_tile);
                     }
                     return ActivateTile(neighbor_tiles.down_tile);
                 }
@@ -479,23 +568,38 @@ namespace Eventing
 
         public void TurnUp()
         {
-            if (!fix_direction)
+            if (!lock_direction)
+            {
                 direction = Directions.Up;
+                looked = true;
+            }
+                
         }
         public void TurnLeft()
         {
-            if (!fix_direction)
+            if (!lock_direction)
+            {
                 direction = Directions.Left;
+                looked = true;
+            }
+                
         }
         public void TurnRight()
         {
-            if (!fix_direction)
+            if (!lock_direction)
+            {
                 direction = Directions.Right;
+                looked = true;
+            }
+                
         }
         public void TurnDown()
         {
-            if (!fix_direction)
+            if (!lock_direction)
+            {
                 direction = Directions.Down;
+                looked = true;
+            }
         }
 
         public void Turn90DegreesCCW()
@@ -546,7 +650,6 @@ namespace Eventing
                     break;
             }
         }
-
         public void TurnAtRandom()
         {
             System.Random random = Utilities.Random.GetRandom();
@@ -555,10 +658,13 @@ namespace Eventing
             {
                 new_direction = (Directions)UnityEngine.Random.Range(0, 3);
             }
-            if (!fix_direction)
+            if (!lock_direction)
+            {
                 direction = new_direction;
+                looked = true;
+            }
+                
         }
-
         public void TurnTowardsPlayer()
         {
             // TODO
@@ -591,6 +697,7 @@ namespace Eventing
             }
             return false;
         }
+        
         [BoxGroup("Debug Actions/Split/Right/Movement")]
         [Button("Move Left")]
         public bool MoveLeft()
@@ -608,6 +715,7 @@ namespace Eventing
             }
             return false;
         }
+        
         [BoxGroup("Debug Actions/Split/Right/Movement")]
         [Button("Move Right")]
         public bool MoveRight()
@@ -625,6 +733,7 @@ namespace Eventing
             }
             return false;
         }
+        
         [BoxGroup("Debug Actions/Split/Right/Movement")]
         [Button("Move Down")]
         public bool MoveDown()
@@ -725,33 +834,34 @@ namespace Eventing
             moving = true;
             return success;
         }
+        
         [BoxGroup("Debug Actions/Split/Right/Movement")]
         [Button("Step Backward")]
         public bool StepBackward()
         {
-            bool prev_fix_direction = fix_direction;
+            bool prev_lock_direction = lock_direction;
             bool success = false;
             switch (direction)
             {
                 case Directions.Up:
-                    FixDirectionOn();
+                    LockDirectionOn();
                     success = MoveDown();
-                    fix_direction = prev_fix_direction;
+                    lock_direction = prev_lock_direction;
                     break;
                 case Directions.Left:
-                    FixDirectionOn();
+                    LockDirectionOn();
                     success = MoveRight();
-                    fix_direction = prev_fix_direction;
+                    lock_direction = prev_lock_direction;
                     break;
                 case Directions.Right:
-                    FixDirectionOn();
+                    LockDirectionOn();
                     success = MoveLeft();
-                    fix_direction = prev_fix_direction;
+                    lock_direction = prev_lock_direction;
                     break;
                 case Directions.Down:
-                    FixDirectionOn();
+                    LockDirectionOn();
                     success = MoveUp();
-                    fix_direction = prev_fix_direction;
+                    lock_direction = prev_lock_direction;
                     break;
                 default:
                     break;
@@ -790,10 +900,58 @@ namespace Eventing
 
         [BoxGroup("Debug Actions/Split/Right/Movement")]
         [Button("Jump in Place")]
-        public void JumpInPlace() { }
+        public bool JumpInPlace() { 
+            float height = Constants.JUMP_HEIGHT;
+            target_pos += (height * Vector3.back) + (height * Vector3.up);
+            moving = true;
+            jumping = true;
+            jump_data = new JumpData (height, new Vector3(), 0);
+            tile_activated = false;
+
+            return true;
+        }
+        
         [BoxGroup("Debug Actions/Split/Right/Movement")]
         [Button("Jump Forward")]
-        public void JumpForward(int num_tiles) { }
+        public bool JumpForward(int num_tiles = 1)
+        {
+            // TODO Check for Events
+            // TODO Check more than 2 tiles ahead
+            ParallaxTileBase check_tile = (num_tiles == 2) ? neighbor_tiles.look_ahead_tile : neighbor_tiles.facing_tile;
+            if (move_through_walls || num_tiles >2 || (neighbor_tiles.on_tile != null && 
+                check_tile != null && check_tile.allow_passage))
+            {
+                float height = Constants.JUMP_HEIGHT * num_tiles;
+                Vector3 v = new Vector3();
+
+                switch (direction)
+                {
+                    case Directions.Up:
+                        v = Vector3.up;
+                        break;
+                    case Directions.Left:
+                        v = Vector3.left;
+                        break;
+                    case Directions.Right:
+                        v = Vector3.right;
+                        break;
+                    case Directions.Down:
+                        v = Vector3.down;
+                        break;
+                    default:
+                        break;
+                }
+                
+                target_pos += (height * Vector3.back) + (height * Vector3.up) + (v * (float)num_tiles / 2);
+                moving = true;
+                jumping = true;
+                jump_data = new JumpData (height, v, num_tiles);
+                tile_activated = false;
+                return true;
+            }
+            return false;
+        }
+        
         [BoxGroup("Debug Actions/Split/Right/Movement")]
         [Button("Jump Backward")]
         public void JumpBackward(int num_tiles) { }
@@ -841,13 +999,13 @@ namespace Eventing
             move_through_walls = false;
         }
 
-        public void FixDirectionOn()
+        public void LockDirectionOn()
         {
-            fix_direction = true;
+            lock_direction = true;
         }
-        public void FixDirectionOff()
+        public void LockDirectionOff()
         {
-            fix_direction = false;
+            lock_direction = false;
         }
 
         public void WalkingAnimationOn()

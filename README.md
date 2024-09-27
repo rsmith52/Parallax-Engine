@@ -18,7 +18,8 @@ Unity Project for 2.5d Parallax RPG Engine
 * Slide on ice
 * Ice ramps?
 * Sand ramps / landslides?
-* Jump ledges
+* Jump ledges - detect blockers on other side
+* Tiles that you can't jump in (marsh, deep sand, etc.)
 
 ### Map Managing Code
 * Buttons calling to methods (maybe static) to create new layers above/below (also delete top/bottom layer)
@@ -36,13 +37,18 @@ Unity Project for 2.5d Parallax RPG Engine
 * Consider what script sprite appearance and layer handling is owned by... moveable object may not make the most sense
 * Better way to find current map in MoveableObject
 * Player should be child of map?
-* When a flag gets set as a side effect temporarily, rather than turn it off after, it should reset to it's previous status
+* When a flag gets set as a side effect temporarily, rather than turn it off after, it should reset to it's previous status - check this is done consistently
 * Weird visual overlap with objects on up layer as player moves down to lower layer
+* Tile activation might be one off
+* Implement falling physics?
+* Make shadow not jump
+* Jump forward when jumping while moving
 
 ### Other things to do
 * Region map - Melanite Style, LoP Region Concept
 * Improve comments / documentation in code
 * Message system - UI should have separate border / fill elements so opacity can be set differently
+* Look at "Garbage Gold" reddit post for inspo
 * Consider white outlines on characters / events
 
 ### Mechanics
