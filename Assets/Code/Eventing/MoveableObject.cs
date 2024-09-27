@@ -99,6 +99,7 @@ namespace Eventing
 
         private SpriteRenderer[] sprites;
         private SpriteMask bush_mask;
+        private SpriteRenderer shadow;
 
         [Title("Static Flags")]
         public bool invisible = false;
@@ -194,6 +195,14 @@ namespace Eventing
             //animator = GetComponentInChildren<Animator>();
             sprites = GetComponentsInChildren<SpriteRenderer>();
             bush_mask = GetComponentInChildren<SpriteMask>();
+            foreach (SpriteRenderer sprite in sprites)
+            {
+                if (sprite.tag == Constants.SHADOW_TAG)
+                {
+                    shadow = sprite;
+                    break;
+                }
+            }
             moving = true;
             looked = true;
             jumping = false;
@@ -230,14 +239,15 @@ namespace Eventing
             speed = (jumping || falling) ? (
                 jump_data.num_tiles > 0 ? Constants.SPEEDS[(int)MovementSpeeds.Fast] : Constants.SPEEDS[(int)MovementSpeeds.Moderate]) : 
                 Constants.SPEEDS[(int)movement_speed];
-
+            
             // Apply Movement
             if (moving)
             {
+                Vector3 move_dir = target_pos - transform.position;
+                
                 // Activate the tile being moved onto
                 if (!tile_activated && !jumping && !falling)
                 {
-                    Vector3 move_dir = target_pos - transform.position;
                     tile_activated = ActivateTile(move_dir);
                 }
 
@@ -271,7 +281,7 @@ namespace Eventing
             {
                 if (jumping)
                 {
-                    target_pos += (jump_data.height * Vector3.forward) + (jump_data.height * Vector3.down) + (jump_data.direction * (float)jump_data.num_tiles / 2);
+                    target_pos += ((jump_data.height * Vector3.forward) + (jump_data.height * Vector3.down) + (jump_data.direction * (float)jump_data.num_tiles / 2));
                     jumping = false;
                     falling = true;
                 }
@@ -326,6 +336,13 @@ namespace Eventing
                 neighbor_tiles = map.GetNeighborTiles(this, true);
                 looked = false;
             }
+
+            // Fall to ground
+            // if (neighbor_tiles.on_tile == null && !moving && !falling)
+            // {
+            //     target_pos += Vector3.forward + Vector3.down;
+            //     falling = true;
+            // }
         }
 
         #endregion
@@ -372,11 +389,13 @@ namespace Eventing
 
         private bool ActivateTile(Vector3 move_dir)
         {
+            if (neighbor_tiles.on_tile == null) return false;
             if (Mathf.Abs(move_dir.x) > 0)
             {
                 // Move Right
                 if (move_dir.x > 0)
                 {
+                    if (neighbor_tiles.right_tile == null) return false;
                     // Move Onto Right Stairs
                     if (neighbor_tiles.right_tile.terrain_tag == TerrainTags.StairRight)
                     {
@@ -409,6 +428,7 @@ namespace Eventing
                 // Move Left
                 else if (move_dir.x < 0)
                 {
+                    if (neighbor_tiles.left_tile == null) return false;
                     // Move Onto Left Stairs
                     if (neighbor_tiles.left_tile.terrain_tag == TerrainTags.StairLeft)
                     {
@@ -444,6 +464,7 @@ namespace Eventing
                 // Move Up
                 if (move_dir.y > 0)
                 {
+                    if (neighbor_tiles.up_tile == null) return false;
                     // Move Off Up Stairs
                     if (neighbor_tiles.on_tile.terrain_tag == TerrainTags.StairUp)
                     {
@@ -466,6 +487,7 @@ namespace Eventing
                 // Move Down
                 else if (move_dir.y < 0)
                 {
+                    if (neighbor_tiles.down_tile == null) return false;
                     // Move Onto Up Stairs
                     if (neighbor_tiles.down_tile.terrain_tag == TerrainTags.StairUp)
                     {
@@ -902,7 +924,7 @@ namespace Eventing
         [Button("Jump in Place")]
         public bool JumpInPlace() { 
             float height = Constants.JUMP_HEIGHT;
-            target_pos += (height * Vector3.back) + (height * Vector3.up);
+            target_pos += ((height * Vector3.back) + (height * Vector3.up));
             moving = true;
             jumping = true;
             jump_data = new JumpData (height, new Vector3(), 0);
@@ -941,8 +963,8 @@ namespace Eventing
                     default:
                         break;
                 }
-                
-                target_pos += (height * Vector3.back) + (height * Vector3.up) + (v * (float)num_tiles / 2);
+
+                target_pos += ((height * Vector3.back) + (height * Vector3.up) + (v * (float)num_tiles / 2));
                 moving = true;
                 jumping = true;
                 jump_data = new JumpData (height, v, num_tiles);

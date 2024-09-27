@@ -8,6 +8,7 @@ TagManager:
   - Priority Tile
   - DePriority Tile
   - Shadow
+  - Extra Priority Tile
   layers:
   - Default
   - TransparentFX

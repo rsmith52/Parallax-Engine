@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 726282956160947172}
   m_Layer: 0
   m_Name: Front Left
-  m_TagString: Priority Tile
+  m_TagString: Extra Priority Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

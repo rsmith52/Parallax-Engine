@@ -11,6 +11,7 @@ namespace Utilities
         public static readonly float MAP_LAYER_HEIGHT = 0.5f;
         public static readonly int SORTING_LAYERS_PER_MAP_LAYER = 10;
         public static readonly int EVENT_SORTING_LAYER_OFFSET = 5;
+        public static readonly string EXTRA_PRIORITY_TILE_TAG = "Extra Priority Tile";
         public static readonly string PRIORITY_TILE_TAG = "Priority Tile";
         public static readonly string DEPRIORITY_TILE_TAG = "DePriority Tile";
         public static readonly int PRIORITY_TILE_OFFSET = (int)(0.1f * SORTING_LAYERS_PER_MAP_LAYER);
@@ -32,6 +33,13 @@ namespace Utilities
         };
         public static readonly float TAP_VS_HOLD_TIME = 0.075f;
         public static readonly float JUMP_HEIGHT = 0.5f;
+
+        #endregion
+
+
+        #region Sprites
+
+        public static readonly string SHADOW_TAG = "Shadow";
 
         #endregion
     }

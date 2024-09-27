@@ -18,7 +18,6 @@ Unity Project for 2.5d Parallax RPG Engine
 * Slide on ice
 * Ice ramps?
 * Sand ramps / landslides?
-* Jump ledges - detect blockers on other side
 * Tiles that you can't jump in (marsh, deep sand, etc.)
 
 ### Map Managing Code
@@ -42,7 +41,6 @@ Unity Project for 2.5d Parallax RPG Engine
 * Tile activation might be one off
 * Implement falling physics?
 * Make shadow not jump
-* Jump forward when jumping while moving
 
 ### Other things to do
 * Region map - Melanite Style, LoP Region Concept

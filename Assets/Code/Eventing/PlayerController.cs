@@ -67,10 +67,6 @@ namespace Eventing
             if (Input.GetKeyDown(Controls.ACTION_BUTTON))
                 player_mover.ActivateEvent();
 
-            // Handle Jump Input
-            if (Input.GetKeyDown(Controls.JUMP))
-                player_mover.JumpInPlace();
-
             // Handle Running/Sneaking Input
             if (Input.GetKeyDown(Controls.RUN_BUTTON))
                 StartRunning();
@@ -81,8 +77,22 @@ namespace Eventing
             else if (Input.GetKeyUp(Controls.SNEAK_BUTTON))
                 StopSneaking();
 
+            // Handle Jump Input
+            if (Input.GetKey(Controls.JUMP) && current_pos == target_pos)
+            {
+                if (Input.GetKey(Controls.MOVE_UP) || Input.GetKey(Controls.MOVE_LEFT) ||
+                    Input.GetKey(Controls.MOVE_RIGHT) || Input.GetKey(Controls.MOVE_DOWN))
+                {
+                    if (player_mover.movement_speed == MovementSpeeds.Moderate)
+                        player_mover.JumpForward(1);
+                    else if (player_mover.movement_speed == MovementSpeeds.Fast || player_mover.movement_speed == MovementSpeeds.VeryFast)
+                        player_mover.JumpForward(2);
+                }
+                else
+                    player_mover.JumpInPlace();
+            }
             // Handle Movement Input
-            if (Input.GetKey(Controls.MOVE_UP) && current_pos == target_pos)
+            else if (Input.GetKey(Controls.MOVE_UP) && current_pos == target_pos)
             {
                 if (!player_mover.lock_direction && direction != Directions.Up)
                 {

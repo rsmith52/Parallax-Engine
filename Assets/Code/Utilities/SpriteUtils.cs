@@ -49,6 +49,8 @@ namespace Utilities
                     sprite.sortingOrder = layer + Constants.PRIORITY_TILE_OFFSET;
                 else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG)
                     sprite.sortingOrder = layer - Constants.PRIORITY_TILE_OFFSET;
+                else if (sprite.tag == Constants.EXTRA_PRIORITY_TILE_TAG)
+                    sprite.sortingOrder = layer + (2 * Constants.PRIORITY_TILE_OFFSET);
                 else
                     sprite.sortingOrder = layer;
             }
