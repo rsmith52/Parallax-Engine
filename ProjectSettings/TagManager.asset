@@ -7,6 +7,7 @@ TagManager:
   - Map
   - Priority Tile
   - DePriority Tile
+  - Shadow
   layers:
   - Default
   - TransparentFX

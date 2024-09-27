@@ -138,17 +138,23 @@ namespace Eventing
                 // Shift layers
                 if (Input.GetKeyDown(Controls.SHIFT_LAYER_UP))
                 {
-                    player_mover.MoveThroughWallsOn();
-                    player_mover.MoveLayerUp();
-                    // player_mover.MoveUp();
-                    player_mover.MoveThroughWallsOff();
+                    if (player_mover.neighbor_tiles.above_tile != null)
+                    {
+                        player_mover.MoveThroughWallsOn();
+                        player_mover.MoveLayerUp();
+                        player_mover.MoveUp();
+                        player_mover.MoveThroughWallsOff();
+                    }
                 }
                 else if (Input.GetKeyDown(Controls.SHIFT_LAYER_DOWN))
                 {
-                    player_mover.MoveThroughWallsOn();
-                    player_mover.MoveLayerDown();
-                    // player_mover.MoveDown();
-                    player_mover.MoveThroughWallsOff();
+                    if (player_mover.neighbor_tiles.below_tile != null)
+                    {
+                        player_mover.MoveThroughWallsOn();
+                        player_mover.MoveLayerDown();
+                        player_mover.MoveDown();
+                        player_mover.MoveThroughWallsOff();
+                    }
                 }
             }
         }

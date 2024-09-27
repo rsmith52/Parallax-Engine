@@ -90,6 +90,8 @@ namespace Eventing
         [Title("Awareness")]
         [ReadOnly]
         public bool in_bush;
+        [ReadOnly]
+        public bool on_water;
 
         [TabGroup ("Movement")]
         [ReadOnly]
@@ -274,14 +276,20 @@ namespace Eventing
 
         #region Map Interactions
 
+        [TitleGroup("Debug Actions")]
+        [HorizontalGroup("Debug Actions/Split")]
+        [VerticalGroup("Debug Actions/Split/Left")]
+        [BoxGroup("Debug Actions/Split/Left/Activation")]
         [Button("Activate Current Tile")]
         private void ManualActivateTile()
         {
-            ActivateTile(neighbor_tiles.on_tile);
+            ActivateTile(neighbor_tiles.on_tile, true);
         }
 
-        private bool ActivateTile(ParallaxTileBase tile)
+        private bool ActivateTile(ParallaxTileBase tile, bool verbose = false)
         {
+            if (verbose) Debug.Log("Activating tile: " + neighbor_tiles.on_tile);
+
             // No tile, must be moving through walls
             if (tile == null)
                 return true;
@@ -291,6 +299,12 @@ namespace Eventing
                 in_bush = true; // TODO - bush animation
             else
                 in_bush = false;
+
+            // On Water Flag
+            if (ParallaxTerrain.IsWaterTile(tile))
+                on_water = true;
+            else
+                on_water = false;
 
             return true;
         }
@@ -387,6 +401,7 @@ namespace Eventing
             return false;
         }
 
+        [BoxGroup("Debug Actions/Split/Left/Activation")]
         [Button("Activate Event")]
         public void ActivateEvent() { }
 
@@ -559,6 +574,9 @@ namespace Eventing
             target_pos = transform.position;
         }
 
+        [VerticalGroup("Debug Actions/Split/Right")]
+        [BoxGroup("Debug Actions/Split/Right/Movement")]
+        [Button("Move Up")]
         public bool MoveUp()
         {
             TurnUp();
@@ -573,6 +591,8 @@ namespace Eventing
             }
             return false;
         }
+        [BoxGroup("Debug Actions/Split/Right/Movement")]
+        [Button("Move Left")]
         public bool MoveLeft()
         {
             TurnLeft();
@@ -588,6 +608,8 @@ namespace Eventing
             }
             return false;
         }
+        [BoxGroup("Debug Actions/Split/Right/Movement")]
+        [Button("Move Right")]
         public bool MoveRight()
         {
             TurnRight();
@@ -603,6 +625,8 @@ namespace Eventing
             }
             return false;
         }
+        [BoxGroup("Debug Actions/Split/Right/Movement")]
+        [Button("Move Down")]
         public bool MoveDown()
         {
             TurnDown();
@@ -675,6 +699,8 @@ namespace Eventing
             return false;
         }
 
+        [BoxGroup("Debug Actions/Split/Right/Movement")]
+        [Button("Step Forward")]
         public bool StepForward()
         {
             bool success = false;
@@ -699,6 +725,8 @@ namespace Eventing
             moving = true;
             return success;
         }
+        [BoxGroup("Debug Actions/Split/Right/Movement")]
+        [Button("Step Backward")]
         public bool StepBackward()
         {
             bool prev_fix_direction = fix_direction;
@@ -732,6 +760,8 @@ namespace Eventing
             return success;
         }
 
+        [BoxGroup("Debug Actions/Split/Right/Movement")]
+        [Button("Move at Random")]
         public bool MoveAtRandom()
         {
             bool success = false;
@@ -758,8 +788,14 @@ namespace Eventing
             return success;
         }
 
+        [BoxGroup("Debug Actions/Split/Right/Movement")]
+        [Button("Jump in Place")]
         public void JumpInPlace() { }
+        [BoxGroup("Debug Actions/Split/Right/Movement")]
+        [Button("Jump Forward")]
         public void JumpForward(int num_tiles) { }
+        [BoxGroup("Debug Actions/Split/Right/Movement")]
+        [Button("Jump Backward")]
         public void JumpBackward(int num_tiles) { }
 
         #endregion

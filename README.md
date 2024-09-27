@@ -11,6 +11,7 @@ Unity Project for 2.5d Parallax RPG Engine
 ### Tile Additions / Edits
 * Sand for Beach
 * Beach Water / Shore
+* Add shadows in
 
 ### Tile object coding
 * Reflections on ice, still water, etc.
@@ -26,6 +27,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Map object stores map size? background music
 * Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
 * Detection for while on water or near water looking at edges
+* Ground layer "objects" like paths & seabed need a separate "environment" layer, not objects
 
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines
@@ -73,6 +75,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * zerudez
 * Hydragirium
 * Alistair
+* Flurmimon
 
 ### Asset Packs
 * Odin Inspector

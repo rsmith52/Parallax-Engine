@@ -190,6 +190,7 @@ namespace Mapping
             NeighborTiles neighbor_tiles = new NeighborTiles{};
             bool on_stairs = false;
             bool on_water = false;
+            bool on_bridge = false;
 
             Vector3Int int_pos = new Vector3Int (
                 (int)(pos.x),
@@ -201,8 +202,9 @@ namespace Mapping
             neighbor_tiles.on_tile = GetTileAtPosition (neighbor_maps, int_pos).tile;
             if (neighbor_tiles.on_tile != null)
             {
-                on_stairs = (neighbor_tiles.on_tile != null && ParallaxTerrain.IsStairTile(neighbor_tiles.on_tile.terrain_tag));
-                on_water = (neighbor_tiles.on_tile != null && ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile.terrain_tag));
+                on_stairs = (neighbor_tiles.on_tile != null && ParallaxTerrain.IsStairTile(neighbor_tiles.on_tile));
+                on_water = (neighbor_tiles.on_tile != null && ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile));
+                on_bridge = (neighbor_tiles.on_tile != null && ParallaxTerrain.IsBridgeTile(neighbor_tiles.on_tile));
             }
         
             // Same Level Neighbors
@@ -219,7 +221,7 @@ namespace Mapping
 
             // Above / Below Level Neighbors - primarily bridge & water use
             neighbor_tiles.above_tile = CheckTilePositionOnLayer (new MatchedTile{}, int_pos + Vector3Int.up, neighbor_maps.layer_up, neighbor_maps.objects_up).tile;
-            if (on_water && neighbor_tiles.down_tile != null && ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile.terrain_tag))
+            if (on_bridge || (on_water && neighbor_tiles.down_tile != null && ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile)))
                 neighbor_tiles.below_tile = CheckTilePositionOnLayer (new MatchedTile{}, int_pos + Vector3Int.down, neighbor_maps.layer_down, neighbor_maps.objects_down).tile;
 
             return neighbor_tiles;
@@ -244,6 +246,16 @@ namespace Mapping
             // Handle terrain tiles
             if (matched_tile.tile != null && !matched_tile.object_match)
             {
+                // Extend double tall terrain front edges
+                MatchedTile up_tile = new MatchedTile{};
+                up_tile = CheckTilePositionOnLayer (up_tile, pos + Vector3Int.up, neighbor_maps.layer_up, neighbor_maps.objects_up, true);
+                RuleTile up_ruletile = up_tile.tile as RuleTile;
+                if (up_ruletile != null && up_ruletile.is_terrain && up_ruletile.is_double_tall)
+                {
+                    matched_tile.tile = up_ruletile;
+                    matched_tile.map = up_tile.map;
+                }
+                
                 RuleTile ruletile = matched_tile.tile as RuleTile;
                 if (ruletile != null)
                 {
@@ -255,16 +267,6 @@ namespace Mapping
                     matched_tile = StairTileHelper(matched_tile, ruletile, pos + Vector3Int.down, neighbor_maps.layer_up, neighbor_maps.objects_up);
                     matched_tile = StairTileHelper(matched_tile, ruletile, pos + Vector3Int.down + Vector3Int.left, neighbor_maps.ground, neighbor_maps.objects);
                     matched_tile = StairTileHelper(matched_tile, ruletile, pos + Vector3Int.down + Vector3Int.right, neighbor_maps.ground, neighbor_maps.objects);
-                }
-
-                // Extend double tall terrain front edges
-                MatchedTile up_tile = new MatchedTile{};
-                up_tile = CheckTilePositionOnLayer (up_tile, pos + Vector3Int.up, neighbor_maps.layer_up, neighbor_maps.objects_up, true);
-                RuleTile up_ruletile = up_tile.tile as RuleTile;
-                if (up_ruletile != null && up_ruletile.is_terrain && up_ruletile.is_double_tall)
-                {
-                    matched_tile.tile = up_ruletile;
-                    matched_tile.map = up_tile.map;
                 }
             }
             return matched_tile;
