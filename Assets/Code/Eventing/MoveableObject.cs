@@ -271,7 +271,7 @@ namespace Eventing
                 foreach (SpriteRenderer sprite in sprites)
                     sprite.enabled = true;
                      
-            if (in_bush && !jumping)
+            if (in_bush && !jumping && !falling)
                 bush_mask.enabled = true;
             else
                 bush_mask.enabled = false;
@@ -939,30 +939,43 @@ namespace Eventing
         {
             // TODO Check for Events
             // TODO Check more than 2 tiles ahead
-            ParallaxTileBase check_tile = (num_tiles == 2) ? neighbor_tiles.look_ahead_tile : neighbor_tiles.facing_tile;
-            if (move_through_walls || num_tiles >2 || (neighbor_tiles.on_tile != null && 
-                check_tile != null && check_tile.allow_passage))
+            ParallaxTileBase check_tile = neighbor_tiles.facing_tile;
+            if (move_through_walls || (neighbor_tiles.on_tile != null && !neighbor_tiles.facing_other_level &&
+                ((num_tiles >2) ||
+                (num_tiles == 1 && check_tile != null && check_tile.allow_passage && check_tile.terrain_tag != TerrainTags.Ledge) ||
+                (num_tiles == 2 && neighbor_tiles.look_ahead_tile != null && neighbor_tiles.look_ahead_tile.allow_passage && neighbor_tiles.look_ahead_tile.terrain_tag != TerrainTags.Ledge)
+            )))
             {
                 float height = Constants.JUMP_HEIGHT * num_tiles;
                 Vector3 v = new Vector3();
+                bool ledge_dir_allowed = true;
 
                 switch (direction)
                 {
                     case Directions.Up:
                         v = Vector3.up;
+                        if (check_tile != null && check_tile.terrain_tag == TerrainTags.Ledge)
+                            ledge_dir_allowed = check_tile.down_passage;
                         break;
                     case Directions.Left:
                         v = Vector3.left;
+                        if (check_tile != null && check_tile.terrain_tag == TerrainTags.Ledge)
+                            ledge_dir_allowed = check_tile.right_passage;
                         break;
                     case Directions.Right:
                         v = Vector3.right;
+                        if (check_tile != null && check_tile.terrain_tag == TerrainTags.Ledge)
+                            ledge_dir_allowed = check_tile.left_passage;
                         break;
                     case Directions.Down:
                         v = Vector3.down;
+                        if (check_tile != null && check_tile.terrain_tag == TerrainTags.Ledge)
+                            ledge_dir_allowed = check_tile.up_passage;
                         break;
                     default:
                         break;
                 }
+                if (!ledge_dir_allowed) return false;
 
                 target_pos += ((height * Vector3.back) + (height * Vector3.up) + (v * (float)num_tiles / 2));
                 moving = true;

@@ -80,15 +80,16 @@ namespace Eventing
             // Handle Jump Input
             if (Input.GetKey(Controls.JUMP) && current_pos == target_pos)
             {
+                bool jump_success = false;
                 if (Input.GetKey(Controls.MOVE_UP) || Input.GetKey(Controls.MOVE_LEFT) ||
                     Input.GetKey(Controls.MOVE_RIGHT) || Input.GetKey(Controls.MOVE_DOWN))
                 {
                     if (player_mover.movement_speed == MovementSpeeds.Moderate)
-                        player_mover.JumpForward(1);
+                        jump_success = player_mover.JumpForward(1);
                     else if (player_mover.movement_speed == MovementSpeeds.Fast || player_mover.movement_speed == MovementSpeeds.VeryFast)
-                        player_mover.JumpForward(2);
+                        jump_success = player_mover.JumpForward(2);
                 }
-                else
+                if (!jump_success)
                     player_mover.JumpInPlace();
             }
             // Handle Movement Input

@@ -50,6 +50,7 @@ namespace Mapping
         public ParallaxTileBase right_tile;
         public ParallaxTileBase down_tile;
 
+        public bool facing_other_level;
         public ParallaxTileBase facing_tile;
         public ParallaxTileBase look_ahead_tile;
         public ParallaxTileBase above_tile;
@@ -70,6 +71,7 @@ namespace Mapping
     {
         public ParallaxTileBase tile;
         public Tilemap map;
+        public Tilemap layer;
         public bool object_match;
     }
 
@@ -205,10 +207,12 @@ namespace Mapping
                 0
             );
 
+            // Current Tile - modifies some behavior of neighbor tile detection/perception
+            MatchedTile on_tile = GetTileAtPosition (neighbor_maps, int_pos);
+            neighbor_tiles.on_tile = on_tile.tile;
+
             if (!look_only)
             {
-                // Current Tile - modifies some behavior of neighbor tile detection/perception
-                neighbor_tiles.on_tile = GetTileAtPosition (neighbor_maps, int_pos).tile;
                 if (neighbor_tiles.on_tile != null)
                 {
                     on_stairs = (neighbor_tiles.on_tile != null && ParallaxTerrain.IsStairTile(neighbor_tiles.on_tile));
@@ -249,8 +253,12 @@ namespace Mapping
                 default:
                     break;
             }
-            neighbor_tiles.facing_tile = GetTileAtPosition (neighbor_maps, int_pos + dir_vector, on_stairs).tile;
             neighbor_tiles.look_ahead_tile = GetTileAtPosition (neighbor_maps, int_pos + (2 * dir_vector), on_stairs).tile;
+
+            MatchedTile facing_tile = GetTileAtPosition (neighbor_maps, int_pos + dir_vector, on_stairs);
+            neighbor_tiles.facing_tile = facing_tile.tile;
+            neighbor_tiles.facing_other_level = ((on_tile.layer == null && facing_tile.layer != null) || (on_tile.layer != null && facing_tile.layer == null) ||
+                (on_tile.layer != null && facing_tile.layer != null && on_tile.layer.name != facing_tile.layer.name));
             
             return neighbor_tiles;
         }
@@ -316,6 +324,7 @@ namespace Mapping
                     {
                         matched_tile.tile = checked_tile;
                         matched_tile.map = objects[i];
+                        matched_tile.layer = layer;
                         matched_tile.object_match = true;
                     }
 
@@ -324,6 +333,7 @@ namespace Mapping
                     {
                         matched_tile.tile = null;
                         matched_tile.map = null;
+                        matched_tile.layer = null;
                         matched_tile.object_match = false;
                     }
                 }
@@ -335,6 +345,7 @@ namespace Mapping
                     {
                         matched_tile.tile = checked_tile;
                         matched_tile.map = layer;
+                        matched_tile.layer = layer;
                     }
             }
 
