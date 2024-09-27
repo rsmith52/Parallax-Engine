@@ -17,7 +17,6 @@ Unity Project for 2.5d Parallax RPG Engine
 * Slide on ice
 * Ice ramps?
 * Sand ramps / landslides?
-* Prefab tiles should properly place tiles in full space
 * Jump ledges
 
 ### Map Managing Code

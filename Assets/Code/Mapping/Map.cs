@@ -50,13 +50,13 @@ namespace Mapping
         public ParallaxTileBase right_tile;
         public ParallaxTileBase down_tile;
 
-        //[HideInInspector]
+        [HideInInspector]
         public ParallaxTileBase up_left_tile;
-        //[HideInInspector]
+        [HideInInspector]
         public ParallaxTileBase up_right_tile;
-        //[HideInInspector]
+        [HideInInspector]
         public ParallaxTileBase down_left_tile;
-        //[HideInInspector]
+        [HideInInspector]
         public ParallaxTileBase down_right_tile;
 
         public ParallaxTileBase above_tile;
