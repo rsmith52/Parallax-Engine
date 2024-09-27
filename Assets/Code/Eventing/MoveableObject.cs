@@ -937,6 +937,7 @@ namespace Eventing
         [Button("Jump Forward")]
         public bool JumpForward(int num_tiles = 1)
         {
+            if (num_tiles < 1) return false;
             // TODO Check for Events
             // TODO Check more than 2 tiles ahead
             ParallaxTileBase check_tile = neighbor_tiles.facing_tile;
@@ -984,7 +985,7 @@ namespace Eventing
                 tile_activated = false;
                 return true;
             }
-            return false;
+            return JumpForward(num_tiles - 1);
         }
         
         [BoxGroup("Debug Actions/Split/Right/Movement")]
