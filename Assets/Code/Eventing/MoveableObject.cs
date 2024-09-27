@@ -306,17 +306,21 @@ namespace Eventing
                     if (neighbor_tiles.right_tile.terrain_tag == TerrainTags.StairRight)
                     {
                         CancelMovement();
-                        MoveLayerUp();
-                        MoveUpRight();
-                        return ActivateTile(neighbor_tiles.up_right_tile);
+                        if (MoveUpRight()) 
+                        {
+                            MoveLayerUp();
+                            return ActivateTile(neighbor_tiles.up_right_tile);
+                        }
                     }
                     // Move Off Left Stairs
                     else if (neighbor_tiles.on_tile.terrain_tag == TerrainTags.StairLeft)
                     {
                         CancelMovement();
-                        MoveLayerDown();
-                        MoveDownRight();
-                        return ActivateTile(neighbor_tiles.down_right_tile);
+                        if (MoveDownRight())
+                        {
+                            MoveLayerDown();
+                            return ActivateTile(neighbor_tiles.down_right_tile);
+                        }
                     }
                     return ActivateTile(neighbor_tiles.right_tile);
                 }
@@ -327,17 +331,21 @@ namespace Eventing
                     if (neighbor_tiles.left_tile.terrain_tag == TerrainTags.StairLeft)
                     {
                         CancelMovement();
-                        MoveLayerUp();
-                        MoveUpLeft();
-                        return ActivateTile(neighbor_tiles.up_left_tile);
+                        if (MoveUpLeft())
+                        {
+                            MoveLayerUp();
+                            return ActivateTile(neighbor_tiles.up_left_tile);
+                        }
                     }
                     // Move Off Right Stairs
                     else if (neighbor_tiles.on_tile.terrain_tag == TerrainTags.StairRight)
                     {
                         CancelMovement();
-                        MoveLayerDown();
-                        MoveDownLeft();
-                        return ActivateTile(neighbor_tiles.down_left_tile);
+                        if (MoveDownLeft())
+                        {
+                            MoveLayerDown();
+                            return ActivateTile(neighbor_tiles.down_left_tile);
+                        }
                     }
                     return ActivateTile(neighbor_tiles.left_tile);
                 }
@@ -351,9 +359,11 @@ namespace Eventing
                     if (neighbor_tiles.on_tile.terrain_tag == TerrainTags.StairUp)
                     {
                         CancelMovement();
-                        MoveUp();
-                        MoveLayerUp();
-                        return ActivateTile(neighbor_tiles.up_tile);
+                        if (MoveUp())
+                        {
+                            MoveLayerUp();
+                            return ActivateTile(neighbor_tiles.up_tile);
+                        }
                     }
                     return ActivateTile(neighbor_tiles.up_tile);
                 }
@@ -364,9 +374,11 @@ namespace Eventing
                     if (neighbor_tiles.down_tile.terrain_tag == TerrainTags.StairUp)
                     {
                         CancelMovement();
-                        MoveDown();
-                        MoveLayerDown();
-                        return ActivateTile(neighbor_tiles.down_tile);
+                        if (MoveDown())
+                        {
+                            MoveLayerDown();
+                            return ActivateTile(neighbor_tiles.down_tile);
+                        }
                     }
                     return ActivateTile(neighbor_tiles.down_tile);
                 }
@@ -547,7 +559,7 @@ namespace Eventing
             target_pos = transform.position;
         }
 
-        public void MoveUp()
+        public bool MoveUp()
         {
             TurnUp();
             if (move_through_walls || (neighbor_tiles.on_tile != null && neighbor_tiles.up_tile != null &&
@@ -557,21 +569,26 @@ namespace Eventing
                 target_pos += Vector3.up;
                 moving = true;
                 tile_activated = false;
+                return true;
             }
+            return false;
         }
-        public void MoveLeft()
+        public bool MoveLeft()
         {
             TurnLeft();
-            if (move_through_walls || (neighbor_tiles.on_tile != null && neighbor_tiles.left_tile != null &&
+            if (move_through_walls || neighbor_tiles.on_tile.terrain_tag == TerrainTags.StairRight ||
+                (neighbor_tiles.on_tile != null && neighbor_tiles.left_tile != null &&
                 (left_event == null || left_event.IsPassable()) && neighbor_tiles.on_tile.left_passage &&
                 neighbor_tiles.left_tile.allow_passage && neighbor_tiles.left_tile.right_passage))
             {
                 target_pos += Vector3.left;
                 moving = true;
                 tile_activated = false;
+                return true;
             }
+            return false;
         }
-        public void MoveRight()
+        public bool MoveRight()
         {
             TurnRight();
             if (move_through_walls || neighbor_tiles.on_tile.terrain_tag == TerrainTags.StairLeft ||
@@ -582,9 +599,11 @@ namespace Eventing
                 target_pos += Vector3.right;
                 moving = true;
                 tile_activated = false;
+                return true;
             }
+            return false;
         }
-        public void MoveDown()
+        public bool MoveDown()
         {
             TurnDown();
             if (move_through_walls || (neighbor_tiles.on_tile != null && neighbor_tiles.down_tile != null &&
@@ -594,112 +613,149 @@ namespace Eventing
                 target_pos += Vector3.down;
                 moving = true;
                 tile_activated = false;
+                return true;
             }
+            return false;
         }
 
-        public void MoveUpLeft()
+        public bool MoveUpLeft()
         {
             TurnLeft();
-            target_pos += Vector3.up + Vector3.left;
-            moving = true;
-            tile_activated = false;
+            // TODO Check for Events
+            if (move_through_walls || (neighbor_tiles.on_tile != null && neighbor_tiles.up_left_tile != null &&
+            neighbor_tiles.up_left_tile.allow_passage))
+            {
+                target_pos += Vector3.up + Vector3.left;
+                moving = true;
+                tile_activated = false;
+                return true;
+            }
+            return false;
         }
-        public void MoveUpRight()
+        public bool MoveUpRight()
         {
             TurnRight();
-            target_pos += Vector3.up + Vector3.right;
-            moving = true;
-            tile_activated = false;
+            // TODO Check for Events
+            if (move_through_walls || (neighbor_tiles.on_tile != null && neighbor_tiles.up_right_tile != null &&
+            neighbor_tiles.up_right_tile.allow_passage))
+            {
+                target_pos += Vector3.up + Vector3.right;
+                moving = true;
+                tile_activated = false;
+                return true;
+            }
+            return false;
         }
-        public void MoveDownLeft()
+        public bool MoveDownLeft()
         {
             TurnLeft();
-            target_pos += Vector3.down + Vector3.left;
-            moving = true;
-            tile_activated = false;
+            // TODO Check for Events
+            if (move_through_walls || (neighbor_tiles.on_tile != null && neighbor_tiles.down_left_tile != null &&
+            neighbor_tiles.down_left_tile.allow_passage))
+            {
+                target_pos += Vector3.down + Vector3.left;
+                moving = true;
+                tile_activated = false;
+                return true;
+            }
+            return false;
         }
-        public void MoveDownRight()
+        public bool MoveDownRight()
         {
             TurnRight();
-            target_pos += Vector3.down + Vector3.right;
-            moving = true;
-            tile_activated = false;
+            // TODO Check for Events
+            if (move_through_walls || (neighbor_tiles.on_tile != null && neighbor_tiles.down_right_tile != null &&
+            neighbor_tiles.down_right_tile.allow_passage))
+            {
+                target_pos += Vector3.down + Vector3.right;
+                moving = true;
+                tile_activated = false;
+                return true;
+            }
+            return false;
         }
 
-        public void StepForward()
+        public bool StepForward()
         {
+            bool success = false;
             switch (direction)
             {
                 case Directions.Up:
-                    MoveUp();
+                    success = MoveUp();
                     break;
                 case Directions.Left:
-                    MoveLeft();
+                    success = MoveLeft();
                     break;
                 case Directions.Right:
-                    MoveRight();
+                    success = MoveRight();
                     break;
                 case Directions.Down:
-                    MoveDown();
+                    success = MoveDown();
                     break;
                 default:
+                    success = false;
                     break;
             }
             moving = true;
+            return success;
         }
-        public void StepBackward()
+        public bool StepBackward()
         {
             bool prev_fix_direction = fix_direction;
+            bool success = false;
             switch (direction)
             {
                 case Directions.Up:
                     FixDirectionOn();
-                    MoveDown();
+                    success = MoveDown();
                     fix_direction = prev_fix_direction;
                     break;
                 case Directions.Left:
                     FixDirectionOn();
-                    MoveRight();
+                    success = MoveRight();
                     fix_direction = prev_fix_direction;
                     break;
                 case Directions.Right:
                     FixDirectionOn();
-                    MoveLeft();
+                    success = MoveLeft();
                     fix_direction = prev_fix_direction;
                     break;
                 case Directions.Down:
                     FixDirectionOn();
-                    MoveUp();
+                    success = MoveUp();
                     fix_direction = prev_fix_direction;
                     break;
                 default:
                     break;
             }
             moving = true;
+            return success;
         }
 
-        public void MoveAtRandom()
+        public bool MoveAtRandom()
         {
+            bool success = false;
             System.Random random = Utilities.Random.GetRandom();
             Directions new_direction = (Directions)random.Next(4);
             switch (new_direction)
             {
                 case Directions.Up:
-                    MoveUp();
+                    success = MoveUp();
                     break;
                 case Directions.Left:
-                    MoveLeft();
+                    success = MoveLeft();
                     break;
                 case Directions.Right:
-                    MoveRight();
+                    success = MoveRight();
                     break;
                 case Directions.Down:
-                    MoveDown();
+                    success = MoveDown();
                     break;
                 default:
                     break;
             }
             moving = true;
+            return success;
         }
 
         public void JumpInPlace() { }

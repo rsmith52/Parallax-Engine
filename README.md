@@ -18,6 +18,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Ice ramps?
 * Sand ramps / landslides?
 * Prefab tiles should properly place tiles in full space
+* Jump ledges
 
 ### Map Managing Code
 * Buttons calling to methods (maybe static) to create new layers above/below (also delete top/bottom layer)
@@ -26,7 +27,6 @@ Unity Project for 2.5d Parallax RPG Engine
 * Map object stores map size? background music
 * Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
 * Detection for while on water or near water looking at edges
-* Awareness - looking while on stairs should look at a slightly different tile in certain directions
 
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines
