@@ -32,11 +32,11 @@ Unity Project for 2.5d Parallax RPG Engine
 * Consider what script sprite appearance and layer handling is owned by... moveable object may not make the most sense
 * Better way to find current map in MoveableObject
 * Tile activation might be one off
-* Implement falling physics?
 * Make shadow not jump
 * Settings for jump / swim enabled - can be unlocked?
 * Setting for allow jumping up ledges / over rocks? again can be unlocked?
 * "Selected Event" concept. Doesn't need to be directly in front, could be on ground, under, look ahead, etc.
+* More advanced falling physics
 
 ### Other things to do
 * Region map - Melanite Style, LoP Region Concept

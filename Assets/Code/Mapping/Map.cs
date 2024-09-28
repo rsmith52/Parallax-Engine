@@ -155,7 +155,7 @@ namespace Mapping
                     
                     // Dynamic set sorting layers
                     TilemapRenderer renderer = object_layer.GetComponent<TilemapRenderer>();
-                    if (renderer.tag == Constants.EXTRA_PRIORITY_TILE_TAG)
+                    if (renderer.tag == Constants.GROUND_LAYER_TAG)
                         renderer.sortingOrder = sorting_layer + (2 * Constants.PRIORITY_TILE_OFFSET);
                     else
                         renderer.sortingOrder = sorting_layer + i;
@@ -318,7 +318,7 @@ namespace Mapping
                 matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.layer_down, neighbor_maps.objects_down);
             
             // Handle terrain tiles
-            if (matched_tile.tile != null && !matched_tile.object_match)
+            if (matched_tile.tile != null && (!matched_tile.object_match || matched_tile.map.tag == Constants.GROUND_LAYER_TAG))
             {
                 // Extend double tall terrain front edges
                 MatchedTile up_tile = new MatchedTile{};

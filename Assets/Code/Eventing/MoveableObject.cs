@@ -352,11 +352,19 @@ namespace Eventing
                     }  
                 }   
             }
+            // Update facing & look ahead tile
             else if (looked)
             {
-                // Update look ahead tile
                 neighbor_tiles = map.GetNeighborTiles(this, true);
                 looked = false;
+            }
+            // Falling physics when in air
+            else if (neighbor_tiles.on_tile == null && !move_through_walls && !moving && !jumping && !falling)
+            {
+                SinkDown(true);
+                // target_pos += Vector3.forward + Vector3.down;
+                // moving = true;
+                // falling = true;
             }
 
             // Fall to ground
@@ -1127,9 +1135,9 @@ namespace Eventing
             }
             return false;
         }
-        public bool SinkDown()
+        public bool SinkDown(bool fall = false)
         {
-            if (neighbor_tiles.below_tile != null && neighbor_tiles.below_tile.allow_passage)
+            if (fall || (neighbor_tiles.below_tile != null && neighbor_tiles.below_tile.allow_passage))
             {
                 bool prev_move_through_walls = move_through_walls;
                 bool prev_lock_direction = lock_direction;

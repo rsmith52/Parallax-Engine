@@ -14,7 +14,8 @@ namespace Utilities
         public static readonly string EXTRA_PRIORITY_TILE_TAG = "Extra Priority Tile";
         public static readonly string PRIORITY_TILE_TAG = "Priority Tile";
         public static readonly string DEPRIORITY_TILE_TAG = "DePriority Tile";
-        public static readonly string UP_LAYER_PRIORITY_TILE = "Up Layer Priority Tile";
+        public static readonly string UP_LAYER_PRIORITY_TILE_TAG = "Up Layer Priority Tile";
+        public static readonly string GROUND_LAYER_TAG = "Ground Layer";
         public static readonly int PRIORITY_TILE_OFFSET = (int)(0.1f * SORTING_LAYERS_PER_MAP_LAYER);
         public static readonly float TRANS_TILE_ALPHA = 0.75f;
 
