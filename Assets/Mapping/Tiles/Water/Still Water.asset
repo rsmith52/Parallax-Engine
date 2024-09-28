@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Still Water
   m_EditorClassIdentifier: 
   terrain_tag: 20
-  allow_passage: 0
-  up_passage: 0
-  left_passage: 0
-  right_passage: 0
-  down_passage: 0
+  allow_passage: 1
+  up_passage: 1
+  left_passage: 1
+  right_passage: 1
+  down_passage: 1
   is_bush: 0
   is_counter: 0
   is_trans: 1

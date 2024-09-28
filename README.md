@@ -27,6 +27,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Map object stores map size? background music
 * Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
 * Ground layer "objects" like paths & seabed need a separate "environment" layer, not objects
+* Underwater should allow 1 more tile down everywhere! - need to modify when certain tiles are visible based on adjacent / up/above tiles being water
 
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines
@@ -42,12 +43,16 @@ Unity Project for 2.5d Parallax RPG Engine
 * Make shadow not jump
 * Settings for jump / swim enabled - can be unlocked?
 * Setting for allow jumping up ledges / over rocks? again can be unlocked?
+* Test movement onto/off of water when there are rocks etc. blocking the way
+* "Selected Event" concept. Doesn't need to be directly in front, could be on ground, under, look ahead, etc.
 
 ### Other things to do
 * Region map - Melanite Style, LoP Region Concept
 * Improve comments / documentation in code
 * Message system - UI should have separate border / fill elements so opacity can be set differently
 * Look at "Garbage Gold" reddit post for inspo
+* Reddit post pokemon "eternal ties" inspiration
+* Reddit post UI pixel font
 * Consider white outlines on characters / events
 
 ### Mechanics

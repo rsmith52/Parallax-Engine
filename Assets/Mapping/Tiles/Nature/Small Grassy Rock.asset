@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 06acc72d434f245648b6d2d5e6d686fe, type: 3}
-  m_Name: Small Mossy Rock
+  m_Name: Small Grassy Rock
   m_EditorClassIdentifier: 
-  terrain_tag: 3
+  terrain_tag: 1
   allow_passage: 0
   up_passage: 1
   left_passage: 1
@@ -22,4 +22,4 @@ MonoBehaviour:
   is_counter: 0
   is_trans: 0
   is_reflective: 0
-  sprite: {fileID: -1766672755, guid: 415d7341247264cd8bf2bfc99b3eeae4, type: 3}
+  sprite: {fileID: 1692628324, guid: 415d7341247264cd8bf2bfc99b3eeae4, type: 3}

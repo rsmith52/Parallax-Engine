@@ -1052,7 +1052,10 @@ namespace Eventing
                 tile_activated = false;
                 return true;
             }
-            return JumpForward(num_tiles - 1);
+            // Don't jump when trying to enter/leave water that is blocked
+            if (ParallaxTerrain.IsWaterTile(neighbor_tiles.facing_tile)) return false;
+            // Attempt shorter jump or hop in place if long jump blocked
+            else return JumpForward(num_tiles - 1);
         }
         
         [BoxGroup("Debug Actions/Split/Right/Movement")]

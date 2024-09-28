@@ -127,10 +127,6 @@ namespace Mapping
                 for (int i = 0; i < object_layers[layer.Key].Length; i++)
                 {
                     Tilemap object_layer = object_layers[layer.Key][i];
-                    
-                    // Dynamic set sorting layers
-                    TilemapRenderer renderer = object_layer.GetComponent<TilemapRenderer>();
-                    renderer.sortingOrder = sorting_layer + i;
 
                     // Instantiate Prefab Tiles
                     foreach (Vector3Int pos in object_layer.cellBounds.allPositionsWithin)
@@ -148,6 +144,10 @@ namespace Mapping
                             prefab_tile.InstantiatePrefab(local_place, object_layer);
                         }
                     }
+                    
+                    // Dynamic set sorting layers
+                    TilemapRenderer renderer = object_layer.GetComponent<TilemapRenderer>();
+                    renderer.sortingOrder = sorting_layer + i;
                 }
             }
         }
@@ -228,9 +228,12 @@ namespace Mapping
                 neighbor_tiles.down_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down, on_stairs).tile;
 
                 // Above / Below Level Neighbors - primarily bridge & water use
-                neighbor_tiles.above_tile = CheckTilePositionOnLayer (new MatchedTile{}, int_pos + Vector3Int.up, neighbor_maps.layer_up, neighbor_maps.objects_up).tile;
+                // neighbor_tiles.above_tile = CheckTilePositionOnLayer (new MatchedTile{}, int_pos + Vector3Int.up, neighbor_maps.layer_up, neighbor_maps.objects_up).tile;
+                // if (on_bridge || (on_water && neighbor_tiles.down_tile != null && ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile)))
+                //     neighbor_tiles.below_tile = CheckTilePositionOnLayer (new MatchedTile{}, int_pos + Vector3Int.down, neighbor_maps.layer_down, neighbor_maps.objects_down).tile;
+                neighbor_tiles.above_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up, on_stairs, true).tile;
                 if (on_bridge || (on_water && neighbor_tiles.down_tile != null && ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile)))
-                    neighbor_tiles.below_tile = CheckTilePositionOnLayer (new MatchedTile{}, int_pos + Vector3Int.down, neighbor_maps.layer_down, neighbor_maps.objects_down).tile;
+                    neighbor_tiles.below_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down, on_stairs, false, true).tile;
 
                 // Corner Neighbors
                 neighbor_tiles.up_left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up + Vector3Int.left, on_stairs).tile;
@@ -268,20 +271,22 @@ namespace Mapping
             return neighbor_tiles;
         }
 
-        private MatchedTile GetTileAtPosition (NeighborTilemaps neighbor_maps, Vector3Int pos, bool on_stairs = false)
+        private MatchedTile GetTileAtPosition (NeighborTilemaps neighbor_maps, Vector3Int pos,
+                                                bool on_stairs = false, bool looking_above = false, bool looking_below = false)
         {
             MatchedTile matched_tile = new MatchedTile{};
             matched_tile.object_match = false;
             
             // Check Layer Up
-            matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.layer_up, neighbor_maps.objects_up, true);
+            if (!looking_below)
+                matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.layer_up, neighbor_maps.objects_up, !looking_above);
             
             // Check Current Layer
-            if (matched_tile.tile == null)
+            if (matched_tile.tile == null && !looking_above && !looking_below)
                 matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.ground, neighbor_maps.objects);
 
             // Check Layer Down in special cases
-            if (on_stairs && matched_tile.tile == null)
+            if (looking_below || (on_stairs && matched_tile.tile == null))
                 matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.layer_down, neighbor_maps.objects_down);
             
             // Handle terrain tiles
@@ -289,7 +294,8 @@ namespace Mapping
             {
                 // Extend double tall terrain front edges
                 MatchedTile up_tile = new MatchedTile{};
-                up_tile = CheckTilePositionOnLayer (up_tile, pos + Vector3Int.up, neighbor_maps.layer_up, neighbor_maps.objects_up, true);
+                if (looking_below) up_tile = CheckTilePositionOnLayer (up_tile, pos + Vector3Int.up, neighbor_maps.ground, neighbor_maps.objects, true);
+                else up_tile = CheckTilePositionOnLayer (up_tile, pos + Vector3Int.up, neighbor_maps.layer_up, neighbor_maps.objects_up, true);
                 RuleTile up_ruletile = up_tile.tile as RuleTile;
                 if (up_ruletile != null && up_ruletile.is_terrain && up_ruletile.is_double_tall)
                 {
@@ -321,7 +327,7 @@ namespace Mapping
             {
                 for (int i = objects.Length - 1; i >= 0; i--)
                 {
-                    if (matched_tile.tile)
+                    if (matched_tile.tile && !up)
                         break;
 
                     checked_tile = (ParallaxTileBase)objects[i].GetTile(pos);
@@ -333,8 +339,8 @@ namespace Mapping
                         matched_tile.object_match = true;
                     }
 
-                    // Ignore bridges on layer above, see the ground on current level instead
-                    if (up && matched_tile.tile && matched_tile.tile.terrain_tag == TerrainTags.Bridge)
+                    // Ignore bridges and water on layer above, see the ground on current level instead
+                    if (up && matched_tile.tile && (ParallaxTerrain.IsBridgeTile(matched_tile.tile) || ParallaxTerrain.IsWaterTile(matched_tile.tile)))
                     {
                         matched_tile.tile = null;
                         matched_tile.map = null;

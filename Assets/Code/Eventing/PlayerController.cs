@@ -151,9 +151,9 @@ namespace Eventing
                 }
 
                 // Shift layers
-                if (Input.GetKeyDown(Controls.SHIFT_LAYER_UP))
+                if (Input.GetKeyDown(Controls.SHIFT_LAYER_UP) && current_pos == target_pos)
                 {
-                    if (player_mover.neighbor_tiles.above_tile != null)
+                    if (player_mover.neighbor_tiles.above_tile != null && player_mover.neighbor_tiles.above_tile.allow_passage)
                     {
                         bool move_through_walls = player_mover.move_through_walls;
                         player_mover.MoveThroughWallsOn();
@@ -162,9 +162,9 @@ namespace Eventing
                         if (!move_through_walls) player_mover.MoveThroughWallsOff();
                     }
                 }
-                else if (Input.GetKeyDown(Controls.SHIFT_LAYER_DOWN))
+                else if (Input.GetKeyDown(Controls.SHIFT_LAYER_DOWN) && current_pos == target_pos)
                 {
-                    if (player_mover.neighbor_tiles.below_tile != null)
+                    if (player_mover.neighbor_tiles.below_tile != null && player_mover.neighbor_tiles.below_tile.allow_passage)
                     {
                         bool move_through_walls = player_mover.move_through_walls;
                         player_mover.MoveThroughWallsOn();

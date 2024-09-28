@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Sirenix.OdinInspector;
@@ -13,6 +15,7 @@ namespace Mapping
     {
         public int x_width;
         public int y_height;
+        public int z_layers;
     }
 
     #endregion
@@ -106,16 +109,39 @@ namespace Mapping
             SpriteUtils.ConfigurePrefabTileSprites(map, instance, is_trans);
 
             // Handle multi-tile prefabs
-            BasicTile tile_copy = MultiTileCopy(this);
-
             if (multi_tile)
             {
+                BasicTile tile_copy = MultiTileCopy(this);
+                Map map_obj = map.GetComponentInParent<Map>();
+                Tilemap layer_map = map.GetComponentsInParent<Tilemap>().Last();
+                Tilemap copy_to_map;
+
                 for (int i = 0; i < tile_size.x_width; i++)
                 {
                     for (int j = 0; j < tile_size.y_height; j++)
                     {
-                        if (i == 0 && j == 0) continue;
-                        map.SetTile(pos + (i * Vector3Int.right) + (j * Vector3Int.up), tile_copy);
+                        for (int k = 0; k < tile_size.z_layers; k++)
+                        {
+                            if (k == 0)
+                            {
+                                if (i == 0 && j == 0) continue;
+                                map.SetTile(pos + (i * Vector3Int.right) + (j * Vector3Int.up), tile_copy);
+                            }
+                            else
+                            {
+                                copy_to_map = GetCopyToMap(map_obj, layer_map, k);
+                                if (copy_to_map == null) 
+                                {
+                                    Debug.Log("Object Layer Map Not Found to Expand: " + this.name);
+                                    break;
+                                }
+                                else
+                                {
+                                    Vector3Int y_offset = new Vector3Int(0, k, 0);
+                                    copy_to_map.SetTile(pos + (i * Vector3Int.right) + (j * Vector3Int.up) + y_offset, tile_copy);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -129,6 +155,25 @@ namespace Mapping
             tile_copy.allow_passage = base_tile.allow_passage;
 
             return tile_copy;
+        }
+
+        private Tilemap GetCopyToMap(Map map, Tilemap base_layer, int layers_up)
+        {
+            int layer_up_key = 0;
+            foreach (KeyValuePair<int, Tilemap> layer in map.map_layers)
+            {
+                if (layer.Value.name == base_layer.name)
+                {
+                    layer_up_key = layer.Key + 1;
+                }
+            }
+
+            if (map.object_layers.ContainsKey(layer_up_key))
+            {
+                Tilemap[] object_layers = map.object_layers[layer_up_key];
+                return object_layers.Last();
+            }
+            else return null;
         }
 
         #endregion

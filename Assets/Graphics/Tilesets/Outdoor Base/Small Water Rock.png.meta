@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 415d7341247264cd8bf2bfc99b3eeae4
+guid: a978975571d7748308243ebc65f811eb
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,13 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Nature Decorations_0
+      name: Water Decorations_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 16
+        y: 0
         width: 16
-        height: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -111,20 +111,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 46d505eff7c2146b1a7f78313527e4e4
-      internalID: 700500133
+      spriteID: 5b43ef81e18b14b759a5a550af803eab
+      internalID: 1654147716
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature Decorations_1
+      name: Water Decorations_1
       rect:
         serializedVersion: 2
         x: 16
-        y: 16
+        y: 0
         width: 16
-        height: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -132,20 +132,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ae086a98023c7426b8feab8617c48ec4
-      internalID: 2145361900
+      spriteID: 8ae695ac455d743638997d5263368e8e
+      internalID: -236273835
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature Decorations_2
+      name: Water Decorations_2
       rect:
         serializedVersion: 2
         x: 32
-        y: 16
+        y: 0
         width: 16
-        height: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -153,29 +153,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7ae09c65075f94eccba7f3fe37430c0f
-      internalID: 1692628324
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Nature Decorations_3
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 16
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8cc6ebc6951ba471ab298c56850ef88b
-      internalID: 1096951043
+      spriteID: b147f3fff42624f34aafd98bf61026a1
+      internalID: 588976907
       vertices: []
       indices: 
       edges: []
@@ -191,10 +170,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Nature Decorations_0: 700500133
-      Nature Decorations_1: 2145361900
-      Nature Decorations_2: 1692628324
-      Nature Decorations_3: 1096951043
+      Water Decorations_0: 1654147716
+      Water Decorations_1: -236273835
+      Water Decorations_2: 588976907
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

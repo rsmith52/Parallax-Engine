@@ -28,5 +28,6 @@ MonoBehaviour:
   tile_size:
     x_width: 2
     y_height: 2
+    z_layers: 1
   prefab_offset: {x: 1, y: 1.5}
   prefab_local_z: 0
