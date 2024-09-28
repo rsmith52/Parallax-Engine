@@ -101,7 +101,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 16
+        y: 32
         width: 16
         height: 16
       alignment: 0
@@ -122,7 +122,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 16
-        y: 16
+        y: 32
         width: 16
         height: 16
       alignment: 0
@@ -143,7 +143,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 32
-        y: 16
+        y: 32
         width: 16
         height: 16
       alignment: 0
@@ -164,7 +164,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 48
-        y: 16
+        y: 32
         width: 16
         height: 16
       alignment: 0
@@ -185,7 +185,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 64
-        y: 16
+        y: 32
         width: 16
         height: 16
       alignment: 0
@@ -206,7 +206,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 16
         width: 16
         height: 16
       alignment: 0
@@ -227,7 +227,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 16
-        y: 0
+        y: 16
         width: 16
         height: 16
       alignment: 0
@@ -239,6 +239,69 @@ TextureImporter:
       bones: []
       spriteID: 329f06e5bb0a84b7c9ae10446b09f149
       internalID: -1086206042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nature Decorations_7
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c010c31964c9344b1b02306ca5dacaed
+      internalID: 390409373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nature Decorations_8
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5526658ea34a48b093b6eca2bd54fc3
+      internalID: 1990773255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nature Decorations_9
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc5ca4a691d304b77990aa9ae98f61a8
+      internalID: -1447927009
       vertices: []
       indices: 
       edges: []
@@ -261,6 +324,9 @@ TextureImporter:
       Nature Decorations_4: 1190782170
       Nature Decorations_5: 842430624
       Nature Decorations_6: -1086206042
+      Nature Decorations_7: 390409373
+      Nature Decorations_8: 1990773255
+      Nature Decorations_9: -1447927009
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

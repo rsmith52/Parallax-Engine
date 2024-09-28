@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9703bda91e26e45fb8da0035911824c7
+guid: 6f8b6e6d0dee8402ab639776b1d4d661
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Water Decorations_0
+      name: Lily Pads 2_0
       rect:
         serializedVersion: 2
         x: 0
@@ -111,14 +111,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7b339bd59bc5d4f9aacd1e5953331b64
-      internalID: -1290250795
+      spriteID: 8f372ef561dfd4ab7a44ace3456d29ce
+      internalID: 939689097
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Water Decorations_1
+      name: Lily Pads 2_1
       rect:
         serializedVersion: 2
         x: 16
@@ -132,8 +132,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a774ba883327e405786030e1c5713c27
-      internalID: -1134827554
+      spriteID: 1f43e644910d9413588b259c7800701c
+      internalID: -556117094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lily Pads 2_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d984e5e22d25a42c094160ea5b0a5418
+      internalID: -1293456762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lily Pads 2_3
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d32bb41977a24886a42c1201e5e2568
+      internalID: -1219004867
       vertices: []
       indices: 
       edges: []
@@ -149,8 +191,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Water Decorations_0: -1290250795
-      Water Decorations_1: -1134827554
+      Lily Pads 2_0: 939689097
+      Lily Pads 2_1: -556117094
+      Lily Pads 2_2: -1293456762
+      Lily Pads 2_3: -1219004867
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
