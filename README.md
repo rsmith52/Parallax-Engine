@@ -6,7 +6,6 @@ Unity Project for 2.5d Parallax RPG Engine
 ## Notes To Remember TODOs
 ### Tile Replacements / Credits
 * Switch grass & tree tiles / find credit for them
-* Same with rocks/misc. minor decorations
 
 ### Tile Additions / Edits
 * Sand for Beach
