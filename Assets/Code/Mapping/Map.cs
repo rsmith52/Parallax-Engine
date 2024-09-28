@@ -155,7 +155,10 @@ namespace Mapping
                     
                     // Dynamic set sorting layers
                     TilemapRenderer renderer = object_layer.GetComponent<TilemapRenderer>();
-                    renderer.sortingOrder = sorting_layer + i;
+                    if (renderer.tag == Constants.EXTRA_PRIORITY_TILE_TAG)
+                        renderer.sortingOrder = sorting_layer + (2 * Constants.PRIORITY_TILE_OFFSET);
+                    else
+                        renderer.sortingOrder = sorting_layer + i;
                 }
             }
         }

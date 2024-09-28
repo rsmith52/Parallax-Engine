@@ -25,18 +25,12 @@ Unity Project for 2.5d Parallax RPG Engine
 * New layers could be full or empty by default? Nice to have
 * Map object stores map size? background music
 * Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
-* Ground layer "objects" like paths & seabed need a separate "environment" layer, not objects
-* Underwater should allow 1 more tile down everywhere! - need to modify when certain tiles are visible based on adjacent / up/above tiles being water
 
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines
-* Proper movement restrictions
 * Diagonal movement... maybe
 * Consider what script sprite appearance and layer handling is owned by... moveable object may not make the most sense
 * Better way to find current map in MoveableObject
-* Player should be child of map?
-* When a flag gets set as a side effect temporarily, rather than turn it off after, it should reset to it's previous status - check this is done consistently
-* Weird visual overlap with objects on up layer as player moves down to lower layer
 * Tile activation might be one off
 * Implement falling physics?
 * Make shadow not jump

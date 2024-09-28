@@ -5,6 +5,7 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using Mapping;
 using Utilities;
+using Eventing;
 
 namespace Eventing
 {
@@ -24,6 +25,13 @@ namespace Eventing
         Up,
         Left,
         Right,
+        Down
+    }
+
+    public enum LayerChange
+    {
+        None,
+        Up,
         Down
     }
 
@@ -50,6 +58,8 @@ namespace Eventing
         JumpBackward,
         MoveLayerUp,
         MoveLayerDown,
+        RiseUp,
+        SinkDown,
         SetInvisibleFlag,
         SetThroughFlag,
         SetLockDirectionFlag,
@@ -96,6 +106,9 @@ namespace Eventing
         private float speed;
         private Map map;
         private Vector3 target_pos;
+        [HideInInspector]
+        public LayerChange layer_change;
+        private JumpData jump_data;
 
         private SpriteRenderer[] sprites;
         private SpriteMask bush_mask;
@@ -127,9 +140,6 @@ namespace Eventing
         [TabGroup ("Movement")]
         [ReadOnly]
         public bool falling;
-        [TabGroup ("Movement")]
-        [ReadOnly]
-        public JumpData jump_data;
         [TabGroup ("Movement")]
         [ReadOnly]
         public bool other_moved;
@@ -207,6 +217,7 @@ namespace Eventing
             looked = true;
             jumping = false;
             jump_data = new JumpData{};
+            layer_change = LayerChange.None;
             falling = false;
             other_moved = false;
             in_move_route = false;
@@ -246,9 +257,20 @@ namespace Eventing
                 Vector3 move_dir = target_pos - transform.position;
                 
                 // Activate the tile being moved onto
-                if (!tile_activated && !jumping && !falling)
+                if (!tile_activated && !jumping && !falling && layer_change == LayerChange.None)
                 {
                     tile_activated = ActivateTile(move_dir);
+                }
+                else if (layer_change == LayerChange.Up)
+                {
+                    tile_activated = ActivateTile(neighbor_tiles.above_tile);
+                    layer_change = LayerChange.None;
+                }
+                    
+                else if (layer_change == LayerChange.Down)
+                {
+                    tile_activated = ActivateTile(neighbor_tiles.below_tile);
+                    layer_change = LayerChange.None;
                 }
 
                 // Move in that direction
@@ -1067,8 +1089,6 @@ namespace Eventing
             else return JumpForward(num_tiles - 1);
         }
         
-        [BoxGroup("Debug Actions/Split/Right/Movement")]
-        [Button("Jump Backward")]
         public void JumpBackward(int num_tiles) { }
 
         #endregion
@@ -1089,6 +1109,40 @@ namespace Eventing
             moving = true;
             layer -= 1;
             tile_activated = false;
+        }
+        public bool RiseUp()
+        {
+            if (neighbor_tiles.above_tile != null && neighbor_tiles.above_tile.allow_passage)
+            {
+                bool prev_move_through_walls = move_through_walls;
+                bool prev_lock_direction = lock_direction;
+                MoveThroughWallsOn();
+                LockDirectionOn();
+                layer_change = LayerChange.Up;
+                MoveLayerUp();
+                MoveUp();
+                if (!prev_move_through_walls) MoveThroughWallsOff();
+                if (!prev_lock_direction) LockDirectionOff();
+                return true;
+            }
+            return false;
+        }
+        public bool SinkDown()
+        {
+            if (neighbor_tiles.below_tile != null && neighbor_tiles.below_tile.allow_passage)
+            {
+                bool prev_move_through_walls = move_through_walls;
+                bool prev_lock_direction = lock_direction;
+                MoveThroughWallsOn();
+                LockDirectionOn();
+                layer_change = LayerChange.Down;
+                MoveLayerDown();
+                MoveDown();
+                if (!prev_move_through_walls) MoveThroughWallsOff();
+                if (!prev_lock_direction) LockDirectionOff();
+                return true;
+            }
+            return false;
         }
 
         #endregion
