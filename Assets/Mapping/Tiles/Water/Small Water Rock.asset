@@ -29,5 +29,5 @@ MonoBehaviour:
     x_width: 1
     y_height: 1
     z_layers: 2
-  prefab_offset: {x: 0.5, y: 1.25}
+  prefab_offset: {x: 0.5, y: 1}
   prefab_local_z: 0
