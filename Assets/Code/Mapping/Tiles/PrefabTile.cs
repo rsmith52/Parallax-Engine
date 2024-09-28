@@ -132,7 +132,7 @@ namespace Mapping
                                 copy_to_map = GetCopyToMap(map_obj, layer_map, k);
                                 if (copy_to_map == null) 
                                 {
-                                    Debug.Log("Object Layer Map Not Found to Expand: " + this.name);
+                                    // Debug.Log("Object Layer Map Not Found to Expand: " + this.name);
                                     break;
                                 }
                                 else
