@@ -52,18 +52,21 @@ namespace Mapping
 
         public static bool IsStairTile(ParallaxTileBase tile)
         {
+            if (tile == null) return false;
             TerrainTags[] stair_tags = new TerrainTags[] { TerrainTags.StairUp, TerrainTags.StairLeft, TerrainTags.StairRight };
             return stair_tags.Contains(tile.terrain_tag);
         }
 
         public static bool IsWaterTile(ParallaxTileBase tile)
         {
+            if (tile == null) return false;
             TerrainTags[] water_tags = new TerrainTags[] { TerrainTags.WaterStill, TerrainTags.WaterOcean, TerrainTags.DeepWater };
             return water_tags.Contains(tile.terrain_tag);
         }
 
         public static bool IsBridgeTile(ParallaxTileBase tile)
         {
+            if (tile == null) return false;
             TerrainTags[] bridge_tags = new TerrainTags[] { TerrainTags.Bridge };
             return bridge_tags.Contains(tile.terrain_tag);
         }

@@ -774,7 +774,10 @@ namespace Eventing
                 neighbor_tiles.up_tile.down_passage && 
                 (neighbor_tiles.on_tile.up_passage || (ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) && !neighbor_tiles.facing_other_level)) &&
                 (!ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) || neighbor_tiles.up_left_tile == null || (neighbor_tiles.up_left_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.up_left_tile)))) &&
-                (!ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) || neighbor_tiles.up_right_tile == null || (neighbor_tiles.up_right_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.up_right_tile))))))
+                (!ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) || neighbor_tiles.up_right_tile == null || (neighbor_tiles.up_right_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.up_right_tile)))) &&
+                (!ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) || !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) || neighbor_tiles.look_ahead_cw_tile == null || (neighbor_tiles.look_ahead_cw_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_cw_tile)))) &&
+                (!ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) || !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) || neighbor_tiles.look_ahead_ccw_tile == null || (neighbor_tiles.look_ahead_ccw_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_ccw_tile))))
+                ))
             {
                 target_pos += Vector3.up;
                 moving = true;
@@ -793,7 +796,9 @@ namespace Eventing
                 (neighbor_tiles.on_tile != null && neighbor_tiles.left_tile != null &&
                 (left_event == null || left_event.IsPassable()) && neighbor_tiles.on_tile.left_passage &&
                 neighbor_tiles.left_tile.allow_passage && neighbor_tiles.left_tile.right_passage) &&
-                (!ParallaxTerrain.IsWaterTile(neighbor_tiles.left_tile) || neighbor_tiles.up_left_tile == null || (neighbor_tiles.up_left_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.left_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.up_left_tile)))))
+                (!ParallaxTerrain.IsWaterTile(neighbor_tiles.left_tile) || neighbor_tiles.up_left_tile == null || (neighbor_tiles.up_left_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.left_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.up_left_tile)))) &&
+                (!ParallaxTerrain.IsWaterTile(neighbor_tiles.left_tile) || !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) || neighbor_tiles.look_ahead_cw_tile == null || (neighbor_tiles.look_ahead_cw_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_cw_tile))))
+                )
             {
                 target_pos += Vector3.left;
                 moving = true;
@@ -812,7 +817,9 @@ namespace Eventing
                 (neighbor_tiles.on_tile != null && neighbor_tiles.right_tile != null &&
                 (right_event == null || right_event.IsPassable()) && neighbor_tiles.on_tile.right_passage &&
                 neighbor_tiles.right_tile.allow_passage && neighbor_tiles.right_tile.left_passage) &&
-                (!ParallaxTerrain.IsWaterTile(neighbor_tiles.right_tile) || neighbor_tiles.up_right_tile == null || (neighbor_tiles.up_right_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.right_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.up_right_tile)))))
+                (!ParallaxTerrain.IsWaterTile(neighbor_tiles.right_tile) || neighbor_tiles.up_right_tile == null || (neighbor_tiles.up_right_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.right_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.up_right_tile)))) &&
+                (!ParallaxTerrain.IsWaterTile(neighbor_tiles.right_tile) || !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) || neighbor_tiles.look_ahead_ccw_tile == null || (neighbor_tiles.look_ahead_ccw_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_ccw_tile))))
+                )
             {
                 target_pos += Vector3.right;
                 moving = true;

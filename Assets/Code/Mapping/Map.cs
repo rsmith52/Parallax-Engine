@@ -43,20 +43,28 @@ namespace Mapping
     [Serializable]
     public struct NeighborTiles
     {
+        // Immediate Neighbors
         public ParallaxTileBase on_tile;
-
         public ParallaxTileBase up_tile;
         public ParallaxTileBase left_tile;
         public ParallaxTileBase right_tile;
         public ParallaxTileBase down_tile;
 
-        public bool facing_other_level;
-        public bool look_ahead_other_level;
+        // Facing Forward
         public ParallaxTileBase facing_tile;
         public ParallaxTileBase look_ahead_tile;
+        [HideInInspector]
+        public ParallaxTileBase look_ahead_cw_tile;
+        [HideInInspector]
+        public ParallaxTileBase look_ahead_ccw_tile;
+
+        // Layers Above/Below
+        public bool facing_other_level;
+        public bool look_ahead_other_level;
         public ParallaxTileBase above_tile;
         public ParallaxTileBase below_tile;
 
+        // Rarely used Extra Awareness
         [HideInInspector]
         public ParallaxTileBase up_left_tile;
         [HideInInspector]
@@ -228,9 +236,6 @@ namespace Mapping
                 neighbor_tiles.down_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down, on_stairs).tile;
 
                 // Above / Below Level Neighbors - primarily bridge & water use
-                // neighbor_tiles.above_tile = CheckTilePositionOnLayer (new MatchedTile{}, int_pos + Vector3Int.up, neighbor_maps.layer_up, neighbor_maps.objects_up).tile;
-                // if (on_bridge || (on_water && neighbor_tiles.down_tile != null && ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile)))
-                //     neighbor_tiles.below_tile = CheckTilePositionOnLayer (new MatchedTile{}, int_pos + Vector3Int.down, neighbor_maps.layer_down, neighbor_maps.objects_down).tile;
                 neighbor_tiles.above_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up, on_stairs, true).tile;
                 if (on_bridge || (on_water && neighbor_tiles.down_tile != null && ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile)))
                     neighbor_tiles.below_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down, on_stairs, false, true).tile;
@@ -242,18 +247,32 @@ namespace Mapping
                 neighbor_tiles.down_right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down + Vector3Int.right, on_stairs).tile;
             }
 
-            // Facing & Look Ahead Tile
+            // Facing & Look Ahead Tiles
             Vector3Int dir_vector = new Vector3Int();
+            Vector3Int cw_dir_vector = new Vector3Int();
+            Vector3Int ccw_dir_vector = new Vector3Int();
             switch (direction)
             {
                 case Directions.Up:
-                    dir_vector = Vector3Int.up; break;
+                    dir_vector = Vector3Int.up;
+                    cw_dir_vector = (2 * Vector3Int.up) + Vector3Int.right;
+                    ccw_dir_vector = (2 * Vector3Int.up) + Vector3Int.left;
+                    break;
                 case Directions.Left:
-                    dir_vector = Vector3Int.left; break;
+                    dir_vector = Vector3Int.left;
+                    cw_dir_vector = (2 * Vector3Int.left) + Vector3Int.up;
+                    ccw_dir_vector = (2 * Vector3Int.left) + Vector3Int.down;
+                    break;
                 case Directions.Right:
-                    dir_vector = Vector3Int.right; break;
+                    dir_vector = Vector3Int.right;
+                    cw_dir_vector = (2 * Vector3Int.right) + Vector3Int.down;
+                    ccw_dir_vector = (2 * Vector3Int.right) + Vector3Int.up;
+                    break;
                 case Directions.Down:
-                    dir_vector = Vector3Int.down; break;
+                    dir_vector = Vector3Int.down;
+                    cw_dir_vector = (2 * Vector3Int.down) + Vector3Int.left;
+                    ccw_dir_vector = (2 * Vector3Int.down) + Vector3Int.right;
+                    break;
                 default:
                     break;
             }
@@ -267,6 +286,12 @@ namespace Mapping
             neighbor_tiles.look_ahead_tile = look_ahead_tile.tile;
             neighbor_tiles.look_ahead_other_level = ((on_tile.layer == null && look_ahead_tile.layer != null) || (on_tile.layer != null && look_ahead_tile.layer == null) ||
                 (on_tile.layer != null && look_ahead_tile.layer != null && on_tile.layer.name != look_ahead_tile.layer.name));
+
+            MatchedTile look_ahead_cw_tile = GetTileAtPosition (neighbor_maps, int_pos + cw_dir_vector, on_stairs);
+            neighbor_tiles.look_ahead_cw_tile = look_ahead_cw_tile.tile;
+
+            MatchedTile look_ahead_ccw_tile = GetTileAtPosition (neighbor_maps, int_pos + ccw_dir_vector, on_stairs);
+            neighbor_tiles.look_ahead_ccw_tile = look_ahead_ccw_tile.tile;
             
             return neighbor_tiles;
         }

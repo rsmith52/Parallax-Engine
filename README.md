@@ -43,7 +43,6 @@ Unity Project for 2.5d Parallax RPG Engine
 * Make shadow not jump
 * Settings for jump / swim enabled - can be unlocked?
 * Setting for allow jumping up ledges / over rocks? again can be unlocked?
-* Test movement onto/off of water when there are rocks etc. blocking the way
 * "Selected Event" concept. Doesn't need to be directly in front, could be on ground, under, look ahead, etc.
 
 ### Other things to do
