@@ -1,18 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
-public class Settings : MonoBehaviour
+namespace Utilities
 {
-    // Start is called before the first frame update
-    void Start()
+    public class Settings
     {
-        
-    }
+        #region Resource File Paths
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public static string MATERIALS_PATH = "Materials";
+        public static string PIXEL_SNAPPING_MATERIAL_FILENAME = "Tilemap Pixel Snapping";
+
+        #endregion
     }
 }

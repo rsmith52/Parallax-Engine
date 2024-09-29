@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -56,6 +57,15 @@ namespace Utilities
                 else
                     sprite.sortingOrder = layer;
             }
+        }
+
+        /* 
+        * Get material used for pixel snapping
+        */
+        public static Material GetPixelSnappingMaterial()
+        {
+            Material material = Resources.Load<Material>(Path.Join(Settings.MATERIALS_PATH,Settings.PIXEL_SNAPPING_MATERIAL_FILENAME));
+            return material;
         }
 
         #endregion

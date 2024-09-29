@@ -1,11 +1,13 @@
 using System;
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Sirenix.OdinInspector;
 using Utilities;
 using Eventing;
+using Sherbert.Framework.Generic;
 
 namespace Mapping
 {
@@ -20,7 +22,7 @@ namespace Mapping
     public enum MapType
     {
         None = 0,
-        Outdoors = 1
+        Outdoors = 1,
     }
 
     #endregion
@@ -106,9 +108,9 @@ namespace Mapping
         public MapType map_type;
 
         [Title("Layer Information")]
-        public Dictionary<int, Tilemap> map_layers;
+        public SerializableDictionary<int, Tilemap> map_layers;
         [ReadOnly]
-        public Dictionary<int, Tilemap[]> object_layers;
+        public SerializableDictionary<int, Tilemap[]> object_layers;
 
         #endregion
 
@@ -123,14 +125,128 @@ namespace Mapping
         #endregion
 
 
+        #region Map Creation
+
+        [TitleGroup("Expand Map")]
+        [HorizontalGroup("Expand Map/Split")]
+        [VerticalGroup("Expand Map/Split/Left")]
+        [BoxGroup("Expand Map/Split/Left/Add Layers")]
+        [Button("+ Bottom Layer")]
+        public void AddNewBottomLayer()
+        {
+            int lowest_layer = 0;
+            foreach (int key in map_layers.Keys)
+                lowest_layer = (key < lowest_layer) ? key : lowest_layer;
+                
+            CreateNewMapLayer(lowest_layer - 1);
+        }
+
+        [BoxGroup("Expand Map/Split/Left/Add Layers")]
+        [Button("+ Top Layer")]
+        public void AddNewTopLayer()
+        {
+            int highest_layer = 0;
+            foreach (int key in map_layers.Keys)
+                highest_layer = (key > highest_layer) ? key : highest_layer;
+
+            CreateNewMapLayer(highest_layer + 1);
+        }
+
+        private void CreateNewMapLayer(int layer_id, int num_object_layers = 2)
+        {
+            GameObject layer = new GameObject("Layer " + layer_id);
+            layer.transform.parent = this.transform;
+            layer.transform.position = new Vector3(0, 0, -1 * layer_id * Constants.MAP_LAYER_HEIGHT);
+            if (layer_id < 0)
+                layer.transform.SetSiblingIndex(0);
+            
+            layer.AddComponent<Tilemap>();
+            layer.AddComponent<TilemapRenderer>();
+            TilemapRenderer renderer = layer.GetComponent<TilemapRenderer>();
+
+            renderer.sortingLayerID = Constants.ENV_SORTING_LAYER_ID;
+            renderer.sortingLayerName = Constants.ENV_SORTING_LAYER_NAME;
+            renderer.sortingOrder = layer_id * Constants.SORTING_LAYERS_PER_MAP_LAYER;
+            renderer.material = SpriteUtils.GetPixelSnappingMaterial();
+
+            map_layers.Add(layer_id, layer.GetComponent<Tilemap>());
+
+            // Ground Layer
+            AddNewObjectLayer(layer_id, 0, true);
+            for (int i = 0; i < num_object_layers; i++)
+            {
+                // Object Layers
+                AddNewObjectLayer(layer_id, i + 1);
+            }
+        }
+        [BoxGroup("Expand Map/Split/Left/Delete Layers")]
+        [Button("- Bottom Layer")]
+        public void DeleteBottomLayer()
+        {
+            int lowest_layer = 0;
+            foreach (int key in map_layers.Keys)
+                lowest_layer = (key < lowest_layer) ? key : lowest_layer;
+
+            DeleteMapLayer(lowest_layer);
+        }
+
+        [BoxGroup("Expand Map/Split/Left/Delete Layers")]
+        [Button("- Top Layer")]
+        public void DeleteTopLayer()
+        {
+            int highest_layer = 0;
+            foreach (int key in map_layers.Keys)
+                highest_layer = (key > highest_layer) ? key : highest_layer;
+
+            DeleteMapLayer(highest_layer);
+        }
+
+        private void DeleteMapLayer(int layer_id)
+        {
+            GameObject go = map_layers[layer_id].gameObject;
+            map_layers.Remove(layer_id);
+            GameObject.DestroyImmediate(go);
+        }
+
+        [VerticalGroup("Expand Map/Split/Right")]
+        [BoxGroup("Expand Map/Split/Right/Objects")]
+        [Button("+ Object Layer")]
+        public void AddNewObjectLayer(int layer_id, int object_layer_id, bool is_ground = false)
+        {
+            string layer_name = is_ground ? "Ground" : "Objects" + layer_id + "." + object_layer_id;
+            GameObject object_layer = new GameObject(layer_name);
+            object_layer.transform.parent = map_layers[layer_id].transform;
+            object_layer.transform.position += new Vector3(0, 0, -1 * layer_id * Constants.MAP_LAYER_HEIGHT);
+            if (is_ground)
+                object_layer.tag = Constants.GROUND_LAYER_TAG;
+            
+            object_layer.AddComponent<Tilemap>();
+            object_layer.AddComponent<TilemapRenderer>();
+            TilemapRenderer renderer = object_layer.GetComponent<TilemapRenderer>();
+            int layer_sorting_layer = map_layers[layer_id].GetComponent<TilemapRenderer>().sortingOrder;
+
+            renderer.sortingLayerID = is_ground ? Constants.ENV_SORTING_LAYER_ID : Constants.OBJ_SORTING_LAYER_ID;
+            renderer.sortingLayerName = is_ground ? Constants.ENV_SORTING_LAYER_NAME : Constants.OBJ_SORTING_LAYER_NAME;
+            renderer.sortingOrder = is_ground ? layer_sorting_layer + (2 * Constants.PRIORITY_TILE_OFFSET) : layer_sorting_layer + object_layer_id;
+            renderer.material = SpriteUtils.GetPixelSnappingMaterial();
+        }
+
+        #endregion
+
+
         #region Mono Behavior
 
         private void Start()
         {
-            object_layers = new Dictionary<int, Tilemap[]>();
+            object_layers = new SerializableDictionary<int, Tilemap[]>();
             foreach (KeyValuePair<int, Tilemap> layer in map_layers)
             {
-                int sorting_layer = layer.Value.GetComponent<TilemapRenderer>().sortingOrder;
+                if (layer.Value == null) break;
+
+                TilemapRenderer layer_renderer = layer.Value.GetComponent<TilemapRenderer>();
+                layer_renderer.sortingOrder = layer.Key * Constants.SORTING_LAYERS_PER_MAP_LAYER;
+                int sorting_layer = layer_renderer.sortingOrder;
+                
                 object_layers[layer.Key] = layer.Value.GetComponentsInChildren<Tilemap>().Skip(1).ToArray();
                 for (int i = 0; i < object_layers[layer.Key].Length; i++)
                 {

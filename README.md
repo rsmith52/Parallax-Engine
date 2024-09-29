@@ -20,7 +20,6 @@ Unity Project for 2.5d Parallax RPG Engine
 * Tiles that you can't jump in (marsh, deep sand, etc.)
 
 ### Map Managing Code
-* Buttons calling to methods (maybe static) to create new layers above/below (also delete top/bottom layer)
 * Buttons for static functions to load/save maps as well
 * New layers could be full or empty by default? Nice to have
 * Map object stores map size? background music
@@ -79,8 +78,9 @@ Unity Project for 2.5d Parallax RPG Engine
 * Alistair
 * Flurmimon
 
-### Asset Packs
+### Asset Packs / Scripts
 * Odin Inspector
+* JDSherbert SerializableDictionary
 
 ### Music
 * Andrew LiVecchi (MasterOfRevels)

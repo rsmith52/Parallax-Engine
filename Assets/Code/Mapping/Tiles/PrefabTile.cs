@@ -113,8 +113,10 @@ namespace Mapping
             {
                 BasicTile tile_copy = MultiTileCopy(this);
                 Map map_obj = map.GetComponentInParent<Map>();
-                Tilemap layer_map = map.GetComponentsInParent<Tilemap>().Last();
                 Tilemap copy_to_map;
+                Tilemap layer_map = map.GetComponentsInParent<Tilemap>().Last();
+                if (layer_map == null) return; // error case of object layer existing without parent layer
+                
 
                 for (int i = 0; i < tile_size.x_width; i++)
                 {
