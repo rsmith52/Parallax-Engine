@@ -134,7 +134,7 @@ namespace Mapping
         [Button("+ Bottom Layer")]
         public void AddNewBottomLayer()
         {
-            int lowest_layer = 0;
+            int lowest_layer = 1;
             foreach (int key in map_layers.Keys)
                 lowest_layer = (key < lowest_layer) ? key : lowest_layer;
                 
@@ -145,7 +145,7 @@ namespace Mapping
         [Button("+ Top Layer")]
         public void AddNewTopLayer()
         {
-            int highest_layer = 0;
+            int highest_layer = -1;
             foreach (int key in map_layers.Keys)
                 highest_layer = (key > highest_layer) ? key : highest_layer;
 
@@ -183,7 +183,7 @@ namespace Mapping
         [Button("- Bottom Layer")]
         public void DeleteBottomLayer()
         {
-            int lowest_layer = 0;
+            int lowest_layer = 1;
             foreach (int key in map_layers.Keys)
                 lowest_layer = (key < lowest_layer) ? key : lowest_layer;
 
@@ -194,7 +194,7 @@ namespace Mapping
         [Button("- Top Layer")]
         public void DeleteTopLayer()
         {
-            int highest_layer = 0;
+            int highest_layer = -1;
             foreach (int key in map_layers.Keys)
                 highest_layer = (key > highest_layer) ? key : highest_layer;
 

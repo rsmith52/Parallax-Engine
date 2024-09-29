@@ -24,6 +24,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * New layers could be full or empty by default? Nice to have
 * Map object stores map size? background music
 * Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
+* Sorting layers... objects and environment need to be same layer. This is gonna be a mess.
 
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines
