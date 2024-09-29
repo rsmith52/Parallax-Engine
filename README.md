@@ -39,6 +39,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * "Selected Event" concept. Doesn't need to be directly in front, could be on ground, under, look ahead, etc.
 * More advanced falling physics
 * See through tiles when player under/behind them
+* Delay player layer shift for stairs down, water up, etc. Where clipping edges currently
 
 ### Other things to do
 * Region map - Melanite Style, LoP Region Concept

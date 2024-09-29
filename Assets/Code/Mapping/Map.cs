@@ -361,7 +361,7 @@ namespace Mapping
 
                 // Above / Below Level Neighbors - primarily bridge & water use
                 neighbor_tiles.above_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up, on_stairs, true).tile;
-                if (on_bridge || (on_water && neighbor_tiles.down_tile != null && ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile)))
+                if (on_bridge || on_water)
                     neighbor_tiles.below_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down, on_stairs, false, true).tile;
 
                 // Corner Neighbors
@@ -456,7 +456,7 @@ namespace Mapping
                 if (ruletile != null)
                 {
                     // Detect proper surface / edge
-                    matched_tile.tile = ConvertTerrainRuleTile(ruletile, matched_tile.map, pos);
+                    matched_tile.tile = ConvertTerrainRuleTile(ruletile, matched_tile.map, pos, matched_tile.layer.name == neighbor_maps.layer_up.name);
                     
                     // Handle stairs
                     matched_tile = StairTileHelper(matched_tile, ruletile, pos + Vector3Int.down, neighbor_maps.ground, neighbor_maps.objects);
@@ -472,6 +472,7 @@ namespace Mapping
         {
             ParallaxTileBase checked_tile;
             
+            // Check Object Layers Top to Bottom
             if (matched_tile.tile == null && objects != null)
             {
                 for (int i = objects.Length - 1; i >= 0; i--)
@@ -499,25 +500,42 @@ namespace Mapping
                 }
             }
 
-            if (matched_tile.tile == null && layer != null)
+            // Check Base Terrain Layer
+            if (layer != null)
             {
-                checked_tile = (ParallaxTileBase)layer.GetTile(pos);
-                if (checked_tile && checked_tile.terrain_tag != TerrainTags.None)
+                GameObject go = layer.GetInstantiatedObject(pos);
+                if (matched_tile.tile == null || (up && go != null && 
+                (go.tag == Constants.TERRAIN_EDGE_TILE_TAG || (go.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG && !ParallaxTerrain.IsStairTile(matched_tile.tile)))))
                 {
-                    matched_tile.tile = checked_tile;
-                    matched_tile.map = layer;
-                    matched_tile.layer = layer;
+                    checked_tile = (ParallaxTileBase)layer.GetTile(pos);
+                    if (checked_tile && checked_tile.terrain_tag != TerrainTags.None)
+                    {
+                        matched_tile.tile = checked_tile;
+                        matched_tile.map = layer;
+                        matched_tile.layer = layer;
+                    }
+                }
+
+                // Ignore Cliff Edges on layer above, see the ground on current level instead
+                if (up && matched_tile.tile && ParallaxTerrain.IsTerrainTile(matched_tile.tile) && go.tag == Constants.TERRAIN_EDGE_TILE_TAG)
+                {
+                    matched_tile.tile = null;
+                    matched_tile.map = null;
+                    matched_tile.layer = null;
+                    matched_tile.object_match = false;
                 }
             }
 
             return matched_tile;
         }
 
-        private ParallaxTileBase ConvertTerrainRuleTile(RuleTile ruletile, Tilemap matched_map, Vector3Int pos)
+        private ParallaxTileBase ConvertTerrainRuleTile(RuleTile ruletile, Tilemap matched_map, Vector3Int pos, bool layer_up)
         {
             if (!ruletile.is_terrain) return ruletile;
             string tile_name = ruletile.name;
             ParallaxTileBase check_tile;
+
+            if (layer_up) Debug.Log("Convert Terrain Up: " + pos);
 
             // Check Left
             check_tile = (ParallaxTileBase)matched_map.GetTile(pos + Vector3Int.left);

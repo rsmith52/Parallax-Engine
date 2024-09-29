@@ -48,7 +48,7 @@ namespace Utilities
                 // Sorting layer handling
                 if (sprite.tag == Constants.PRIORITY_TILE_TAG)
                     sprite.sortingOrder = layer + Constants.PRIORITY_TILE_OFFSET;
-                else if (sprite.tag == Constants.TERRAIN_EDGE_TILE_TAG)
+                else if (sprite.tag == Constants.TERRAIN_EDGE_TILE_TAG || sprite.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG)
                     sprite.sortingOrder = layer + Constants.TERRAIN_EDGE_TILE_OFFSET;
                 else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG)
                     sprite.sortingOrder = layer - Constants.PRIORITY_TILE_OFFSET;

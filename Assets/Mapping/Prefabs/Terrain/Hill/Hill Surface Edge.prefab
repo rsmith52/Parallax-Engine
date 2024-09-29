@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 666170992054649941}
   m_Layer: 0
   m_Name: Hill Surface Edge
-  m_TagString: Untagged
+  m_TagString: Terrain Edge Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

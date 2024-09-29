@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06acc72d434f245648b6d2d5e6d686fe, type: 3}
   m_Name: Dirt
   m_EditorClassIdentifier: 
-  terrain_tag: 2
+  terrain_tag: 0
   allow_passage: 1
   up_passage: 1
   left_passage: 1
