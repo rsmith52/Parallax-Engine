@@ -50,11 +50,12 @@ namespace Mapping
     {
         #region Static Methods
 
-        public static bool IsStairTile(ParallaxTileBase tile)
+        public static bool IsStairTile(ParallaxTileBase tile, bool is_side_only = false)
         {
             if (tile == null) return false;
             TerrainTags[] stair_tags = new TerrainTags[] { TerrainTags.StairUp, TerrainTags.StairLeft, TerrainTags.StairRight };
-            return stair_tags.Contains(tile.terrain_tag);
+            TerrainTags[] side_stair_tags = new TerrainTags[] { TerrainTags.StairLeft, TerrainTags.StairRight };
+            return is_side_only ? side_stair_tags.Contains(tile.terrain_tag) : stair_tags.Contains(tile.terrain_tag);
         }
 
         public static bool IsWaterTile(ParallaxTileBase tile)

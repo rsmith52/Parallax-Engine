@@ -40,6 +40,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * More advanced falling physics
 * See through tiles when player under/behind them
 * Delay player layer shift for stairs down, water up, etc. Where clipping edges currently
+* Intermittent bug that happens on stairs sometimes where on_tile is null
 
 ### Other things to do
 * Region map - Melanite Style, LoP Region Concept

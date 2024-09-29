@@ -172,13 +172,14 @@ namespace Mapping
             map_layers.Add(layer_id, layer.GetComponent<Tilemap>());
 
             // Ground Layer
-            AddNewObjectLayer(layer_id, 1, true);
+            AddNewObjectLayer(layer_id, 0, true);
             for (int i = 0; i < num_object_layers; i++)
             {
                 // Object Layers
-                AddNewObjectLayer(layer_id, i + 2);
+                AddNewObjectLayer(layer_id, i + 1);
             }
         }
+        
         [BoxGroup("Expand Map/Split/Left/Delete Layers")]
         [Button("- Bottom Layer")]
         public void DeleteBottomLayer()
@@ -213,7 +214,7 @@ namespace Mapping
         [Button("+ Object Layer")]
         public void AddNewObjectLayer(int layer_id, int object_layer_id, bool is_ground = false)
         {
-            string layer_name = is_ground ? "Ground" : "Objects" + layer_id + "." + object_layer_id;
+            string layer_name = is_ground ? "Ground" : "Objects " + layer_id + "." + object_layer_id;
             GameObject object_layer = new GameObject(layer_name);
             object_layer.transform.parent = map_layers[layer_id].transform;
             object_layer.transform.position += new Vector3(0, 0, -1 * layer_id * Constants.MAP_LAYER_HEIGHT);
@@ -225,7 +226,7 @@ namespace Mapping
 
             renderer.sortingLayerID = Constants.MAP_SORTING_LAYER_ID;
             renderer.sortingLayerName = Constants.MAP_SORTING_LAYER_NAME;
-            renderer.sortingOrder = layer_sorting_layer + object_layer_id;
+            renderer.sortingOrder = layer_sorting_layer + object_layer_id + Constants.PRIORITY_TILE_OFFSET;
             renderer.material = SpriteUtils.GetPixelSnappingMaterial();
 
             if (is_ground)
@@ -279,7 +280,7 @@ namespace Mapping
                     
                     // Dynamic set sorting layers
                     TilemapRenderer renderer = object_layer.GetComponent<TilemapRenderer>();
-                    renderer.sortingOrder = sorting_layer + i + 1;                        
+                    renderer.sortingOrder = sorting_layer + i + Constants.PRIORITY_TILE_OFFSET;                        
                 }
             }
         }
@@ -427,7 +428,7 @@ namespace Mapping
             matched_tile.object_match = false;
             
             // Check Layer Up
-            if (!looking_below)
+            if (!looking_below && neighbor_maps.layer_up != null)
                 matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.layer_up, neighbor_maps.objects_up, !looking_above);
             
             // Check Current Layer
@@ -435,7 +436,7 @@ namespace Mapping
                 matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.ground, neighbor_maps.objects);
 
             // Check Layer Down in special cases
-            if (looking_below || (on_stairs && matched_tile.tile == null))
+            if ((looking_below || (on_stairs && matched_tile.tile == null)) && neighbor_maps.layer_down != null)
                 matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.layer_down, neighbor_maps.objects_down);
             
             // Handle terrain tiles
@@ -456,9 +457,18 @@ namespace Mapping
                 if (ruletile != null)
                 {
                     // Detect proper surface / edge
-                    matched_tile.tile = ConvertTerrainRuleTile(ruletile, matched_tile.map, pos, matched_tile.layer.name == neighbor_maps.layer_up.name);
+                    bool looking_up = (neighbor_maps.layer_up != null && neighbor_maps.layer_up.name == matched_tile.map.name);
+                    if (!looking_up && neighbor_maps.objects_up != null)
+                    {
+                        foreach (Tilemap obj_map in neighbor_maps.objects_up)
+                        {
+                            if (obj_map.name == matched_tile.map.name)
+                                looking_up = true;
+                        }
+                    }
+                    matched_tile.tile = ConvertTerrainRuleTile(ruletile, matched_tile.map, pos, looking_up);
                     
-                    // Handle stairs
+                    // Handle up stairs
                     matched_tile = StairTileHelper(matched_tile, ruletile, pos + Vector3Int.down, neighbor_maps.ground, neighbor_maps.objects);
                     matched_tile = StairTileHelper(matched_tile, ruletile, pos + Vector3Int.down, neighbor_maps.layer_up, neighbor_maps.objects_up);
                     matched_tile = StairTileHelper(matched_tile, ruletile, pos + Vector3Int.down + Vector3Int.left, neighbor_maps.ground, neighbor_maps.objects);
@@ -470,17 +480,21 @@ namespace Mapping
 
         private MatchedTile CheckTilePositionOnLayer (MatchedTile matched_tile, Vector3Int pos, Tilemap layer, Tilemap[] objects, bool up = false)
         {
-            ParallaxTileBase checked_tile;
+            GameObject go = null;
+            if (layer != null)
+                go = layer.GetInstantiatedObject(pos);
             
             // Check Object Layers Top to Bottom
+            ParallaxTileBase checked_tile;
             if (matched_tile.tile == null && objects != null)
             {
                 for (int i = objects.Length - 1; i >= 0; i--)
                 {
-                    if (matched_tile.tile && !up)
+                    if ((matched_tile.tile && !up))
                         break;
 
                     checked_tile = (ParallaxTileBase)objects[i].GetTile(pos);
+                    
                     if (checked_tile && checked_tile.terrain_tag != TerrainTags.None)
                     {
                         matched_tile.tile = checked_tile;
@@ -503,9 +517,9 @@ namespace Mapping
             // Check Base Terrain Layer
             if (layer != null)
             {
-                GameObject go = layer.GetInstantiatedObject(pos);
-                if (matched_tile.tile == null || (up && go != null && 
-                (go.tag == Constants.TERRAIN_EDGE_TILE_TAG || (go.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG && !ParallaxTerrain.IsStairTile(matched_tile.tile)))))
+                if (matched_tile.tile == null || (!up && ParallaxTerrain.IsStairTile(matched_tile.tile) && go != null && go.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG) || 
+                (up && go != null && (go.tag == Constants.TERRAIN_EDGE_TILE_TAG || (go.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG && !ParallaxTerrain.IsStairTile(matched_tile.tile)))) ||
+                (up && matched_tile.object_match && !ParallaxTerrain.IsStairTile(matched_tile.tile) && !ParallaxTerrain.IsBridgeTile(matched_tile.tile) && !ParallaxTerrain.IsWaterTile(matched_tile.tile)))
                 {
                     checked_tile = (ParallaxTileBase)layer.GetTile(pos);
                     if (checked_tile && checked_tile.terrain_tag != TerrainTags.None)
@@ -513,11 +527,13 @@ namespace Mapping
                         matched_tile.tile = checked_tile;
                         matched_tile.map = layer;
                         matched_tile.layer = layer;
+                        matched_tile.object_match = false;
                     }
                 }
 
                 // Ignore Cliff Edges on layer above, see the ground on current level instead
-                if (up && matched_tile.tile && ParallaxTerrain.IsTerrainTile(matched_tile.tile) && go.tag == Constants.TERRAIN_EDGE_TILE_TAG)
+                if (up && go != null && matched_tile.tile && ParallaxTerrain.IsTerrainTile(matched_tile.tile) && 
+                    (go.tag == Constants.TERRAIN_EDGE_TILE_TAG))
                 {
                     matched_tile.tile = null;
                     matched_tile.map = null;
@@ -529,13 +545,13 @@ namespace Mapping
             return matched_tile;
         }
 
-        private ParallaxTileBase ConvertTerrainRuleTile(RuleTile ruletile, Tilemap matched_map, Vector3Int pos, bool layer_up)
+        private ParallaxTileBase ConvertTerrainRuleTile(RuleTile ruletile, Tilemap matched_map, Vector3Int pos, bool looking_up)
         {
             if (!ruletile.is_terrain) return ruletile;
             string tile_name = ruletile.name;
             ParallaxTileBase check_tile;
 
-            if (layer_up) Debug.Log("Convert Terrain Up: " + pos);
+            if (looking_up) return ruletile;
 
             // Check Left
             check_tile = (ParallaxTileBase)matched_map.GetTile(pos + Vector3Int.left);
