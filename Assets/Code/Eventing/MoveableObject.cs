@@ -261,21 +261,24 @@ namespace Eventing
             {
                 Vector3 move_dir = target_pos - transform.position;
                 
-                // Activate the tile being moved onto
-                if (!tile_activated && !jumping && !falling && layer_change == LayerChange.None)
+                // Activate the tile being moved onto across layers
+                if (!tile_activated)
                 {
-                    tile_activated = ActivateTile(move_dir);
-                }
-                else if (layer_change == LayerChange.Up)
-                {
-                    tile_activated = ActivateTile(neighbor_tiles.above_tile);
-                    layer_change = LayerChange.None;
-                }
-                    
-                else if (layer_change == LayerChange.Down)
-                {
-                    tile_activated = ActivateTile(neighbor_tiles.below_tile);
-                    layer_change = LayerChange.None;
+                    if (!jumping && !falling && layer_change == LayerChange.None)
+                    {
+                        tile_activated = ActivateTile(move_dir);
+                    }
+                    // else if (ayer_change == LayerChange.Up)
+                    // {
+                    //     tile_activated = ActivateTile(neighbor_tiles.above_tile);
+                    //     layer_change = LayerChange.None;
+                    // }
+                        
+                    // else if (layer_change == LayerChange.Down)
+                    // {
+                    //     tile_activated = ActivateTile(neighbor_tiles.below_tile);
+                    //     layer_change = LayerChange.None;
+                    // }
                 }
 
                 // Move in that direction
@@ -368,17 +371,7 @@ namespace Eventing
             else if (neighbor_tiles.on_tile == null && !move_through_walls && !moving && !jumping && !falling)
             {
                 SinkDown(true);
-                // target_pos += Vector3.forward + Vector3.down;
-                // moving = true;
-                // falling = true;
             }
-
-            // Fall to ground
-            // if (neighbor_tiles.on_tile == null && !moving && !falling)
-            // {
-            //     target_pos += Vector3.forward + Vector3.down;
-            //     falling = true;
-            // }
         }
 
         #endregion
@@ -1129,7 +1122,7 @@ namespace Eventing
         {
             target_pos += (Constants.MAP_LAYER_HEIGHT * Vector3.back);
             moving = true;
-            layer += 1;
+            layer+= 1;
             tile_activated = false;
         }
         public void MoveLayerDown()
@@ -1170,8 +1163,8 @@ namespace Eventing
                 bool prev_lock_direction = lock_direction;
                 MoveThroughWallsOn();
                 LockDirectionOn();
-                layer_change = LayerChange.Down;
                 MoveLayerDown();
+                layer_change = LayerChange.Down;
                 MoveDown();
                 if (!prev_move_through_walls) MoveThroughWallsOff();
                 if (!prev_lock_direction) LockDirectionOff();

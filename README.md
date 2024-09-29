@@ -25,22 +25,24 @@ Unity Project for 2.5d Parallax RPG Engine
 * New layers could be full or empty by default? Nice to have
 * Map object stores map size? background music
 * Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
-* Allow movement layer down beneath/behind cliff edge & underwater
 
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines
 * Diagonal movement... maybe
 * Consider what script sprite appearance and layer handling is owned by... moveable object may not make the most sense
 * Better way to find current map in MoveableObject
-* Tile activation might be one off
 * Make shadow not jump
 * Settings for jump / swim enabled - can be unlocked?
 * Setting for allow jumping up ledges / over rocks? again can be unlocked?
 * "Selected Event" concept. Doesn't need to be directly in front, could be on ground, under, look ahead, etc.
 * More advanced falling physics
 * See through tiles when player under/behind them
+
 * Delay player layer shift for stairs down, water up, etc. Where clipping edges currently
 * Intermittent bug that happens on stairs sometimes where on_tile is null
+* Tile activation might be one off
+* On Stairs & In Bush Flags slightly off
+* For ^^^ rethink tile activation & where flags are set - shouldn't set flags every frame in update still
 
 ### Other things to do
 * Region map - Melanite Style, LoP Region Concept
