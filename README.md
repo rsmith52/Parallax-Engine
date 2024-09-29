@@ -18,7 +18,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Ice ramps?
 * Sand ramps / landslides?
 * Tiles that you can't jump in (marsh, deep sand, etc.) - includes water and underwater - jump button should probably be used to dive/rise in water?
-* Underwater tiles should have color tint in palette view
+* Underwater tiles could have color tint in palette view
 
 ### Map Managing Code
 * Buttons for static functions to load/save maps as well
@@ -37,12 +37,15 @@ Unity Project for 2.5d Parallax RPG Engine
 * "Selected Event" concept. Doesn't need to be directly in front, could be on ground, under, look ahead, etc.
 * More advanced falling physics
 * See through tiles when player under/behind them
-
-* Delay player layer shift for stairs down, water up, etc. Where clipping edges currently
 * Intermittent bug that happens on stairs sometimes where on_tile is null
-* Tile activation might be one off
-* On Stairs & In Bush Flags slightly off
-* For ^^^ rethink tile activation & where flags are set - shouldn't set flags every frame in update still
+
+### AI Code
+* Path Finding will need custom logic, gonna be hard
+
+### NLP Code
+* Consider GPT or...
+* Custom NLP Engine 
+* Will need a few types of input to process - requests/commands I'm familiar with, responses are another category
 
 ### Other things to do
 * Region map - Melanite Style, LoP Region Concept

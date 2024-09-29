@@ -226,7 +226,7 @@ namespace Mapping
 
             renderer.sortingLayerID = Constants.MAP_SORTING_LAYER_ID;
             renderer.sortingLayerName = Constants.MAP_SORTING_LAYER_NAME;
-            renderer.sortingOrder = layer_sorting_layer + object_layer_id + Constants.PRIORITY_TILE_OFFSET;
+            renderer.sortingOrder = layer_sorting_layer + object_layer_id + Constants.OBJECT_LAYER_START_OFFSET;
             renderer.material = SpriteUtils.GetPixelSnappingMaterial();
 
             if (is_ground)
@@ -280,7 +280,7 @@ namespace Mapping
                     
                     // Dynamic set sorting layers
                     TilemapRenderer renderer = object_layer.GetComponent<TilemapRenderer>();
-                    renderer.sortingOrder = sorting_layer + i + Constants.PRIORITY_TILE_OFFSET;                        
+                    renderer.sortingOrder = sorting_layer + i + Constants.OBJECT_LAYER_START_OFFSET;                        
                 }
             }
         }
@@ -317,9 +317,15 @@ namespace Mapping
             return neighbor_maps;
         }
 
-        public NeighborTiles GetNeighborTiles (MoveableObject character, bool look_only = false)
+        public NeighborTiles GetNeighborTiles (MoveableObject character, bool look_only = false, 
+                                                bool down_stairs = false, bool up_stairs = false)
         {
             Vector3 pos = character.transform.position;
+            if (down_stairs)
+                pos += new Vector3(0, 0, 0.5f);
+            else if (up_stairs)
+                pos += new Vector3(0, 0, -0.5f);
+
             NeighborTilemaps neighbor_maps = GetNeighborTileMaps(pos);
             NeighborTiles neighbor_tiles = new NeighborTiles{};
             if (look_only)

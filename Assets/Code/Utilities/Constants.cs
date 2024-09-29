@@ -21,9 +21,10 @@ namespace Utilities
         public static readonly string EXTRA_DEPRIORITY_TILE_TAG = "Extra DePriority Tile";
         public static readonly string DOWN_LAYER_PRIORITY_TILE_TAG = "Down Layer Priority Tile";
         
-        public static readonly int TERRAIN_EDGE_TILE_OFFSET = 1;
+        public static readonly int TERRAIN_EDGE_TILE_OFFSET = 2;
         public static readonly int PRIORITY_TILE_OFFSET = 2;
-        public static readonly int EVENT_SORTING_LAYER_OFFSET = SORTING_LAYERS_PER_MAP_LAYER;
+        public static readonly int OBJECT_LAYER_START_OFFSET = 3;
+        public static readonly int EVENT_SORTING_LAYER_OFFSET = SORTING_LAYERS_PER_MAP_LAYER + 1;
 
         public static readonly float TRANS_TILE_ALPHA = 0.75f;
 

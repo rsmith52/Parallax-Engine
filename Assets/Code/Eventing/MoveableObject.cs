@@ -106,13 +106,17 @@ namespace Eventing
         private float speed;
         private Map map;
         private Vector3 target_pos;
-        [HideInInspector]
-        public LayerChange layer_change;
+  
         private JumpData jump_data;
+        private LayerChange layer_change;
+        private bool layer_up_delay;
+        private bool layer_changed;
+        private bool on_stairs_changed;
 
         private SpriteRenderer[] sprites;
         private SpriteMask bush_mask;
         private SpriteRenderer shadow;
+        private bool visibility_changed;
 
         [Title("Static Flags")]
         public bool invisible = false;
@@ -221,9 +225,15 @@ namespace Eventing
             moving = true;
             looked = true;
             jumping = false;
-            jump_data = new JumpData{};
-            layer_change = LayerChange.None;
             falling = false;
+            jump_data = new JumpData{};
+
+            layer_change = LayerChange.None;
+            layer_up_delay = false;
+            layer_changed = true;
+            on_stairs_changed = true;
+            visibility_changed = true;
+            
             other_moved = false;
             in_move_route = false;
             tile_activated = false;
@@ -268,40 +278,24 @@ namespace Eventing
                     {
                         tile_activated = ActivateTile(move_dir);
                     }
-                    // else if (ayer_change == LayerChange.Up)
-                    // {
-                    //     tile_activated = ActivateTile(neighbor_tiles.above_tile);
-                    //     layer_change = LayerChange.None;
-                    // }
+                    else if (layer_change == LayerChange.Up)
+                    {
+                        tile_activated = ActivateTile(neighbor_tiles.above_tile);
+                        layer_change = LayerChange.None;
+                    }
                         
-                    // else if (layer_change == LayerChange.Down)
-                    // {
-                    //     tile_activated = ActivateTile(neighbor_tiles.below_tile);
-                    //     layer_change = LayerChange.None;
-                    // }
+                    else if (layer_change == LayerChange.Down)
+                    {
+                        tile_activated = ActivateTile(neighbor_tiles.below_tile);
+                        layer_change = LayerChange.None;
+                    }
                 }
 
                 // Move in that direction
                 transform.position = Vector3.MoveTowards(transform.position, target_pos, Time.deltaTime * speed);
             }
 
-            // Update Sprites & Sorting Order
-            foreach (SpriteRenderer sprite in sprites)
-            {
-                if (sprite.tag == Constants.PRIORITY_TILE_TAG)
-                    sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.EVENT_SORTING_LAYER_OFFSET + Constants.PRIORITY_TILE_OFFSET;
-                else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG || sprite.tag == Constants.SHADOW_TAG)
-                    sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.EVENT_SORTING_LAYER_OFFSET - Constants.PRIORITY_TILE_OFFSET;
-                else
-                    sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.EVENT_SORTING_LAYER_OFFSET;
-                if (on_stairs)
-                    sprite.sortingOrder += Constants.PRIORITY_TILE_OFFSET;
-                
-                if (invisible)
-                    sprite.enabled = false;
-                else
-                    sprite.enabled = true;
-            }          
+            // Update bush flag    
             if (in_bush && !jumping && !falling)
                 bush_mask.enabled = true;
             else
@@ -310,6 +304,12 @@ namespace Eventing
             // Tilemap and Event awareness check
             if ((other_moved || moving) && transform.position == target_pos)
             {
+                if (layer_up_delay)
+                {
+                    layer += 1;
+                    layer_up_delay = false;
+                    layer_changed = true;
+                }
                 if (jumping)
                 {
                     target_pos += ((jump_data.height * Vector3.forward) + (jump_data.height * Vector3.down) + (jump_data.direction * (float)jump_data.num_tiles / 2));
@@ -372,6 +372,36 @@ namespace Eventing
             {
                 SinkDown(true);
             }
+
+            // Update Sprites & Sorting Order
+            if (layer_changed || on_stairs_changed)
+            {
+                foreach (SpriteRenderer sprite in sprites)
+                {
+                    if (sprite.tag == Constants.PRIORITY_TILE_TAG)
+                        sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.EVENT_SORTING_LAYER_OFFSET + Constants.PRIORITY_TILE_OFFSET;
+                    else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG || sprite.tag == Constants.SHADOW_TAG)
+                        sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.EVENT_SORTING_LAYER_OFFSET - Constants.PRIORITY_TILE_OFFSET;
+                    else
+                        sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.EVENT_SORTING_LAYER_OFFSET;
+                    if (on_stairs)
+                        sprite.sortingOrder += Constants.OBJECT_LAYER_START_OFFSET;
+                }
+                layer_changed = false;
+                on_stairs_changed = false;
+            }
+
+            // Update visible status
+            if (visibility_changed)
+            {
+                foreach (SpriteRenderer sprite in sprites)
+                {
+                    if (invisible)
+                        sprite.enabled = false;
+                    else
+                        sprite.enabled = true;
+                }
+            }
         }
 
         #endregion
@@ -391,7 +421,7 @@ namespace Eventing
 
         private bool ActivateTile(ParallaxTileBase tile, bool verbose = false)
         {
-            if (verbose) Debug.Log("Activating tile: " + neighbor_tiles.on_tile);
+            if (verbose) Debug.Log("Activating tile: " + tile);
 
             // No tile, must be moving through walls
             if (tile == null)
@@ -408,10 +438,13 @@ namespace Eventing
                 in_bush = false;
 
             // On Stairs Flag
-            if (ParallaxTerrain.IsStairTile(tile) || ParallaxTerrain.IsStairTile(neighbor_tiles.on_tile))
+            bool prev_on_stairs = on_stairs;
+            if (ParallaxTerrain.IsStairTile(tile) || ParallaxTerrain.IsStairTile(neighbor_tiles.on_tile, false, true))
                 on_stairs = true;
             else   
                 on_stairs = false;
+            if (on_stairs != prev_on_stairs)
+                on_stairs_changed = true;
 
             // On Water Flag
             if (ParallaxTerrain.IsWaterTile(tile))
@@ -454,6 +487,7 @@ namespace Eventing
                         if (MoveDownRight())
                         {
                             MoveLayerDown();
+                            neighbor_tiles = map.GetNeighborTiles(this, false, true);
                             return ActivateTile(neighbor_tiles.down_right_tile);
                         }
                     }
@@ -502,6 +536,7 @@ namespace Eventing
                         if (MoveDownLeft())
                         {
                             MoveLayerDown();
+                            neighbor_tiles = map.GetNeighborTiles(this, false, true);
                             return ActivateTile(neighbor_tiles.down_left_tile);
                         }
                     }
@@ -543,6 +578,7 @@ namespace Eventing
                         if (MoveUp())
                         {
                             MoveLayerUp();
+                            neighbor_tiles = map.GetNeighborTiles(this, false, false, true);
                             return ActivateTile(neighbor_tiles.up_tile);
                         }
                     }
@@ -1122,7 +1158,7 @@ namespace Eventing
         {
             target_pos += (Constants.MAP_LAYER_HEIGHT * Vector3.back);
             moving = true;
-            layer+= 1;
+            layer_up_delay = true;
             tile_activated = false;
         }
         public void MoveLayerDown()
@@ -1130,6 +1166,7 @@ namespace Eventing
             target_pos += (Constants.MAP_LAYER_HEIGHT * Vector3.forward);
             moving = true;
             layer -= 1;
+            layer_changed = true;
             tile_activated = false;
         }
 
@@ -1181,10 +1218,12 @@ namespace Eventing
         public void InvisibleOn()
         {
             invisible = true;
+            visibility_changed = true;
         }
         public void InvisibleOff()
         {
             invisible = false;
+            visibility_changed = true;
         }
 
         public void MoveThroughWallsOn()
