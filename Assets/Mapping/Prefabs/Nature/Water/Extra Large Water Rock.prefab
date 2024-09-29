@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7747291055122472498}
   m_Layer: 0
   m_Name: Base
-  m_TagString: Up Layer Priority Tile
+  m_TagString: Extra Priority Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -70,10 +70,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -473575885
-  m_SortingLayer: 1
+  m_SortingLayerID: -611510623
+  m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: -236273835, guid: a978975571d7748308243ebc65f811eb, type: 3}
+  m_Sprite: {fileID: 102405757, guid: 88155bc3fcca24c6d924c382a576a149, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -154,10 +154,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -242371227
-  m_SortingLayer: 2
+  m_SortingLayerID: -611510623
+  m_SortingLayer: 3
   m_SortingOrder: 1
-  m_Sprite: {fileID: 588976907, guid: a978975571d7748308243ebc65f811eb, type: 3}
+  m_Sprite: {fileID: 693750037, guid: 88155bc3fcca24c6d924c382a576a149, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -178,7 +178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1630824044834487002}
   m_Layer: 0
-  m_Name: Small Water Rock
+  m_Name: Extra Large Water Rock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

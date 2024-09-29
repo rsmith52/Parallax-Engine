@@ -16,12 +16,16 @@ namespace Utilities
         public static readonly string EXTRA_PRIORITY_TILE_TAG = "Extra Priority Tile";
         public static readonly string UP_LAYER_PRIORITY_TILE_TAG = "Up Layer Priority Tile";
         public static readonly string DEPRIORITY_TILE_TAG = "DePriority Tile";
+        public static readonly string EXTRA_DEPRIORITY_TILE_TAG = "Extra DePriority Tile";
+        public static readonly string DOWN_LAYER_PRIORITY_TILE_TAG = "Down Layer Priority Tile";
         
-        public static readonly int PRIORITY_TILE_OFFSET = (int)(0.1f * SORTING_LAYERS_PER_MAP_LAYER);
-        public static readonly int EVENT_SORTING_LAYER_OFFSET = 5;
+        public static readonly int PRIORITY_TILE_OFFSET = (int)(0.2f * SORTING_LAYERS_PER_MAP_LAYER);
+        public static readonly int EVENT_SORTING_LAYER_OFFSET = 10;
 
         public static readonly float TRANS_TILE_ALPHA = 0.75f;
 
+        public static readonly int MAP_SORTING_LAYER_ID = -611510623;
+        public static readonly string MAP_SORTING_LAYER_NAME = "Map";
         public static readonly int ENV_SORTING_LAYER_ID = -473575885;
         public static readonly string ENV_SORTING_LAYER_NAME = "Environment";
         public static readonly int OBJ_SORTING_LAYER_ID = -242371227;

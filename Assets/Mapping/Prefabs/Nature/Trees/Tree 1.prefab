@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 106081563886657679}
   m_Layer: 0
   m_Name: Middle Leaves
-  m_TagString: Untagged
+  m_TagString: Up Layer Priority Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -70,7 +70,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -2007256281
+  m_SortingLayerID: -611510623
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -2025886142, guid: 870d992e647b440e99c292b9bf1a608d, type: 3}
@@ -154,8 +154,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -242371227
-  m_SortingLayer: 2
+  m_SortingLayerID: -611510623
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 443686369, guid: 870d992e647b440e99c292b9bf1a608d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -238,8 +238,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -242371227
-  m_SortingLayer: 2
+  m_SortingLayerID: -611510623
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -2060733446, guid: 870d992e647b440e99c292b9bf1a608d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -299,7 +299,7 @@ GameObject:
   - component: {fileID: 5317542538492198748}
   m_Layer: 0
   m_Name: Top Leaves
-  m_TagString: Untagged
+  m_TagString: Up Layer Priority Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -357,7 +357,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -2007256281
+  m_SortingLayerID: -611510623
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 238486838, guid: 870d992e647b440e99c292b9bf1a608d, type: 3}

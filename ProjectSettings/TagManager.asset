@@ -11,6 +11,8 @@ TagManager:
   - Extra Priority Tile
   - Up Layer Priority Tile
   - Ground Layer
+  - Extra DePriority Tile
+  - Down Layer Priority Tile
   layers:
   - Default
   - TransparentFX
@@ -48,15 +50,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Environment
-    uniqueID: 3821391411
-    locked: 0
-  - name: Objects & Characters
-    uniqueID: 4052596069
-    locked: 0
-  - name: Cover
-    uniqueID: 2287711015
-    locked: 0
-  - name: Always on Top
-    uniqueID: 1498962395
+  - name: Map
+    uniqueID: 3683456673
     locked: 0

@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 7207255426524408866}
   m_Layer: 0
   m_Name: Gap Fill
-  m_TagString: DePriority Tile
+  m_TagString: Down Layer Priority Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -104,9 +104,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -473575885
+  m_SortingLayerID: -611510623
   m_SortingLayer: 1
-  m_SortingOrder: -1
+  m_SortingOrder: -10
   m_Sprite: {fileID: -831633950, guid: 2d8c25e8bd2fc4afbb6b5f479f5d0137, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 833311234952082183}
   m_Layer: 0
   m_Name: Gap Fill
-  m_TagString: DePriority Tile
+  m_TagString: Down Layer Priority Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -188,9 +188,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -473575885
+  m_SortingLayerID: -611510623
   m_SortingLayer: 1
-  m_SortingOrder: -1
+  m_SortingOrder: -10
   m_Sprite: {fileID: -831633950, guid: 2d8c25e8bd2fc4afbb6b5f479f5d0137, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 7907035521734977735}
   m_Layer: 0
   m_Name: Front Inner Left
-  m_TagString: Untagged
+  m_TagString: Extra DePriority Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -272,9 +272,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -473575885
+  m_SortingLayerID: -611510623
   m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingOrder: -4
   m_Sprite: {fileID: 521612660, guid: 3861c6b942ce04f12b0f4d22e709e204, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

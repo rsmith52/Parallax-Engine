@@ -127,6 +127,8 @@ namespace Eventing
         public bool in_bush;
         [ReadOnly]
         public bool on_water;
+        [ReadOnly]
+        public bool on_stairs;
 
         [TabGroup ("Movement")]
         [ReadOnly]
@@ -279,20 +281,21 @@ namespace Eventing
 
             // Update Sprites & Sorting Order
             foreach (SpriteRenderer sprite in sprites)
+            {
                 if (sprite.tag == Constants.PRIORITY_TILE_TAG)
                     sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.EVENT_SORTING_LAYER_OFFSET + Constants.PRIORITY_TILE_OFFSET;
-                else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG)
+                else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG || sprite.tag == Constants.SHADOW_TAG)
                     sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.EVENT_SORTING_LAYER_OFFSET - Constants.PRIORITY_TILE_OFFSET;
                 else
                     sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.EVENT_SORTING_LAYER_OFFSET;
-            
-            if (invisible)
-                    foreach (SpriteRenderer sprite in sprites)
-                        sprite.enabled = false;
-            else
-                foreach (SpriteRenderer sprite in sprites)
+                if (on_stairs)
+                    sprite.sortingOrder += Constants.PRIORITY_TILE_OFFSET;
+                
+                if (invisible)
+                    sprite.enabled = false;
+                else
                     sprite.enabled = true;
-                     
+            }          
             if (in_bush && !jumping && !falling)
                 bush_mask.enabled = true;
             else
@@ -413,6 +416,12 @@ namespace Eventing
                 on_water = true;
             else
                 on_water = false;
+
+            // On Stairs Flag
+            if (ParallaxTerrain.IsStairTile(tile) || ParallaxTerrain.IsStairTile(neighbor_tiles.on_tile))
+                on_stairs = true;
+            else   
+                on_stairs = false;
 
             return true;
         }

@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 3858453688517471138}
   m_Layer: 0
   m_Name: Front Center
-  m_TagString: Untagged
+  m_TagString: Extra DePriority Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -102,9 +102,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -473575885
+  m_SortingLayerID: -611510623
   m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingOrder: -4
   m_Sprite: {fileID: 526506562, guid: 3861c6b942ce04f12b0f4d22e709e204, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
