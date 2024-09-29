@@ -71,6 +71,20 @@ namespace Mapping
             return bridge_tags.Contains(tile.terrain_tag);
         }
 
+        public static bool IsUnderwaterTile(ParallaxTileBase tile)
+        {
+            if (tile == null) return false;
+            TerrainTags[] underwater_tags = new TerrainTags[] { TerrainTags.Underwater, TerrainTags.WaterGrass };
+            return underwater_tags.Contains(tile.terrain_tag);
+        }
+
+        public static bool IsTerrainTile(ParallaxTileBase tile)
+        {
+            RuleTile ruletile = tile as RuleTile;
+            if (ruletile != null && ruletile.is_terrain) return true;
+            else return false;
+        }
+
         #endregion
     }
 }

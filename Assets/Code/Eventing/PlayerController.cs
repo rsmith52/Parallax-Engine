@@ -77,20 +77,31 @@ namespace Eventing
             else if (Input.GetKeyUp(Controls.SNEAK_BUTTON))
                 StopSneaking();
 
-            // Handle Jump Input
+            // Handle Jump/Dive Input
             if (Input.GetKey(Controls.JUMP) && current_pos == target_pos)
             {
-                bool jump_success = false;
-                if (Input.GetKey(Controls.MOVE_UP) || Input.GetKey(Controls.MOVE_LEFT) ||
-                    Input.GetKey(Controls.MOVE_RIGHT) || Input.GetKey(Controls.MOVE_DOWN))
+                if (player_mover.on_water)
                 {
-                    if (player_mover.movement_speed == MovementSpeeds.Moderate)
-                        jump_success = player_mover.JumpForward(1);
-                    else if (player_mover.movement_speed == MovementSpeeds.Fast || player_mover.movement_speed == MovementSpeeds.VeryFast)
-                        jump_success = player_mover.JumpForward(2);
+                    player_mover.SinkDown();
                 }
-                if (!jump_success)
-                    player_mover.JumpInPlace();
+                else if (player_mover.underwater)
+                {
+                    player_mover.RiseUp();
+                }
+                else
+                {
+                    bool jump_success = false;
+                    if (Input.GetKey(Controls.MOVE_UP) || Input.GetKey(Controls.MOVE_LEFT) ||
+                        Input.GetKey(Controls.MOVE_RIGHT) || Input.GetKey(Controls.MOVE_DOWN))
+                    {
+                        if (player_mover.movement_speed == MovementSpeeds.Moderate)
+                            jump_success = player_mover.JumpForward(1);
+                        else if (player_mover.movement_speed == MovementSpeeds.Fast || player_mover.movement_speed == MovementSpeeds.VeryFast)
+                            jump_success = player_mover.JumpForward(2);
+                    }
+                    if (!jump_success)
+                        player_mover.JumpInPlace();
+                }
             }
             // Handle Movement Input
             else if (Input.GetKey(Controls.MOVE_UP) && current_pos == target_pos)

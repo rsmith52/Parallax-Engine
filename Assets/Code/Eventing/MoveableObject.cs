@@ -126,9 +126,12 @@ namespace Eventing
         [ReadOnly]
         public bool in_bush;
         [ReadOnly]
+        public bool on_stairs;
+        [ReadOnly]
         public bool on_water;
         [ReadOnly]
-        public bool on_stairs;
+        public bool underwater;
+        
 
         [TabGroup ("Movement")]
         [ReadOnly]
@@ -411,17 +414,23 @@ namespace Eventing
             else
                 in_bush = false;
 
+            // On Stairs Flag
+            if (ParallaxTerrain.IsStairTile(tile) || ParallaxTerrain.IsStairTile(neighbor_tiles.on_tile))
+                on_stairs = true;
+            else   
+                on_stairs = false;
+
             // On Water Flag
             if (ParallaxTerrain.IsWaterTile(tile))
                 on_water = true;
             else
                 on_water = false;
 
-            // On Stairs Flag
-            if (ParallaxTerrain.IsStairTile(tile) || ParallaxTerrain.IsStairTile(neighbor_tiles.on_tile))
-                on_stairs = true;
-            else   
-                on_stairs = false;
+            // Underwater Flag
+            if (ParallaxTerrain.IsUnderwaterTile(tile))
+                underwater = true;
+            else
+                underwater = false;
 
             return true;
         }
@@ -1127,6 +1136,9 @@ namespace Eventing
             layer -= 1;
             tile_activated = false;
         }
+
+        [BoxGroup("Debug Actions/Split/Right/Movement")]
+        [Button("Rise Up")]
         public bool RiseUp()
         {
             if (neighbor_tiles.above_tile != null && neighbor_tiles.above_tile.allow_passage)
@@ -1144,6 +1156,9 @@ namespace Eventing
             }
             return false;
         }
+        
+        [BoxGroup("Debug Actions/Split/Right/Movement")]
+        [Button("Sink Down")]
         public bool SinkDown(bool fall = false)
         {
             if (fall || (neighbor_tiles.below_tile != null && neighbor_tiles.below_tile.allow_passage))

@@ -48,6 +48,8 @@ namespace Utilities
                 // Sorting layer handling
                 if (sprite.tag == Constants.PRIORITY_TILE_TAG)
                     sprite.sortingOrder = layer + Constants.PRIORITY_TILE_OFFSET;
+                else if (sprite.tag == Constants.TERRAIN_EDGE_TILE_TAG)
+                    sprite.sortingOrder = layer + Constants.TERRAIN_EDGE_TILE_OFFSET;
                 else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG)
                     sprite.sortingOrder = layer - Constants.PRIORITY_TILE_OFFSET;
                 else if (sprite.tag == Constants.EXTRA_PRIORITY_TILE_TAG)
@@ -57,7 +59,7 @@ namespace Utilities
                 else if (sprite.tag == Constants.UP_LAYER_PRIORITY_TILE_TAG)
                     sprite.sortingOrder = layer + Constants.SORTING_LAYERS_PER_MAP_LAYER;
                 else if (sprite.tag == Constants.DOWN_LAYER_PRIORITY_TILE_TAG)
-                    sprite.sortingOrder = layer - Constants.SORTING_LAYERS_PER_MAP_LAYER;
+                    sprite.sortingOrder = layer - Constants.SORTING_LAYERS_PER_MAP_LAYER + 1; // Gap Fill Use
                 else
                     sprite.sortingOrder = layer;
             }

@@ -13,6 +13,7 @@ TagManager:
   - Ground Layer
   - Extra DePriority Tile
   - Down Layer Priority Tile
+  - Terrain Edge Tile
   layers:
   - Default
   - TransparentFX

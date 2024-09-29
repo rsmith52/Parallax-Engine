@@ -498,15 +498,16 @@ namespace Mapping
                     }
                 }
             }
+
             if (matched_tile.tile == null && layer != null)
             {
                 checked_tile = (ParallaxTileBase)layer.GetTile(pos);
                 if (checked_tile && checked_tile.terrain_tag != TerrainTags.None)
-                    {
-                        matched_tile.tile = checked_tile;
-                        matched_tile.map = layer;
-                        matched_tile.layer = layer;
-                    }
+                {
+                    matched_tile.tile = checked_tile;
+                    matched_tile.map = layer;
+                    matched_tile.layer = layer;
+                }
             }
 
             return matched_tile;
