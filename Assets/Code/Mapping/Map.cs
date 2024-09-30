@@ -716,6 +716,64 @@ namespace Mapping
         }
 
         private List<TilePosition> GetMatchingConnectedTiles(Tilemap map, Vector3Int start_pos, ParallaxTileBase start_tile)
+        {   
+            List<TilePosition> matching_tiles = GetMatchingTilesOnLayer(map, start_pos, start_tile);
+            List<TilePosition> sorted_tiles = SortTilePositions(matching_tiles);
+            
+            Dictionary<int, Dictionary<int, int>> set_map = new Dictionary<int, Dictionary<int, int>>();
+            Dictionary<int, List<TilePosition>> sets = new Dictionary<int, List<TilePosition>>();
+
+            int new_set_id = 1;
+
+            foreach (TilePosition tile in sorted_tiles)
+            {
+                Dictionary<int, int> y_pos = new Dictionary<int, int>();
+                List<TilePosition> new_set = new List<TilePosition>();
+                sets[new_set_id] = new_set;
+
+                new_set.Add(tile);
+                y_pos[tile.pos.y] = new_set_id;
+                set_map[tile.pos.x] = y_pos;
+                
+                new_set_id++;
+
+                if (set_map.ContainsKey(tile.pos.x - 1) && set_map[tile.pos.x - 1].ContainsKey(tile.pos.y))
+                {
+                    int set_id_1 = set_map[tile.pos.x][tile.pos.y];
+                    int set_id_2 = set_map[tile.pos.x - 1][tile.pos.y];
+                    MergeSets(set_map, sets, set_id_1, set_id_2);
+
+                }
+                if (set_map.ContainsKey(tile.pos.x) && set_map[tile.pos.x].ContainsKey(tile.pos.y - 1))
+                {
+                    int set_id_1 = set_map[tile.pos.x][tile.pos.y];
+                    int set_id_2 = set_map[tile.pos.x][tile.pos.y - 1];
+                    MergeSets(set_map, sets, set_id_1, set_id_2);
+                }
+            }
+
+            // Get target set using start position
+            int target_set = set_map[start_pos.x][start_pos.y];
+            return sets[target_set];
+        }
+
+        private void MergeSets(Dictionary<int, Dictionary<int, int>> set_map, Dictionary<int, List<TilePosition>> sets, int id_1, int id_2)
+        {
+            foreach (TilePosition tile in sets[id_1])
+            {
+                set_map[tile.pos.x][tile.pos.y] = id_2;
+                sets[id_2].Add(tile);
+            }
+        }
+
+        private List<TilePosition> SortTilePositions(List<TilePosition> tile_positions)
+        {
+            List<TilePosition> sorted_tiles = tile_positions.OrderBy(s => s.pos.y).ToList();
+
+            return sorted_tiles;
+        }
+
+        private List<TilePosition> GetMatchingTilesOnLayer(Tilemap map, Vector3Int start_pos, ParallaxTileBase start_tile)
         {
             List<TilePosition> matching_tiles = new List<TilePosition>();
             matching_tiles.Add(new TilePosition(map, start_pos));
@@ -726,7 +784,7 @@ namespace Mapping
                 {
                     Vector3Int pos = new Vector3Int(x, y, 0);
                     ParallaxTileBase tile = (ParallaxTileBase)map.GetTile(pos);
-                    if (tile && (tile.name == start_tile.name))
+                    if (tile && (tile.terrain_tag == start_tile.terrain_tag))
                         matching_tiles.Add(new TilePosition(map, pos));
                 }
             }
