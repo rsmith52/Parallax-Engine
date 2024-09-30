@@ -446,7 +446,8 @@ namespace Mapping
                 matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.layer_down, neighbor_maps.objects_down);
             
             // Handle terrain tiles
-            if (matched_tile.tile != null && (!matched_tile.object_match || matched_tile.map.tag == Constants.GROUND_LAYER_TAG))
+            if (matched_tile.tile != null && (!matched_tile.object_match || 
+            (matched_tile.map.tag == Constants.GROUND_LAYER_TAG && !ParallaxTerrain.IsStairTile(matched_tile.tile))))
             {
                 // Extend double tall terrain front edges
                 MatchedTile up_tile = new MatchedTile{};
