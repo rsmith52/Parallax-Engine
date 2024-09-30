@@ -59,7 +59,7 @@ namespace Utilities
                 else if (sprite.tag == Constants.UP_LAYER_PRIORITY_TILE_TAG)
                     sprite.sortingOrder = layer + Constants.SORTING_LAYERS_PER_MAP_LAYER;
                 else if (sprite.tag == Constants.DOWN_LAYER_PRIORITY_TILE_TAG)
-                    sprite.sortingOrder = layer - Constants.SORTING_LAYERS_PER_MAP_LAYER + Constants.PRIORITY_TILE_OFFSET; // Gap Fill Use
+                    sprite.sortingOrder = layer - Constants.SORTING_LAYERS_PER_MAP_LAYER + (2 * Constants.PRIORITY_TILE_OFFSET); // Gap Fill Use
                 else
                     sprite.sortingOrder = layer;
             }
