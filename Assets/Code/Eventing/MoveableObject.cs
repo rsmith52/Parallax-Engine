@@ -136,6 +136,8 @@ namespace Eventing
         public bool on_water;
         [ReadOnly]
         public bool underwater;
+        [ReadOnly]
+        public bool under_bridge;
         
 
         [TabGroup ("Movement")]
@@ -477,6 +479,12 @@ namespace Eventing
                 // Move Right
                 if (move_dir.x > 0)
                 {
+                    // Under Bridge Flag
+                    if (map.HideBridgeAbovePosition(this.transform.position + Vector3.right))
+                        under_bridge = true;
+                    else
+                        under_bridge = false;
+
                     if (neighbor_tiles.right_tile == null) return false;
                     // Move Onto Right Stairs
                     if (neighbor_tiles.right_tile.terrain_tag == TerrainTags.StairRight)
@@ -530,6 +538,12 @@ namespace Eventing
                 // Move Left
                 else if (move_dir.x < 0)
                 {
+                    // Under Bridge Flag
+                    if (map.HideBridgeAbovePosition(this.transform.position + Vector3.left))
+                        under_bridge = true;
+                    else
+                        under_bridge = false;
+
                     if (neighbor_tiles.left_tile == null) return false;
                     // Move Onto Left Stairs
                     if (neighbor_tiles.left_tile.terrain_tag == TerrainTags.StairLeft)
@@ -586,6 +600,12 @@ namespace Eventing
                 // Move Up
                 if (move_dir.y > 0)
                 {
+                    // Under Bridge Flag
+                    if (map.HideBridgeAbovePosition(this.transform.position + Vector3.up))
+                        under_bridge = true;
+                    else
+                        under_bridge = false;
+
                     if (neighbor_tiles.up_tile == null) return false;
                     // Move Off Up Stairs
                     if (neighbor_tiles.on_tile.terrain_tag == TerrainTags.StairUp)
@@ -625,6 +645,12 @@ namespace Eventing
                 // Move Down
                 else if (move_dir.y < 0)
                 {
+                    // Under Bridge Flag
+                    if (map.HideBridgeAbovePosition(this.transform.position + Vector3.down))
+                        under_bridge = true;
+                    else
+                        under_bridge = false;
+
                     if (neighbor_tiles.down_tile == null) return false;
                     // Move Onto Up Stairs
                     if (neighbor_tiles.down_tile.terrain_tag == TerrainTags.StairUp)

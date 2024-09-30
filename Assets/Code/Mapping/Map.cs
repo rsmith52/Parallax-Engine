@@ -86,6 +86,19 @@ namespace Mapping
         public bool object_match;
     }
 
+    [Serializable]
+    public struct TilePosition
+    {
+        public Tilemap map;
+        public Vector3Int pos;
+
+        public TilePosition (Tilemap m, Vector3Int p)
+        {
+            map = m;
+            pos = p;
+        }
+    }
+
     #endregion
 
 
@@ -111,6 +124,10 @@ namespace Mapping
         public SerializableDictionary<int, Tilemap> map_layers;
         [ReadOnly]
         public Dictionary<int, Tilemap[]> object_layers;
+
+        // Track Hidden Tiles / Layers
+        private bool bridge_hidden;
+        List<TilePosition> hidden_bridge;
 
         #endregion
 
@@ -240,6 +257,10 @@ namespace Mapping
 
         private void Start()
         {
+            // Start with nothing hidden
+            bridge_hidden = false;
+            hidden_bridge = null;
+            
             // Populate Object Layers
             object_layers = new Dictionary<int, Tilemap[]>();
             foreach (KeyValuePair<int, Tilemap> layer in map_layers)
@@ -282,6 +303,61 @@ namespace Mapping
                     TilemapRenderer renderer = object_layer.GetComponent<TilemapRenderer>();
                     renderer.sortingOrder = sorting_layer + i + Constants.OBJECT_LAYER_START_OFFSET;                        
                 }
+            }
+        }
+        
+        #endregion
+
+
+        #region Map Effects
+
+        public bool HideBridgeAbovePosition(Vector3 pos)
+        {
+            NeighborTilemaps neighbor_maps = GetNeighborTileMaps(pos);
+            Vector3Int int_pos = new Vector3Int (
+                (int)(pos.x),
+                (int)(pos.y) + 1,
+                0
+            );
+
+            MatchedTile above_tile = new MatchedTile{};
+            above_tile = CheckTilePositionOnLayer (above_tile, int_pos, neighbor_maps.layer_up, neighbor_maps.objects_up, true, true);
+            if (above_tile.tile != null && ParallaxTerrain.IsBridgeTile(above_tile.tile))
+            {
+                if (!bridge_hidden)
+                {
+                    // Hide Bridge
+
+                    // Get all connected bridge tiles
+                    List<TilePosition> bridge_tiles = GetMatchingConnectedTiles(above_tile.map, int_pos, above_tile.tile);
+                    
+                    // Get all objects above them
+                    List<TilePosition> object_tiles = GetObjectsOnLayerAtPositions(neighbor_maps.objects_up, bridge_tiles);
+                    foreach (TilePosition obj_tile in object_tiles)
+                        bridge_tiles.Add(obj_tile);
+                    
+                    // Make all tiles transparent
+                    foreach (TilePosition tile in bridge_tiles)
+                        tile.map.SetColor(tile.pos, new Color(1,1,1,Constants.HIDDEN_LAYER_TILE_ALPHA));
+
+                    bridge_hidden = true;
+                    hidden_bridge = bridge_tiles;
+                }
+                return true;
+            }
+            else 
+            {
+                // Show Bridge Again
+                if (bridge_hidden)
+                {
+                    // Make all tiles opaque
+                    foreach (TilePosition tile in hidden_bridge)
+                        tile.map.SetColor(tile.pos, new Color(1,1,1,1));
+
+                    bridge_hidden = false;
+                    hidden_bridge = null;
+                }
+                return false;
             }
         }
 
@@ -522,7 +598,8 @@ namespace Mapping
             return matched_tile;
         }
 
-        private MatchedTile CheckTilePositionOnLayer (MatchedTile matched_tile, Vector3Int pos, Tilemap layer, Tilemap[] objects, bool up = false)
+        private MatchedTile CheckTilePositionOnLayer (MatchedTile matched_tile, Vector3Int pos, Tilemap layer, Tilemap[] objects,
+                                                        bool up = false, bool see_bridge = false)
         {
             GameObject go = null;
             if (layer != null)
@@ -534,7 +611,7 @@ namespace Mapping
             {
                 for (int i = objects.Length - 1; i >= 0; i--)
                 {
-                    if ((matched_tile.tile && !up))
+                    if ((matched_tile.tile && !up && !see_bridge))
                         break;
 
                     checked_tile = (ParallaxTileBase)objects[i].GetTile(pos);
@@ -548,7 +625,7 @@ namespace Mapping
                     }
 
                     // Ignore bridges and water on layer above, see the ground on current level instead
-                    if (up && matched_tile.tile && (ParallaxTerrain.IsBridgeTile(matched_tile.tile) || ParallaxTerrain.IsWaterTile(matched_tile.tile)))
+                    if (up && !see_bridge && matched_tile.tile && (ParallaxTerrain.IsBridgeTile(matched_tile.tile) || ParallaxTerrain.IsWaterTile(matched_tile.tile)))
                     {
                         matched_tile.tile = null;
                         matched_tile.map = null;
@@ -562,7 +639,7 @@ namespace Mapping
             if (layer != null)
             {
                 if (matched_tile.tile == null || (!up && ParallaxTerrain.IsStairTile(matched_tile.tile) && go != null && go.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG) || 
-                (up && go != null && (go.tag == Constants.TERRAIN_EDGE_TILE_TAG || (go.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG && !ParallaxTerrain.IsStairTile(matched_tile.tile)))) ||
+                (up && !see_bridge && go != null && (go.tag == Constants.TERRAIN_EDGE_TILE_TAG || (go.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG && !ParallaxTerrain.IsStairTile(matched_tile.tile)))) ||
                 (up && matched_tile.object_match && !ParallaxTerrain.IsStairTile(matched_tile.tile) && !ParallaxTerrain.IsBridgeTile(matched_tile.tile) && !ParallaxTerrain.IsWaterTile(matched_tile.tile)))
                 {
                     checked_tile = (ParallaxTileBase)layer.GetTile(pos);
@@ -636,6 +713,43 @@ namespace Mapping
                 matched_tile.tile = ruletile.surface_tile;
 
             return matched_tile;
+        }
+
+        private List<TilePosition> GetMatchingConnectedTiles(Tilemap map, Vector3Int start_pos, ParallaxTileBase start_tile)
+        {
+            List<TilePosition> matching_tiles = new List<TilePosition>();
+            matching_tiles.Add(new TilePosition(map, start_pos));
+
+            for (int x = map.cellBounds.min.x; x < map.cellBounds.max.x; x++)
+            {
+                for (int y = map.cellBounds.min.y; y < map.cellBounds.max.y; y++)
+                {
+                    Vector3Int pos = new Vector3Int(x, y, 0);
+                    ParallaxTileBase tile = (ParallaxTileBase)map.GetTile(pos);
+                    if (tile && (tile.name == start_tile.name))
+                        matching_tiles.Add(new TilePosition(map, pos));
+                }
+            }
+
+            return matching_tiles;
+        }
+
+        private List<TilePosition> GetObjectsOnLayerAtPositions(Tilemap[] object_layers, List<TilePosition> tile_positions)
+        {
+            List<TilePosition> object_positions = new List<TilePosition>();
+
+            for (int i = object_layers.Length - 1; i >= 0; i--)
+            {
+                Tilemap object_map = object_layers[i];
+                foreach (TilePosition tile_pos in tile_positions)
+                {
+                    ParallaxTileBase tile = (ParallaxTileBase)object_map.GetTile(tile_pos.pos);
+                    if (tile != null)
+                        object_positions.Add(new TilePosition(object_map, tile_pos.pos));
+                }
+            }
+
+            return object_positions;
         }
 
         #endregion

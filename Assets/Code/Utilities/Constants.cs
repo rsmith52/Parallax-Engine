@@ -28,6 +28,7 @@ namespace Utilities
         public static readonly int EVENT_SORTING_LAYER_OFFSET = SORTING_LAYERS_PER_MAP_LAYER + 1;
 
         public static readonly float TRANS_TILE_ALPHA = 0.75f;
+        public static readonly float HIDDEN_LAYER_TILE_ALPHA = 0.5f;
 
         public static readonly int MAP_SORTING_LAYER_ID = -611510623;
         public static readonly string MAP_SORTING_LAYER_NAME = "Map";
