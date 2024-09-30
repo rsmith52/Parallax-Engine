@@ -14,6 +14,7 @@ namespace Utilities
         public static readonly string GROUND_LAYER_TAG = "Ground Layer";
         public static readonly string TERRAIN_EDGE_TILE_TAG = "Terrain Edge Tile";
         public static readonly string TERRAIN_CORNER_EDGE_TILE_TAG = "Terrain Corner Edge Tile";
+        public static readonly string TOP_SIDE_STAIR_TILE = "Top Side Stair Tile";
         public static readonly string PRIORITY_TILE_TAG = "Priority Tile";
         public static readonly string EXTRA_PRIORITY_TILE_TAG = "Extra Priority Tile";
         public static readonly string UP_LAYER_PRIORITY_TILE_TAG = "Up Layer Priority Tile";

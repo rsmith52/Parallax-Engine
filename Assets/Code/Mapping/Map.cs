@@ -317,6 +317,43 @@ namespace Mapping
             return neighbor_maps;
         }
 
+        public GameObject GetGameObjectAtPosition (Vector3 pos)
+        {
+            NeighborTilemaps neighbor_maps = GetNeighborTileMaps(pos);
+            Vector3Int int_pos = new Vector3Int (
+                (int)(pos.x),
+                (int)(pos.y),
+                0
+            );
+
+            GameObject found_object = null;
+            found_object = GetGameObjectOnLayer (found_object, int_pos, neighbor_maps.layer_up, neighbor_maps.objects_up);
+            if (!found_object) found_object = GetGameObjectOnLayer (found_object, int_pos, neighbor_maps.ground, neighbor_maps.objects);
+
+            return found_object;
+        }
+
+        private GameObject GetGameObjectOnLayer (GameObject go, Vector3Int pos, Tilemap layer, Tilemap[] objects)
+        {
+            ParallaxTileBase tile = null;
+            if (go == null && objects != null)
+            {
+                for (int i = objects.Length - 1; i >= 0; i--)
+                {
+                    if (go != null) break;
+                    
+                    tile = (ParallaxTileBase)objects[i].GetTile(pos);
+                    PrefabTile prefab_tile = tile as PrefabTile;
+                    if (prefab_tile) go = prefab_tile.prefab;
+                    else go = objects[i].GetInstantiatedObject(pos);
+                }
+            }
+            if (go == null && layer != null)
+                go = layer.GetInstantiatedObject(pos);
+
+            return go;
+        }
+
         public NeighborTiles GetNeighborTiles (MoveableObject character, bool look_only = false, 
                                                 bool down_stairs = false, bool up_stairs = false)
         {

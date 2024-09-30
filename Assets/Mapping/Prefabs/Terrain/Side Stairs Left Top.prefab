@@ -71,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -611510623
-  m_SortingLayer: 3
+  m_SortingLayer: 1
   m_SortingOrder: 11
   m_Sprite: {fileID: 1905809443, guid: 3d415827f081042308b997b8e3790536, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 3133200543998055751}
   m_Layer: 0
   m_Name: Side Stairs Left Top
-  m_TagString: Untagged
+  m_TagString: Top Side Stair Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

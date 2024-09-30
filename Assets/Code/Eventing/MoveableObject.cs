@@ -110,6 +110,7 @@ namespace Eventing
         private JumpData jump_data;
         private LayerChange layer_change;
         private bool layer_up_delay;
+        private bool layer_down_delay;
         private bool layer_changed;
         private bool on_stairs_changed;
 
@@ -230,6 +231,7 @@ namespace Eventing
 
             layer_change = LayerChange.None;
             layer_up_delay = false;
+            layer_down_delay = false;
             layer_changed = true;
             on_stairs_changed = true;
             visibility_changed = true;
@@ -310,6 +312,12 @@ namespace Eventing
                     layer_up_delay = false;
                     layer_changed = true;
                 }
+                else if (layer_down_delay)
+                {
+                    layer -= 1;
+                    layer_down_delay = false;
+                    layer_changed = true;
+                }
                 if (jumping)
                 {
                     target_pos += ((jump_data.height * Vector3.forward) + (jump_data.height * Vector3.down) + (jump_data.direction * (float)jump_data.num_tiles / 2));
@@ -374,7 +382,7 @@ namespace Eventing
             }
 
             // Update Sprites & Sorting Order
-            if (layer_changed || on_stairs_changed)
+            if (layer_changed || (on_stairs_changed && !layer_up_delay && !layer_down_delay))
             {
                 foreach (SpriteRenderer sprite in sprites)
                 {
@@ -476,7 +484,9 @@ namespace Eventing
                         CancelMovement();
                         if (MoveUpRight()) 
                         {
-                            MoveLayerUp();
+                            GameObject go = map.GetGameObjectAtPosition(this.transform.position + Vector3.up + Vector3.right);
+                            if (go.tag == Constants.TOP_SIDE_STAIR_TILE) MoveLayerUp(false);
+                            else MoveLayerUp(true);
                             return ActivateTile(neighbor_tiles.up_right_tile);
                         }
                     }
@@ -486,7 +496,9 @@ namespace Eventing
                         CancelMovement();
                         if (MoveDownRight())
                         {
-                            MoveLayerDown();
+                            GameObject go = map.GetGameObjectAtPosition(this.transform.position);
+                            if (go.tag == Constants.TOP_SIDE_STAIR_TILE) MoveLayerDown(true);
+                            else MoveLayerDown(false);
                             neighbor_tiles = map.GetNeighborTiles(this, false, true);
                             return ActivateTile(neighbor_tiles.down_right_tile);
                         }
@@ -525,7 +537,9 @@ namespace Eventing
                         CancelMovement();
                         if (MoveUpLeft())
                         {
-                            MoveLayerUp();
+                            GameObject go = map.GetGameObjectAtPosition(this.transform.position + Vector3.up + Vector3.left);
+                            if (go.tag == Constants.TOP_SIDE_STAIR_TILE) MoveLayerUp(false);
+                            else MoveLayerUp(true);
                             return ActivateTile(neighbor_tiles.up_left_tile);
                         }
                     }
@@ -535,7 +549,9 @@ namespace Eventing
                         CancelMovement();
                         if (MoveDownLeft())
                         {
-                            MoveLayerDown();
+                            GameObject go = map.GetGameObjectAtPosition(this.transform.position);
+                            if (go.tag == Constants.TOP_SIDE_STAIR_TILE) MoveLayerDown(true);
+                            else MoveLayerDown(false);
                             neighbor_tiles = map.GetNeighborTiles(this, false, true);
                             return ActivateTile(neighbor_tiles.down_left_tile);
                         }
@@ -577,7 +593,7 @@ namespace Eventing
                         CancelMovement();
                         if (MoveUp())
                         {
-                            MoveLayerUp();
+                            MoveLayerUp(true);
                             neighbor_tiles = map.GetNeighborTiles(this, false, false, true);
                             return ActivateTile(neighbor_tiles.up_tile);
                         }
@@ -616,7 +632,7 @@ namespace Eventing
                         CancelMovement();
                         if (MoveDown())
                         {
-                            MoveLayerDown();
+                            MoveLayerDown(true);
                             return ActivateTile(neighbor_tiles.down_tile);
                         }
                     }
@@ -1154,19 +1170,28 @@ namespace Eventing
 
         #region Movement Between Layers
 
-        public void MoveLayerUp()
+        public void MoveLayerUp(bool delay_until_move_comp = false)
         {
             target_pos += (Constants.MAP_LAYER_HEIGHT * Vector3.back);
             moving = true;
-            layer_up_delay = true;
+            if (delay_until_move_comp) layer_up_delay = true;
+            else 
+            {
+                layer += 1;
+                layer_changed = true;
+            }
             tile_activated = false;
         }
-        public void MoveLayerDown()
+        public void MoveLayerDown(bool delay_until_move_comp = false)
         {
             target_pos += (Constants.MAP_LAYER_HEIGHT * Vector3.forward);
             moving = true;
-            layer -= 1;
-            layer_changed = true;
+            if (delay_until_move_comp) layer_down_delay = true;
+            else 
+            {
+                layer -= 1;
+                layer_changed = true;
+            }
             tile_activated = false;
         }
 
@@ -1181,7 +1206,7 @@ namespace Eventing
                 MoveThroughWallsOn();
                 LockDirectionOn();
                 layer_change = LayerChange.Up;
-                MoveLayerUp();
+                MoveLayerUp(true);
                 MoveUp();
                 if (!prev_move_through_walls) MoveThroughWallsOff();
                 if (!prev_lock_direction) LockDirectionOff();
@@ -1200,7 +1225,7 @@ namespace Eventing
                 bool prev_lock_direction = lock_direction;
                 MoveThroughWallsOn();
                 LockDirectionOn();
-                MoveLayerDown();
+                MoveLayerDown(false);
                 layer_change = LayerChange.Down;
                 MoveDown();
                 if (!prev_move_through_walls) MoveThroughWallsOff();
