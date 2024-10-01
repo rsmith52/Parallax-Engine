@@ -37,8 +37,8 @@ Unity Project for 2.5d Parallax RPG Engine
 * "Selected Event" concept. Doesn't need to be directly in front, could be on ground, under, look ahead, etc.
 * More advanced falling physics
 * See through entire layers 2 up when player is below (and behind?) them
-* See through bridges, but not ALL bridges
 * Intermittent bug that happens on stairs sometimes where on_tile is null
+* Make see through tiles fade in/out rather than abrubtly change
 
 ### AI Code
 * Path Finding will need custom logic, gonna be hard

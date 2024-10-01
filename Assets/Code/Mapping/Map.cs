@@ -127,7 +127,7 @@ namespace Mapping
 
         // Track Hidden Tiles / Layers
         private bool bridge_hidden;
-        List<TilePosition> hidden_bridge;
+        private List<TilePosition> hidden_bridge;
 
         #endregion
 
@@ -324,25 +324,36 @@ namespace Mapping
             above_tile = CheckTilePositionOnLayer (above_tile, int_pos, neighbor_maps.layer_up, neighbor_maps.objects_up, true, true);
             if (above_tile.tile != null && ParallaxTerrain.IsBridgeTile(above_tile.tile))
             {
+                // Hide Bridge
                 if (!bridge_hidden)
                 {
-                    // Hide Bridge
+                    // See if this bridge was recently hidden
+                    if (hidden_bridge != null && hidden_bridge.Contains(new TilePosition (above_tile.map, int_pos)))
+                    {
+                        // Bridge already found / saved
+                        // Debug.Log("Bridge already saved!");
+                    }
+                    // If not, find the bridge
+                    else
+                    {
+                        // Get all connected bridge tiles
+                        List<TilePosition> bridge_tiles = GetMatchingConnectedTiles(above_tile.map, int_pos, above_tile.tile);
+                        
+                        // Get all objects above them
+                        List<TilePosition> object_tiles = GetObjectsOnLayerAtPositions(neighbor_maps.objects_up, bridge_tiles);
+                        foreach (TilePosition obj_tile in object_tiles)
+                            bridge_tiles.Add(obj_tile);
 
-                    // Get all connected bridge tiles
-                    List<TilePosition> bridge_tiles = GetMatchingConnectedTiles(above_tile.map, int_pos, above_tile.tile);
-                    
-                    // Get all objects above them
-                    List<TilePosition> object_tiles = GetObjectsOnLayerAtPositions(neighbor_maps.objects_up, bridge_tiles);
-                    foreach (TilePosition obj_tile in object_tiles)
-                        bridge_tiles.Add(obj_tile);
-                    
+                        hidden_bridge = bridge_tiles;
+                    }
+
                     // Make all tiles transparent
-                    foreach (TilePosition tile in bridge_tiles)
+                    foreach (TilePosition tile in hidden_bridge)
                         tile.map.SetColor(tile.pos, new Color(1,1,1,Constants.HIDDEN_LAYER_TILE_ALPHA));
 
                     bridge_hidden = true;
-                    hidden_bridge = bridge_tiles;
                 }
+
                 return true;
             }
             else 
@@ -355,8 +366,8 @@ namespace Mapping
                         tile.map.SetColor(tile.pos, new Color(1,1,1,1));
 
                     bridge_hidden = false;
-                    hidden_bridge = null;
                 }
+
                 return false;
             }
         }
@@ -715,76 +726,77 @@ namespace Mapping
             return matched_tile;
         }
 
+        /*
+        * Returns all tiles with the same terrain tag on the specified tilemap (layer) touching a specific start tile
+        */
         private List<TilePosition> GetMatchingConnectedTiles(Tilemap map, Vector3Int start_pos, ParallaxTileBase start_tile)
         {   
-            List<TilePosition> matching_tiles = GetMatchingTilesOnLayer(map, start_pos, start_tile);
-            List<TilePosition> sorted_tiles = SortTilePositions(matching_tiles);
-            
-            Dictionary<int, Dictionary<int, int>> set_map = new Dictionary<int, Dictionary<int, int>>();
-            Dictionary<int, List<TilePosition>> sets = new Dictionary<int, List<TilePosition>>();
-
-            int new_set_id = 1;
-
-            foreach (TilePosition tile in sorted_tiles)
-            {
-                Dictionary<int, int> y_pos = new Dictionary<int, int>();
-                List<TilePosition> new_set = new List<TilePosition>();
-                sets[new_set_id] = new_set;
-
-                new_set.Add(tile);
-                y_pos[tile.pos.y] = new_set_id;
-                set_map[tile.pos.x] = y_pos;
-                
-                new_set_id++;
-
-                if (set_map.ContainsKey(tile.pos.x - 1) && set_map[tile.pos.x - 1].ContainsKey(tile.pos.y))
-                {
-                    int set_id_1 = set_map[tile.pos.x][tile.pos.y];
-                    int set_id_2 = set_map[tile.pos.x - 1][tile.pos.y];
-                    MergeSets(set_map, sets, set_id_1, set_id_2);
-
-                }
-                if (set_map.ContainsKey(tile.pos.x) && set_map[tile.pos.x].ContainsKey(tile.pos.y - 1))
-                {
-                    int set_id_1 = set_map[tile.pos.x][tile.pos.y];
-                    int set_id_2 = set_map[tile.pos.x][tile.pos.y - 1];
-                    MergeSets(set_map, sets, set_id_1, set_id_2);
-                }
-            }
-
-            // Get target set using start position
-            int target_set = set_map[start_pos.x][start_pos.y];
-            return sets[target_set];
-        }
-
-        private void MergeSets(Dictionary<int, Dictionary<int, int>> set_map, Dictionary<int, List<TilePosition>> sets, int id_1, int id_2)
-        {
-            foreach (TilePosition tile in sets[id_1])
-            {
-                set_map[tile.pos.x][tile.pos.y] = id_2;
-                sets[id_2].Add(tile);
-            }
-        }
-
-        private List<TilePosition> SortTilePositions(List<TilePosition> tile_positions)
-        {
-            List<TilePosition> sorted_tiles = tile_positions.OrderBy(s => s.pos.y).ToList();
-
-            return sorted_tiles;
-        }
-
-        private List<TilePosition> GetMatchingTilesOnLayer(Tilemap map, Vector3Int start_pos, ParallaxTileBase start_tile)
-        {
-            List<TilePosition> matching_tiles = new List<TilePosition>();
-            matching_tiles.Add(new TilePosition(map, start_pos));
-
+            // Mark all tiles as not visited
+            Dictionary<int, Dictionary<int, bool>> visited_tiles = new Dictionary<int, Dictionary<int, bool>>();
             for (int x = map.cellBounds.min.x; x < map.cellBounds.max.x; x++)
             {
+                visited_tiles.Add(x, new Dictionary<int, bool>());
                 for (int y = map.cellBounds.min.y; y < map.cellBounds.max.y; y++)
+                {
+                    visited_tiles[x].Add(y, false);
+                }
+            }
+            List<TilePosition> connected_tiles = new List<TilePosition>();
+
+            // Add starting tile to queue
+            Queue<TilePosition> queue = new Queue<TilePosition>();
+            TilePosition start = new TilePosition (map, start_pos);
+            queue.Enqueue(start);
+            
+            // Floodfill Algorithm
+            while (queue.Any())
+            {
+                // Check if tile has already been visited
+                TilePosition cur_tile = queue.Dequeue();
+                if (visited_tiles[cur_tile.pos.x][cur_tile.pos.y] == true)
+                    continue;
+
+                // Mark tile as visited
+                visited_tiles[cur_tile.pos.x][cur_tile.pos.y] = true;
+                
+                // If this is a matching tile, add it and queue up neighbors
+                ParallaxTileBase tile = (ParallaxTileBase)map.GetTile(cur_tile.pos);
+                if (tile != null && (tile.terrain_tag == start_tile.terrain_tag))
+                {
+                    connected_tiles.Add(cur_tile);
+
+                    // Queue up neighbors
+                    TilePosition up_tile = new TilePosition(map, cur_tile.pos + new Vector3Int(0, 1, 0));
+                    queue.Enqueue(up_tile);
+
+                    TilePosition left_tile = new TilePosition(map, cur_tile.pos + new Vector3Int(-1, 0, 0));
+                    queue.Enqueue(left_tile);
+
+                    TilePosition right_tile = new TilePosition(map, cur_tile.pos + new Vector3Int(1, 0, 0));
+                    queue.Enqueue(right_tile);
+
+                    TilePosition down_tile = new TilePosition(map, cur_tile.pos + new Vector3Int(0, -1, 0));
+                    queue.Enqueue(down_tile);
+                }
+            }
+
+            return connected_tiles;
+        }
+
+        /*
+        * Returns all tiles with the same terrain tag on the specified tilemap (layer) 
+        */
+        private List<TilePosition> GetMatchingTilesOnLayer(Tilemap map, ParallaxTileBase source_tile)
+        {
+            List<TilePosition> matching_tiles = new List<TilePosition>();
+
+            for (int x = map.cellBounds.min.x; x <= map.cellBounds.max.x; x++)
+            {
+                for (int y = map.cellBounds.min.y; y <= map.cellBounds.max.y; y++)
                 {
                     Vector3Int pos = new Vector3Int(x, y, 0);
                     ParallaxTileBase tile = (ParallaxTileBase)map.GetTile(pos);
-                    if (tile && (tile.terrain_tag == start_tile.terrain_tag))
+                    if (tile && (tile.terrain_tag == source_tile.terrain_tag))
                         matching_tiles.Add(new TilePosition(map, pos));
                 }
             }
