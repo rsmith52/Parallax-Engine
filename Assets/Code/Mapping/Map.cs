@@ -128,6 +128,8 @@ namespace Mapping
         // Track Hidden Tiles / Layers
         private bool bridge_hidden;
         private List<TilePosition> hidden_bridge;
+        private bool layers_hidden;
+        private List<TilePosition> hidden_layers;
 
         #endregion
 
@@ -260,6 +262,8 @@ namespace Mapping
             // Start with nothing hidden
             bridge_hidden = false;
             hidden_bridge = null;
+            layers_hidden = false;
+            hidden_layers = null;
             
             // Populate Object Layers
             object_layers = new Dictionary<int, Tilemap[]>();
@@ -311,6 +315,10 @@ namespace Mapping
 
         #region Map Effects
 
+        /*
+        * Checks if pos is below a bridge, returns true if so, false if not. 
+        * If position is below a bridge, hides that bridge. If not, shows the previously hidden bridge.
+        */
         public bool HideBridgeAbovePosition(Vector3 pos)
         {
             NeighborTilemaps neighbor_maps = GetNeighborTileMaps(pos);
@@ -372,10 +380,37 @@ namespace Mapping
             }
         }
 
+        /*
+        * Checks if a position is hidden by a higher terrain layer, returns true if so, false if not.
+        * If the position is hidden by a terrain layer, hides that terrain layer and all above it. If not, shows the previously hidden tiles.
+        */
+        public bool HideLayersAbovePosition(Vector3 pos, int start_n_up = 2)
+        {
+            Vector3Int int_pos = new Vector3Int (
+                (int)(pos.x),
+                (int)(pos.y) + start_n_up,
+                0
+            );
+            int start_layer_id = GetMapLayerIDFromPosition(int_pos);
+
+            return false;
+        }
+
         #endregion
 
 
         #region Map Awareness
+        
+        private int GetMapLayerIDFromPosition (Vector3 pos)
+        {
+            foreach (KeyValuePair<int, Tilemap> layer in map_layers)
+            {
+                Tilemap map = layer.Value;
+                if (map.transform.position.z == pos.z) return layer.Key;
+            }
+
+            return int.MinValue;
+        }
         
         private NeighborTilemaps GetNeighborTileMaps (Vector3 pos)
         {
