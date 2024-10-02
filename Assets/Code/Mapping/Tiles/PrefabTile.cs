@@ -41,6 +41,14 @@ namespace Mapping
         #endregion
 
 
+        #region Fields
+
+        private GameObject instantiated_object;
+        public GameObject GetInstantiatedObject() { return instantiated_object; }
+
+        #endregion
+
+
         #region MonoBehavior
 
         public override void GetTileData(Vector3Int pos, ITilemap tilemap, ref TileData tile_data)
@@ -94,6 +102,7 @@ namespace Mapping
         {   
             GameObject instance = Instantiate(prefab);
             instance.transform.SetParent(map.transform);
+            instantiated_object = instance;
 
             // Modify position of object to match middle of tile sprite
             instance.transform.position = new Vector3(

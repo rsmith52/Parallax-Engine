@@ -25,6 +25,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * New layers could be full or empty by default? Nice to have
 * Map object stores map size? background music
 * Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
+* Would be really nice to have map managing code visible in same editor window as tile palette for map editing
 
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines
@@ -39,6 +40,10 @@ Unity Project for 2.5d Parallax RPG Engine
 * Intermittent bug that happens on stairs sometimes where on_tile is null
 * Make see through tiles fade in/out rather than abrubtly change
 * Enhance terrain hidding to include stairs, and be smarter about overlapping tiles to look better when transparent
+** Should check side stairs too
+** Simply check 1 tile down to look for stair tiles
+** Check for "layer down" tag and completely hide when hiding
+* Double check proper layer ordering for front stairs when on ground vs. object layer 1
 
 ### AI Code
 * Path Finding will need custom logic, gonna be hard
@@ -60,6 +65,7 @@ Unity Project for 2.5d Parallax RPG Engine
 ### Mechanics
 * Level caps -> Store excess XP
 * Additional pokedex info / research levels like in arceus
+* Defeating wild monsters -> Drop items same as if they were caught and had held items, more common in general
 
 
 

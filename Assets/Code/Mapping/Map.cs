@@ -416,7 +416,10 @@ namespace Mapping
                         // Get all objects above them
                         List<TilePosition> object_tiles = GetObjectsOnLayerAtPositions(object_layers[start_layer_id], terrain_tiles);
                         foreach (TilePosition obj_tile in object_tiles)
+                        {
                             terrain_tiles.Add(obj_tile);
+                        }
+                            
 
                         // TODO - repeat for additional layers on top
 
@@ -458,7 +461,12 @@ namespace Mapping
                 go = GetGameObjectOnLayer(go, tile.pos, null, null, tile.map);
                 if (go != null)
                 foreach (SpriteRenderer sprite in go.GetComponentsInChildren<SpriteRenderer>())
-                    sprite.color = new Color(1,1,1,Constants.HIDDEN_LAYER_TILE_ALPHA);
+                {
+                    if (sprite.tag == Constants.DOWN_LAYER_PRIORITY_TILE_TAG)
+                        sprite.color = new Color (1,1,1,0); // Hide "gap fill" tiles entirely
+                    else
+                        sprite.color = new Color(1,1,1,Constants.HIDDEN_LAYER_TILE_ALPHA);
+                }
             }
         }
 
@@ -548,7 +556,7 @@ namespace Mapping
             {
                 tile = (ParallaxTileBase)map.GetTile(pos);
                 PrefabTile prefab_tile = tile as PrefabTile;
-                if (prefab_tile) go = prefab_tile.prefab;
+                if (prefab_tile) go = prefab_tile.GetInstantiatedObject();
                 else go = map.GetInstantiatedObject(pos);
             }
             else 
@@ -947,6 +955,11 @@ namespace Mapping
                     ParallaxTileBase tile = (ParallaxTileBase)object_map.GetTile(tile_pos.pos);
                     if (tile != null)
                         object_positions.Add(new TilePosition(object_map, tile_pos.pos));
+                        
+                    // Get stairs too!
+                    ParallaxTileBase below_tile = (ParallaxTileBase)object_map.GetTile(tile_pos.pos + Vector3Int.down);
+                    if (below_tile != null && ParallaxTerrain.IsStairTile(below_tile, false, true))
+                        object_positions.Add(new TilePosition(object_map, tile_pos.pos + Vector3Int.down));
                 }
             }
 
