@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 4236767652783378161}
   m_Layer: 0
   m_Name: Bottom Leaves
-  m_TagString: Extra Priority Tile
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -299,7 +299,7 @@ GameObject:
   - component: {fileID: 1567709631986787186}
   m_Layer: 0
   m_Name: Trunk
-  m_TagString: Extra Priority Tile
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

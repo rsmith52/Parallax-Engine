@@ -138,6 +138,8 @@ namespace Eventing
         public bool underwater;
         [ReadOnly]
         public bool under_bridge;
+        [ReadOnly]
+        public bool behind_upper_layer;
         
 
         [TabGroup ("Movement")]
@@ -484,6 +486,11 @@ namespace Eventing
                         under_bridge = true;
                     else
                         under_bridge = false;
+                    // Behind Terrain Flag
+                    if (map.HideLayersAbovePosition(this.transform.position + Vector3.right))
+                        behind_upper_layer = true;
+                    else   
+                        behind_upper_layer = false;
 
                     if (neighbor_tiles.right_tile == null) return false;
                     // Move Onto Right Stairs
@@ -543,6 +550,11 @@ namespace Eventing
                         under_bridge = true;
                     else
                         under_bridge = false;
+                    // Behind Terrain Flag
+                    if (map.HideLayersAbovePosition(this.transform.position + Vector3.left))
+                        behind_upper_layer = true;
+                    else   
+                        behind_upper_layer = false;
 
                     if (neighbor_tiles.left_tile == null) return false;
                     // Move Onto Left Stairs
@@ -605,6 +617,11 @@ namespace Eventing
                         under_bridge = true;
                     else
                         under_bridge = false;
+                    // Behind Terrain Flag
+                    if (map.HideLayersAbovePosition(this.transform.position + Vector3.up))
+                        behind_upper_layer = true;
+                    else   
+                        behind_upper_layer = false;
 
                     if (neighbor_tiles.up_tile == null) return false;
                     // Move Off Up Stairs
@@ -650,6 +667,11 @@ namespace Eventing
                         under_bridge = true;
                     else
                         under_bridge = false;
+                    // Behind Terrain Flag
+                    if (map.HideLayersAbovePosition(this.transform.position + Vector3.down))
+                        behind_upper_layer = true;
+                    else   
+                        behind_upper_layer = false;
 
                     if (neighbor_tiles.down_tile == null) return false;
                     // Move Onto Up Stairs

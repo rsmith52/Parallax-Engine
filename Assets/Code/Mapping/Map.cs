@@ -356,9 +356,7 @@ namespace Mapping
                     }
 
                     // Make all tiles transparent
-                    foreach (TilePosition tile in hidden_bridge)
-                        tile.map.SetColor(tile.pos, new Color(1,1,1,Constants.HIDDEN_LAYER_TILE_ALPHA));
-
+                    HideTiles(hidden_bridge);
                     bridge_hidden = true;
                 }
 
@@ -370,9 +368,7 @@ namespace Mapping
                 if (bridge_hidden)
                 {
                     // Make all tiles opaque
-                    foreach (TilePosition tile in hidden_bridge)
-                        tile.map.SetColor(tile.pos, new Color(1,1,1,1));
-
+                    ShowTiles(hidden_bridge);
                     bridge_hidden = false;
                 }
 
@@ -386,16 +382,105 @@ namespace Mapping
         */
         public bool HideLayersAbovePosition(Vector3 pos, int start_n_up = 2)
         {
+            // Get layer that is start_n_up from current layer
+            pos -= new Vector3(0, 0, (start_n_up * Constants.MAP_LAYER_HEIGHT));
+            int start_layer_id = GetMapLayerIDFromPosition(pos);
+            if (start_layer_id == int.MinValue) return false;
+
+            // Find tile directly above player at that layer
             Vector3Int int_pos = new Vector3Int (
                 (int)(pos.x),
-                (int)(pos.y) + start_n_up,
+                (int)(pos.y),
                 0
             );
-            int start_layer_id = GetMapLayerIDFromPosition(int_pos);
+            MatchedTile start_tile = new MatchedTile{};
+            start_tile = CheckTilePositionOnLayer (start_tile, int_pos, map_layers[start_layer_id], object_layers[start_layer_id], true, false, true);
 
-            return false;
+            if (start_tile.tile != null) // tile on base layer
+            {
+                // Hide Terrain
+                if (!layers_hidden)
+                {
+                    // See if this terrain was recently hidden
+                    if (hidden_layers != null && hidden_layers.Contains(new TilePosition (start_tile.map, int_pos)))
+                    {
+                        // Terrain already found / saved
+                        // Debug.Log("Terrain already saved!");
+                    }
+                    // If not, find the terrain
+                    else
+                    {
+                        // Get all connected terrain tiles
+                        List<TilePosition> terrain_tiles = GetMatchingConnectedTiles(start_tile.map, int_pos, start_tile.tile);
+                        
+                        // Get all objects above them
+                        List<TilePosition> object_tiles = GetObjectsOnLayerAtPositions(object_layers[start_layer_id], terrain_tiles);
+                        foreach (TilePosition obj_tile in object_tiles)
+                            terrain_tiles.Add(obj_tile);
+
+                        // TODO - repeat for additional layers on top
+
+                        hidden_layers = terrain_tiles;
+                    }
+
+                    // Make all tiles transparent
+                    HideTiles(hidden_layers);
+                    layers_hidden = true;
+                }
+                return true;
+            }
+            else 
+            {
+                // Show Terrain Again
+                if (layers_hidden)
+                {
+                    // Make all tiles opaque
+                    ShowTiles(hidden_layers);
+                    layers_hidden = false;
+                }
+                return false;
+            }
         }
 
+        /*
+        * Makes all tiles in a list of tile positions transparent / hidden
+        */
+        private void HideTiles (List<TilePosition> tiles)
+        {
+            
+            foreach (TilePosition tile in tiles)
+            {
+                // Hide basic tiles
+                tile.map.SetColor(tile.pos, new Color(1,1,1,Constants.HIDDEN_LAYER_TILE_ALPHA));
+
+                // Hide prefabs / game objects
+                GameObject go = null;
+                go = GetGameObjectOnLayer(go, tile.pos, null, null, tile.map);
+                if (go != null)
+                foreach (SpriteRenderer sprite in go.GetComponentsInChildren<SpriteRenderer>())
+                    sprite.color = new Color(1,1,1,Constants.HIDDEN_LAYER_TILE_ALPHA);
+            }
+        }
+
+        /*
+        * Makes all tiles in a list of tile positions opaque / visible
+        */
+        private void ShowTiles (List<TilePosition> tiles)
+        {
+            
+            foreach (TilePosition tile in tiles)
+            {
+                // Show basic tiles
+                tile.map.SetColor(tile.pos, new Color(1,1,1,1));
+
+                // Show prefabs
+                GameObject go = null;
+                go = GetGameObjectOnLayer(go, tile.pos, null, null, tile.map);
+                if (go != null)
+                foreach (SpriteRenderer sprite in go.GetComponentsInChildren<SpriteRenderer>())
+                    sprite.color = new Color(1,1,1,1);
+            }
+        }
         #endregion
 
 
@@ -455,23 +540,34 @@ namespace Mapping
             return found_object;
         }
 
-        private GameObject GetGameObjectOnLayer (GameObject go, Vector3Int pos, Tilemap layer, Tilemap[] objects)
+        private GameObject GetGameObjectOnLayer (GameObject go, Vector3Int pos, Tilemap layer, Tilemap[] objects, Tilemap map = null)
         {
             ParallaxTileBase tile = null;
-            if (go == null && objects != null)
+
+            if (map != null)
             {
-                for (int i = objects.Length - 1; i >= 0; i--)
-                {
-                    if (go != null) break;
-                    
-                    tile = (ParallaxTileBase)objects[i].GetTile(pos);
-                    PrefabTile prefab_tile = tile as PrefabTile;
-                    if (prefab_tile) go = prefab_tile.prefab;
-                    else go = objects[i].GetInstantiatedObject(pos);
-                }
+                tile = (ParallaxTileBase)map.GetTile(pos);
+                PrefabTile prefab_tile = tile as PrefabTile;
+                if (prefab_tile) go = prefab_tile.prefab;
+                else go = map.GetInstantiatedObject(pos);
             }
-            if (go == null && layer != null)
-                go = layer.GetInstantiatedObject(pos);
+            else 
+            {
+                if (go == null && objects != null)
+                {
+                    for (int i = objects.Length - 1; i >= 0; i--)
+                    {
+                        if (go != null) break;
+                        
+                        tile = (ParallaxTileBase)objects[i].GetTile(pos);
+                        PrefabTile prefab_tile = tile as PrefabTile;
+                        if (prefab_tile) go = prefab_tile.prefab;
+                        else go = objects[i].GetInstantiatedObject(pos);
+                    }
+                }
+                if (go == null && layer != null)
+                    go = layer.GetInstantiatedObject(pos);
+            }
 
             return go;
         }
@@ -645,7 +741,7 @@ namespace Mapping
         }
 
         private MatchedTile CheckTilePositionOnLayer (MatchedTile matched_tile, Vector3Int pos, Tilemap layer, Tilemap[] objects,
-                                                        bool up = false, bool see_bridge = false)
+                                                        bool up = false, bool see_bridge = false, bool ignore_objects = false)
         {
             GameObject go = null;
             if (layer != null)
@@ -653,7 +749,7 @@ namespace Mapping
             
             // Check Object Layers Top to Bottom
             ParallaxTileBase checked_tile;
-            if (matched_tile.tile == null && objects != null)
+            if (matched_tile.tile == null && objects != null && !ignore_objects)
             {
                 for (int i = objects.Length - 1; i >= 0; i--)
                 {
@@ -768,10 +864,10 @@ namespace Mapping
         {   
             // Mark all tiles as not visited
             Dictionary<int, Dictionary<int, bool>> visited_tiles = new Dictionary<int, Dictionary<int, bool>>();
-            for (int x = map.cellBounds.min.x; x < map.cellBounds.max.x; x++)
+            for (int x = map.cellBounds.min.x; x <= map.cellBounds.max.x; x++)
             {
                 visited_tiles.Add(x, new Dictionary<int, bool>());
-                for (int y = map.cellBounds.min.y; y < map.cellBounds.max.y; y++)
+                for (int y = map.cellBounds.min.y; y <= map.cellBounds.max.y; y++)
                 {
                     visited_tiles[x].Add(y, false);
                 }
