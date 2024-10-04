@@ -91,11 +91,13 @@ namespace Mapping
     {
         public Tilemap map;
         public Vector3Int pos;
+        public bool is_object;
 
-        public TilePosition (Tilemap m, Vector3Int p)
+        public TilePosition (Tilemap m, Vector3Int p, bool o = false)
         {
             map = m;
             pos = p;
+            is_object = o;
         }
     }
 
@@ -349,8 +351,7 @@ namespace Mapping
                         
                         // Get all objects above them
                         List<TilePosition> object_tiles = GetObjectsOnLayerAtPositions(neighbor_maps.objects_up, bridge_tiles);
-                        foreach (TilePosition obj_tile in object_tiles)
-                            bridge_tiles.Add(obj_tile);
+                        bridge_tiles.AddRange(object_tiles);
 
                         hidden_bridge = bridge_tiles;
                     }
@@ -395,14 +396,36 @@ namespace Mapping
             );
             MatchedTile start_tile = new MatchedTile{};
             start_tile = CheckTilePositionOnLayer (start_tile, int_pos, map_layers[start_layer_id], object_layers[start_layer_id], true, false, true);
+            bool behind_terrain = (start_tile.tile != null);
 
-            if (start_tile.tile != null) // tile on base layer
+            // Check higher layers to see if behind any of them
+            if (!behind_terrain)
+            {
+                foreach (KeyValuePair<int, Tilemap> layer in map_layers)
+                {
+                    if (layer.Key < start_layer_id + 1) continue;
+                    start_tile = CheckTilePositionOnLayer(start_tile, int_pos, layer.Value, object_layers[layer.Key], true, false, true);
+
+                    if (start_tile.tile != null)
+                    {
+                        behind_terrain = true;
+                        start_layer_id = layer.Key;
+                        break;
+                    }
+                }
+            }
+
+            if (behind_terrain) // tile on base layer
             {
                 // Hide Terrain
-                if (!layers_hidden)
+                bool needs_update = true;
+                if (layers_hidden)
+                    needs_update = hidden_layers != null && !hidden_layers.Contains(new TilePosition (start_tile.map, int_pos + new Vector3Int(0, 1, 0)));
+
+                if (needs_update)
                 {
                     // See if this terrain was recently hidden
-                    if (hidden_layers != null && hidden_layers.Contains(new TilePosition (start_tile.map, int_pos)))
+                    if (hidden_layers != null && hidden_layers.Contains(new TilePosition (start_tile.map, int_pos + new Vector3Int(0, 1, 0))))
                     {
                         // Terrain already found / saved
                         // Debug.Log("Terrain already saved!");
@@ -410,20 +433,39 @@ namespace Mapping
                     // If not, find the terrain
                     else
                     {
-                        // Get all connected terrain tiles
-                        List<TilePosition> terrain_tiles = GetMatchingConnectedTiles(start_tile.map, int_pos, start_tile.tile);
-                        
-                        // Get all objects above them
-                        List<TilePosition> object_tiles = GetObjectsOnLayerAtPositions(object_layers[start_layer_id], terrain_tiles);
-                        foreach (TilePosition obj_tile in object_tiles)
+                        hidden_layers = new List<TilePosition>();
+                        List<TilePosition> terrain_tiles = null; 
+                        ParallaxTileBase init_tile = null;
+                        bool first_loop = true;
+
+                        foreach (KeyValuePair<int, Tilemap> layer in map_layers)
                         {
-                            terrain_tiles.Add(obj_tile);
-                        }
+                            if (layer.Key < start_layer_id) continue;
+
+                            // Check the next layer map
+                            int layer_diff = layer.Key - start_layer_id;
+                            if (first_loop) 
+                            {
+                                init_tile = start_tile.tile;
+                                first_loop = false;
+                            }
+                            else
+                            {
+                                int_pos = new Vector3Int((int)pos.x, (int)pos.y + layer_diff, 0);
+                                start_tile = new MatchedTile{};
+                                start_tile = CheckTilePositionOnLayer(start_tile, int_pos, layer.Value, object_layers[layer.Key], true, false, true);
+                            }
+
+                            // Get all connected terrain tiles
+                            terrain_tiles = GetMatchingConnectedTiles(layer.Value, int_pos, init_tile, layer_diff + 1, terrain_tiles);
                             
+                            // Get all objects above them
+                            List<TilePosition> object_tiles = GetObjectsOnLayerAtPositions(object_layers[layer.Key], terrain_tiles);
+                            terrain_tiles.AddRange(object_tiles);
 
-                        // TODO - repeat for additional layers on top
-
-                        hidden_layers = terrain_tiles;
+                            // Add to the master list
+                            hidden_layers.AddRange(terrain_tiles);
+                        }
                     }
 
                     // Make all tiles transparent
@@ -453,8 +495,22 @@ namespace Mapping
             
             foreach (TilePosition tile in tiles)
             {
+                // See if tile directly below is hidden
+                bool hide_entirely = false;
+                if (!tile.is_object)
+                {
+                    int layer_below = GetMapLayerIDFromPosition(tile.map.transform.position + new Vector3(0, 0, Constants.MAP_LAYER_HEIGHT));
+                    if (layer_below != int.MinValue)
+                    {
+                        TilePosition tile_below = new TilePosition(map_layers[layer_below], tile.pos);
+                        hide_entirely = tiles.Contains(tile_below);
+                    }
+                }
+
+                float hide_alpha = hide_entirely ? 0 : Constants.HIDDEN_LAYER_TILE_ALPHA;
+                
                 // Hide basic tiles
-                tile.map.SetColor(tile.pos, new Color(1,1,1,Constants.HIDDEN_LAYER_TILE_ALPHA));
+                tile.map.SetColor(tile.pos, new Color(1,1,1,hide_alpha));
 
                 // Hide prefabs / game objects
                 GameObject go = null;
@@ -464,8 +520,10 @@ namespace Mapping
                 {
                     if (sprite.tag == Constants.DOWN_LAYER_PRIORITY_TILE_TAG)
                         sprite.color = new Color (1,1,1,0); // Hide "gap fill" tiles entirely
+                    else if (go.tag == Constants.TERRAIN_EDGE_TILE_TAG && sprite.tag == Constants.EXTRA_DEPRIORITY_TILE_TAG)
+                        sprite.color = new Color (1,1,1,0); // Hide "back edge" faces entirely
                     else
-                        sprite.color = new Color(1,1,1,Constants.HIDDEN_LAYER_TILE_ALPHA);
+                        sprite.color = new Color(1,1,1,hide_alpha);
                 }
             }
         }
@@ -868,14 +926,15 @@ namespace Mapping
         /*
         * Returns all tiles with the same terrain tag on the specified tilemap (layer) touching a specific start tile
         */
-        private List<TilePosition> GetMatchingConnectedTiles(Tilemap map, Vector3Int start_pos, ParallaxTileBase start_tile)
+        private List<TilePosition> GetMatchingConnectedTiles(Tilemap map, Vector3Int start_pos, ParallaxTileBase start_tile,
+                                                                int top_n_rows_only = 0, List<TilePosition> expanded_start = null)
         {   
             // Mark all tiles as not visited
             Dictionary<int, Dictionary<int, bool>> visited_tiles = new Dictionary<int, Dictionary<int, bool>>();
-            for (int x = map.cellBounds.min.x; x <= map.cellBounds.max.x; x++)
+            for (int x = map.cellBounds.min.x - 1; x <= map.cellBounds.max.x; x++)
             {
                 visited_tiles.Add(x, new Dictionary<int, bool>());
-                for (int y = map.cellBounds.min.y; y <= map.cellBounds.max.y; y++)
+                for (int y = map.cellBounds.min.y - 1; y <= map.cellBounds.max.y; y++)
                 {
                     visited_tiles[x].Add(y, false);
                 }
@@ -886,13 +945,24 @@ namespace Mapping
             Queue<TilePosition> queue = new Queue<TilePosition>();
             TilePosition start = new TilePosition (map, start_pos);
             queue.Enqueue(start);
+
+            // Add expanded start tiles if provided
+            if (expanded_start != null)
+            {
+                foreach (TilePosition exp in expanded_start)
+                {
+                    TilePosition exp_offset = new TilePosition (map, exp.pos + new Vector3Int(0, 1, 0));
+                    queue.Enqueue(exp_offset);
+                }
+            }
             
             // Floodfill Algorithm
             while (queue.Any())
             {
                 // Check if tile has already been visited
                 TilePosition cur_tile = queue.Dequeue();
-                if (visited_tiles[cur_tile.pos.x][cur_tile.pos.y] == true)
+                if (!visited_tiles.ContainsKey(cur_tile.pos.x) || !visited_tiles[cur_tile.pos.x].ContainsKey(cur_tile.pos.y) ||
+                        visited_tiles[cur_tile.pos.x][cur_tile.pos.y] == true)
                     continue;
 
                 // Mark tile as visited
@@ -900,7 +970,13 @@ namespace Mapping
                 
                 // If this is a matching tile, add it and queue up neighbors
                 ParallaxTileBase tile = (ParallaxTileBase)map.GetTile(cur_tile.pos);
-                if (tile != null && (tile.terrain_tag == start_tile.terrain_tag))
+                bool should_skip = false;
+                if (top_n_rows_only > 0)
+                {
+                    ParallaxTileBase check_tile = (ParallaxTileBase)map.GetTile(cur_tile.pos + (top_n_rows_only * Vector3Int.up));
+                    should_skip = (cur_tile.pos != start_pos && tile != null && check_tile != null && check_tile.terrain_tag == tile.terrain_tag);
+                }
+                if (!should_skip && start_tile != null && tile != null && (tile.terrain_tag == start_tile.terrain_tag))
                 {
                     connected_tiles.Add(cur_tile);
 
@@ -918,6 +994,15 @@ namespace Mapping
                     queue.Enqueue(down_tile);
                 }
             }
+
+            // Edge case to remove start tile when it shouldn't be included in hidden tiles
+            if (top_n_rows_only == 1)
+            {
+                ParallaxTileBase check_tile = (ParallaxTileBase)map.GetTile(start.pos + (top_n_rows_only * Vector3Int.up));
+                if (start_tile != null && check_tile != null && check_tile.terrain_tag == start_tile.terrain_tag)
+                    connected_tiles.Remove(start);
+            }
+                
 
             return connected_tiles;
         }
@@ -954,12 +1039,12 @@ namespace Mapping
                 {
                     ParallaxTileBase tile = (ParallaxTileBase)object_map.GetTile(tile_pos.pos);
                     if (tile != null)
-                        object_positions.Add(new TilePosition(object_map, tile_pos.pos));
+                        object_positions.Add(new TilePosition(object_map, tile_pos.pos, true));
                         
                     // Get stairs too!
                     ParallaxTileBase below_tile = (ParallaxTileBase)object_map.GetTile(tile_pos.pos + Vector3Int.down);
                     if (below_tile != null && ParallaxTerrain.IsStairTile(below_tile, false, true))
-                        object_positions.Add(new TilePosition(object_map, tile_pos.pos + Vector3Int.down));
+                        object_positions.Add(new TilePosition(object_map, tile_pos.pos + Vector3Int.down, true));
                 }
             }
 
