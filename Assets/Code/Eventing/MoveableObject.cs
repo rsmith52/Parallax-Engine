@@ -525,6 +525,13 @@ namespace Eventing
                         if (JumpForward(2))
                             return ActivateTile(neighbor_tiles.look_ahead_tile);
                     }
+                    // Move Right onto/off Jump Tile
+                    else if (neighbor_tiles.right_tile.is_jump || neighbor_tiles.on_tile.is_jump)
+                    {
+                        CancelMovement();
+                        if (JumpForward(1))
+                            return ActivateTile(neighbor_tiles.facing_tile);
+                    }
                     // Move Onto Water Right
                     else if (!ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.right_tile) &&
                             ParallaxTerrain.IsWaterTile(neighbor_tiles.up_right_tile))
@@ -589,6 +596,13 @@ namespace Eventing
                         if (JumpForward(2))
                             return ActivateTile(neighbor_tiles.look_ahead_tile);
                     }
+                    // Move Left onto/off Jump Tile
+                    else if (neighbor_tiles.left_tile.is_jump || neighbor_tiles.on_tile.is_jump)
+                    {
+                        CancelMovement();
+                        if (JumpForward(1))
+                            return ActivateTile(neighbor_tiles.facing_tile);
+                    }
                     // Move Onto Water Left
                     else if (!ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.left_tile) &&
                             ParallaxTerrain.IsWaterTile(neighbor_tiles.up_left_tile))
@@ -642,6 +656,13 @@ namespace Eventing
                         if (JumpForward(2))
                             return ActivateTile(neighbor_tiles.look_ahead_tile);
                     }
+                    // Move Up onto/off Jump Tile
+                    else if (neighbor_tiles.up_tile.is_jump || neighbor_tiles.on_tile.is_jump)
+                    {
+                        CancelMovement();
+                        if (JumpForward(1))
+                            return ActivateTile(neighbor_tiles.facing_tile);
+                    }
                     // Move Onto Water Up
                     else if (!ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) &&
                             ParallaxTerrain.IsWaterTile(neighbor_tiles.up_left_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.up_right_tile))
@@ -690,6 +711,13 @@ namespace Eventing
                         CancelMovement();
                         if (JumpForward(2))
                             return ActivateTile(neighbor_tiles.look_ahead_tile);
+                    }
+                    // Move Down onto/off Jump Tile
+                    else if (neighbor_tiles.down_tile.is_jump || neighbor_tiles.on_tile.is_jump)
+                    {
+                        CancelMovement();
+                        if (JumpForward(1))
+                            return ActivateTile(neighbor_tiles.facing_tile);
                     }
                     // Move Onto Water Down
                     else if (!ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile))

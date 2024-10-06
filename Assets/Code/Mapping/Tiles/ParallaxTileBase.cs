@@ -41,6 +41,7 @@ namespace Mapping
         public bool is_counter = false;
         public bool is_trans = false;
         public bool is_reflective = false;
+        public bool is_jump = false;
 
         #endregion
 

@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 1503745791091827701}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.5}
+  m_LocalPosition: {x: 0, y: 0, z: -0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: -611510623
   m_SortingLayer: 1
   m_SortingOrder: 2
-  m_Sprite: {fileID: 686632292, guid: 97df0442143044edaa1a503f853e4211, type: 3}
+  m_Sprite: {fileID: 1358203318, guid: 24e9464d68a324263915b44279f77499, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -157,7 +157,7 @@ SpriteRenderer:
   m_SortingLayerID: -611510623
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1188083134, guid: 97df0442143044edaa1a503f853e4211, type: 3}
+  m_Sprite: {fileID: 1056932634, guid: 24e9464d68a324263915b44279f77499, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -241,7 +241,7 @@ SpriteRenderer:
   m_SortingLayerID: -611510623
   m_SortingLayer: 1
   m_SortingOrder: 1
-  m_Sprite: {fileID: -1845837024, guid: 97df0442143044edaa1a503f853e4211, type: 3}
+  m_Sprite: {fileID: -869503730, guid: 24e9464d68a324263915b44279f77499, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -262,7 +262,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1630824044834487002}
   m_Layer: 0
-  m_Name: Palm Tree - Skinny
+  m_Name: Jungle Tree - Sand Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -313,7 +313,7 @@ Transform:
   m_GameObject: {fileID: 8916539335428405145}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.75}
+  m_LocalPosition: {x: 0, y: 0, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -360,7 +360,7 @@ SpriteRenderer:
   m_SortingLayerID: -611510623
   m_SortingLayer: 1
   m_SortingOrder: 3
-  m_Sprite: {fileID: 1434225832, guid: 97df0442143044edaa1a503f853e4211, type: 3}
+  m_Sprite: {fileID: -359146077, guid: 24e9464d68a324263915b44279f77499, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

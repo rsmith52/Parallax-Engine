@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34a88e4cea08841649b5b7c5cc9b2938, type: 3}
-  m_Name: Palm Tree - Fat
+  m_Name: Palm Tree - Fat Grass Base
   m_EditorClassIdentifier: 
-  terrain_tag: 4
+  terrain_tag: 1
   allow_passage: 0
   up_passage: 0
   left_passage: 0
@@ -22,12 +22,13 @@ MonoBehaviour:
   is_counter: 0
   is_trans: 0
   is_reflective: 0
-  preview_sprite: {fileID: 632631035, guid: 97df0442143044edaa1a503f853e4211, type: 3}
+  is_jump: 0
+  preview_sprite: {fileID: 1122875362, guid: 97df0442143044edaa1a503f853e4211, type: 3}
   prefab: {fileID: 8626972231468677178, guid: 6eb70d8bef8cc4bfd9ae6d639619bd07, type: 3}
   multi_tile: 0
   tile_size:
     x_width: 1
     y_height: 1
     z_layers: 1
-  prefab_offset: {x: 0.5, y: 2}
+  prefab_offset: {x: 1, y: 2}
   prefab_local_z: 0
