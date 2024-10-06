@@ -285,6 +285,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Ground_9
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71537c26d268b4eb9a7300937cc867f0
+      internalID: 166402428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -305,6 +326,7 @@ TextureImporter:
       Ground_6: 1606174903
       Ground_7: 1610403590
       Ground_8: 373534767
+      Ground_9: 166402428
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

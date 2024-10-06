@@ -306,6 +306,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Nature Decorations_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e94ff1e66f69848c690e0337f36988f9
+      internalID: 1447279185
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nature Decorations_11
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d1062917917240f993e399e2e75c677
+      internalID: 714266301
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -319,6 +361,8 @@ TextureImporter:
     nameFileIdTable:
       Nature Decorations_0: 700500133
       Nature Decorations_1: 2145361900
+      Nature Decorations_10: 1447279185
+      Nature Decorations_11: 714266301
       Nature Decorations_2: 1692628324
       Nature Decorations_3: 1096951043
       Nature Decorations_4: 1190782170
