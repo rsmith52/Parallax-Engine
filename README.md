@@ -43,6 +43,11 @@ Unity Project for 2.5d Parallax RPG Engine
 * More advanced falling physics
 * Intermittent bug that happens on stairs sometimes where on_tile is null
 * Make see through tiles fade in/out rather than abrubtly change
+* Switch to blank humanoid template character, animate it
+
+### UI Code
+* Simple message boxes
+* Speech bubbles
 
 ### AI Code
 * Path Finding will need custom logic, gonna be hard
@@ -65,6 +70,10 @@ Unity Project for 2.5d Parallax RPG Engine
 * Level caps -> Store excess XP
 * Additional pokedex info / research levels like in arceus
 * Defeating wild monsters -> Drop items same as if they were caught and had held items, more common in general
+* Crafting of net new items for the first time to unlock them - repels, etc.
+* Poisoned, no items, limits steps before blacking out, need to take optimal path
+* Skyrim esque random encounters
+* Followers / companions
 
 
 
@@ -73,6 +82,18 @@ Unity Project for 2.5d Parallax RPG Engine
 * Dragon area as beautiful valleys, white stone, green grass, maybe some brown mountain mixed in or as caves. Rive/lake that is a dragon shap with island cave?
 * Rome/Greece area should have fall colors
 * Bamboo in dark mountain caves exterior
+* Mini games / quests in each region/area
+* In tidepool tropics area (and maybe others) - some islands connected by shallow waters you can walk across, maybe tides change too? Make it accessible only sometimes
+
+
+
+## Pokemon to include
+* Marshadow
+* Applin line
+* Sneasel line and all evolutions
+* New primeape evo line
+* H Zoroark
+* Wyrdeer
 
 
 
