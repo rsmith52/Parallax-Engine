@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2091152533698901058}
   - component: {fileID: 106081563886657679}
   m_Layer: 0
-  m_Name: Middle Leaves
+  m_Name: Upper Trunt
   m_TagString: Up Layer Priority Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,8 +72,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -611510623
   m_SortingLayer: 1
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -2028435672, guid: 870d992e647b440e99c292b9bf1a608d, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 686632292, guid: 97df0442143044edaa1a503f853e4211, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 686339255809521322}
   - component: {fileID: 7747291055122472498}
   m_Layer: 0
-  m_Name: Trunk
+  m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -157,7 +157,7 @@ SpriteRenderer:
   m_SortingLayerID: -611510623
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 115757704, guid: 870d992e647b440e99c292b9bf1a608d, type: 3}
+  m_Sprite: {fileID: 1188083134, guid: 97df0442143044edaa1a503f853e4211, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -179,8 +179,8 @@ GameObject:
   - component: {fileID: 8924300047058532763}
   - component: {fileID: 6049461140682701390}
   m_Layer: 0
-  m_Name: Bottom Leaves
-  m_TagString: Untagged
+  m_Name: Bottom Trunk
+  m_TagString: Up Layer Priority Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -240,8 +240,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -611510623
   m_SortingLayer: 1
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -1418162145, guid: 870d992e647b440e99c292b9bf1a608d, type: 3}
+  m_SortingOrder: 1
+  m_Sprite: {fileID: -1845837024, guid: 97df0442143044edaa1a503f853e4211, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -262,7 +262,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1630824044834487002}
   m_Layer: 0
-  m_Name: Tree 1 - Darker
+  m_Name: Palm Tree - Skinny
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -298,7 +298,7 @@ GameObject:
   - component: {fileID: 7222524032806609287}
   - component: {fileID: 5317542538492198748}
   m_Layer: 0
-  m_Name: Top Leaves
+  m_Name: Leaves
   m_TagString: Up Layer Priority Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -359,8 +359,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -611510623
   m_SortingLayer: 1
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -547982725, guid: 870d992e647b440e99c292b9bf1a608d, type: 3}
+  m_SortingOrder: 3
+  m_Sprite: {fileID: 1434225832, guid: 97df0442143044edaa1a503f853e4211, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

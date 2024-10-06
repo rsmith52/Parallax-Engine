@@ -90,6 +90,15 @@ Unity Project for 2.5d Parallax RPG Engine
 * Hydragirium
 * Alistair
 * Flurmimon
+* Manuxd789
+* UltimoSpriter
+* Tyranitar Dark
+* Alucus
+* ChaoticCherryCake
+* iametrine = Dewitty
+* Kymotonian
+* Speedialga
+* Thurpok
 
 ### Asset Packs / Scripts
 * Odin Inspector

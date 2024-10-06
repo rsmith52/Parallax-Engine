@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34a88e4cea08841649b5b7c5cc9b2938, type: 3}
-  m_Name: Tree 1
+  m_Name: Pine Tree - Darker
   m_EditorClassIdentifier: 
   terrain_tag: 1
   allow_passage: 0
@@ -22,8 +22,8 @@ MonoBehaviour:
   is_counter: 0
   is_trans: 0
   is_reflective: 0
-  preview_sprite: {fileID: -255259870, guid: 870d992e647b440e99c292b9bf1a608d, type: 3}
-  prefab: {fileID: 8626972231468677178, guid: 90c1343f1ecd245d28a1b46600fac931, type: 3}
+  preview_sprite: {fileID: 1635281618, guid: 870d992e647b440e99c292b9bf1a608d, type: 3}
+  prefab: {fileID: 8626972231468677178, guid: e5bae188cc8a8427ab7adeb7d4dae6ca, type: 3}
   multi_tile: 1
   tile_size:
     x_width: 2
