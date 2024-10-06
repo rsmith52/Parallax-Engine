@@ -22,6 +22,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Sand ramps / landslides?
 * Tiles that you can't jump in (marsh, deep sand, etc.) - includes water and underwater - jump button should probably be used to dive/rise in water?
 * Underwater tiles could have color tint in palette view - or some indicator of being underwater tiles
+* Animate still water edges
 
 ### Map Managing Code
 * Buttons for static functions to load/save maps as well
