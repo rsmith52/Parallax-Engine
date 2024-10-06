@@ -25,9 +25,9 @@ MonoBehaviour:
   is_jump: 0
   preview_sprite: {fileID: 1122875362, guid: 97df0442143044edaa1a503f853e4211, type: 3}
   prefab: {fileID: 8626972231468677178, guid: 6eb70d8bef8cc4bfd9ae6d639619bd07, type: 3}
-  multi_tile: 0
+  multi_tile: 1
   tile_size:
-    x_width: 1
+    x_width: 2
     y_height: 1
     z_layers: 1
   prefab_offset: {x: 1, y: 2}

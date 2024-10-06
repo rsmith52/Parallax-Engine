@@ -6,6 +6,9 @@ Unity Project for 2.5d Parallax RPG Engine
 ## Notes To Remember TODOs
 ### Tile Replacements / Credits
 * Switch grass & tree tiles / find credit for them
+* More mushrooms
+* Finalize flowers
+* Beach decorations
 
 ### Tile Additions / Edits
 * Sand for Beach

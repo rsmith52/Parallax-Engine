@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34a88e4cea08841649b5b7c5cc9b2938, type: 3}
   m_Name: Hammock Left
   m_EditorClassIdentifier: 
-  terrain_tag: 4
+  terrain_tag: 0
   allow_passage: 0
   up_passage: 0
   left_passage: 0
