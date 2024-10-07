@@ -140,6 +140,8 @@ namespace Eventing
         public bool under_bridge;
         [ReadOnly]
         public bool behind_upper_layer;
+        [ReadOnly]
+        public bool behind_prefab;
         
 
         [TabGroup ("Movement")]
@@ -465,7 +467,10 @@ namespace Eventing
                 on_water = false;
 
             // Underwater Flag
-            if (ParallaxTerrain.IsUnderwaterTile(tile))
+            if (ParallaxTerrain.IsUnderwaterTile(tile) || 
+            (layer_change == LayerChange.None && ParallaxTerrain.IsWaterTile(neighbor_tiles.above_tile)) ||
+            (layer_change == LayerChange.Up && ParallaxTerrain.IsWaterTile(neighbor_tiles.above_tile, true)) ||
+            (layer_change == LayerChange.Down && ParallaxTerrain.IsWaterTile(neighbor_tiles.below_tile, true)))
                 underwater = true;
             else
                 underwater = false;
@@ -491,6 +496,11 @@ namespace Eventing
                         behind_upper_layer = true;
                     else   
                         behind_upper_layer = false;
+                    // Behind Prefab Flag
+                    if (map.HidePrefabBlockingPosition(this.transform.position + Vector3.right))
+                        behind_prefab = true;
+                    else
+                        behind_prefab = false;
 
                     if (neighbor_tiles.right_tile == null) return false;
                     // Move Onto Right Stairs
@@ -534,14 +544,15 @@ namespace Eventing
                     }
                     // Move Onto Water Right
                     else if (!ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.right_tile) &&
-                            ParallaxTerrain.IsWaterTile(neighbor_tiles.up_right_tile))
+                            ParallaxTerrain.IsWaterTile(neighbor_tiles.up_right_tile) && !underwater)
                     {
                         CancelMovement();
                         if (JumpForward(2, true))
                             return ActivateTile(neighbor_tiles.look_ahead_tile);
                     }
                     // Move Off Water Right
-                    else if (ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile))
+                    else if (ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) &&
+                            !underwater)
                     {
                         CancelMovement();
                         if (JumpForward(2, true))
@@ -562,6 +573,11 @@ namespace Eventing
                         behind_upper_layer = true;
                     else   
                         behind_upper_layer = false;
+                    // Behind Prefab Flag
+                    if (map.HidePrefabBlockingPosition(this.transform.position + Vector3.left))
+                        behind_prefab = true;
+                    else
+                        behind_prefab = false;
 
                     if (neighbor_tiles.left_tile == null) return false;
                     // Move Onto Left Stairs
@@ -605,14 +621,15 @@ namespace Eventing
                     }
                     // Move Onto Water Left
                     else if (!ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.left_tile) &&
-                            ParallaxTerrain.IsWaterTile(neighbor_tiles.up_left_tile))
+                            ParallaxTerrain.IsWaterTile(neighbor_tiles.up_left_tile) && !underwater)
                     {
                         CancelMovement();
                         if (JumpForward(2, true))
                             return ActivateTile(neighbor_tiles.look_ahead_tile);
                     }
                     // Move Off Water Left
-                    else if (ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile))
+                    else if (ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) &&
+                            !underwater)
                     {
                         CancelMovement();
                         if (JumpForward(2, true))
@@ -636,6 +653,11 @@ namespace Eventing
                         behind_upper_layer = true;
                     else   
                         behind_upper_layer = false;
+                    // Behind Prefab Flag
+                    if (map.HidePrefabBlockingPosition(this.transform.position + Vector3.up))
+                        behind_prefab = true;
+                    else
+                        behind_prefab = false;
 
                     if (neighbor_tiles.up_tile == null) return false;
                     // Move Off Up Stairs
@@ -665,14 +687,16 @@ namespace Eventing
                     }
                     // Move Onto Water Up
                     else if (!ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) &&
-                            ParallaxTerrain.IsWaterTile(neighbor_tiles.up_left_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.up_right_tile))
+                            ParallaxTerrain.IsWaterTile(neighbor_tiles.up_left_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.up_right_tile) &&
+                            !underwater)
                     {
                         CancelMovement();
                         if (JumpForward(1, true))
                             return ActivateTile(neighbor_tiles.up_tile);
                     }
                     // Move Off Water Up
-                    else if (ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile))
+                    else if (ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) &&
+                            !underwater)
                     {
                         CancelMovement();
                         if (JumpForward(2, true))
@@ -693,6 +717,11 @@ namespace Eventing
                         behind_upper_layer = true;
                     else   
                         behind_upper_layer = false;
+                    // Behind Prefab Flag
+                    if (map.HidePrefabBlockingPosition(this.transform.position + Vector3.down))
+                        behind_prefab = true;
+                    else
+                        behind_prefab = false;
 
                     if (neighbor_tiles.down_tile == null) return false;
                     // Move Onto Up Stairs
@@ -720,7 +749,8 @@ namespace Eventing
                             return ActivateTile(neighbor_tiles.facing_tile);
                     }
                     // Move Onto Water Down
-                    else if (!ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile))
+                    else if (!ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile) &&
+                            !underwater)
                     {
                         CancelMovement();
                         if (JumpForward(2, true))
@@ -728,7 +758,8 @@ namespace Eventing
                     }
                     // Move Off Water Down
                     else if (ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile) &&
-                            ParallaxTerrain.IsWaterTile(neighbor_tiles.left_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.right_tile))
+                            ParallaxTerrain.IsWaterTile(neighbor_tiles.left_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.right_tile) &&
+                            !underwater)
                     {
                         CancelMovement();
                         if (JumpForward(1, true))
@@ -942,12 +973,13 @@ namespace Eventing
                 (up_event == null || up_event.IsPassable()) && neighbor_tiles.up_tile.allow_passage &&
                 neighbor_tiles.up_tile.down_passage && 
                 (neighbor_tiles.on_tile.up_passage || (ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) && !neighbor_tiles.facing_other_level)) &&
+                ((ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) && underwater) ||
                 (!ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) || neighbor_tiles.up_left_tile == null || (neighbor_tiles.up_left_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.up_left_tile)))) &&
                 (!ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) || neighbor_tiles.up_right_tile == null || (neighbor_tiles.up_right_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.up_right_tile)))) &&
                 (!ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) || !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) || neighbor_tiles.look_ahead_cw_tile == null || (neighbor_tiles.look_ahead_cw_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_cw_tile)))) &&
                 (!ParallaxTerrain.IsWaterTile(neighbor_tiles.up_tile) || !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) || neighbor_tiles.look_ahead_ccw_tile == null || (neighbor_tiles.look_ahead_ccw_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_ccw_tile)))) &&
                 (ParallaxTerrain.IsStairTile(neighbor_tiles.up_tile, true) == ParallaxTerrain.IsStairTile(neighbor_tiles.on_tile, true))
-                ))
+                )))
             {
                 target_pos += Vector3.up;
                 moving = true;
@@ -966,9 +998,10 @@ namespace Eventing
                 (neighbor_tiles.on_tile != null && neighbor_tiles.left_tile != null &&
                 (left_event == null || left_event.IsPassable()) && neighbor_tiles.on_tile.left_passage &&
                 neighbor_tiles.left_tile.allow_passage && neighbor_tiles.left_tile.right_passage) &&
+                ((ParallaxTerrain.IsWaterTile(neighbor_tiles.left_tile) && underwater) ||
                 (!ParallaxTerrain.IsWaterTile(neighbor_tiles.left_tile) || neighbor_tiles.up_left_tile == null || (neighbor_tiles.up_left_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.left_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.up_left_tile)))) &&
                 (!ParallaxTerrain.IsWaterTile(neighbor_tiles.left_tile) || !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) || neighbor_tiles.look_ahead_cw_tile == null || (neighbor_tiles.look_ahead_cw_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_cw_tile))))
-                )
+                ))
             {
                 target_pos += Vector3.left;
                 moving = true;
@@ -987,9 +1020,10 @@ namespace Eventing
                 (neighbor_tiles.on_tile != null && neighbor_tiles.right_tile != null &&
                 (right_event == null || right_event.IsPassable()) && neighbor_tiles.on_tile.right_passage &&
                 neighbor_tiles.right_tile.allow_passage && neighbor_tiles.right_tile.left_passage) &&
+                ((ParallaxTerrain.IsWaterTile(neighbor_tiles.right_tile) && underwater) ||
                 (!ParallaxTerrain.IsWaterTile(neighbor_tiles.right_tile) || neighbor_tiles.up_right_tile == null || (neighbor_tiles.up_right_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.right_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.up_right_tile)))) &&
                 (!ParallaxTerrain.IsWaterTile(neighbor_tiles.right_tile) || !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) || neighbor_tiles.look_ahead_ccw_tile == null || (neighbor_tiles.look_ahead_ccw_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_ccw_tile))))
-                )
+                ))
             {
                 target_pos += Vector3.right;
                 moving = true;
@@ -1008,10 +1042,11 @@ namespace Eventing
                 (down_event == null || down_event.IsPassable()) && neighbor_tiles.on_tile.down_passage &&
                 neighbor_tiles.down_tile.allow_passage && 
                 (neighbor_tiles.down_tile.up_passage || (ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && !neighbor_tiles.facing_other_level)) &&
+                ((ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile) && underwater) ||
                 (!ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile) || neighbor_tiles.down_left_tile == null || (neighbor_tiles.down_left_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.down_left_tile)))) &&
                 (!ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile) || neighbor_tiles.down_right_tile == null || (neighbor_tiles.down_right_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.down_right_tile)))) &&
                 (ParallaxTerrain.IsStairTile(neighbor_tiles.down_tile, true) == ParallaxTerrain.IsStairTile(neighbor_tiles.on_tile, true))
-                ))
+                )))
             {
                 target_pos += Vector3.down;
                 moving = true;

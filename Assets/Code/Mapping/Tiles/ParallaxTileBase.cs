@@ -42,6 +42,16 @@ namespace Mapping
         public bool is_trans = false;
         public bool is_reflective = false;
         public bool is_jump = false;
+        public bool is_hideable = false;
+
+        #endregion
+
+
+        #region Fields
+
+        [HideInInspector]
+        public GameObject instantiated_object;
+        public GameObject GetInstantiatedObject() { return instantiated_object; }
 
         #endregion
 

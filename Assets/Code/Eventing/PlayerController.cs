@@ -86,13 +86,17 @@ namespace Eventing
             {
                 if (current_pos == target_pos)
                 {
-                    if (player_mover.on_water)
+                    if (player_mover.on_water || player_mover.underwater)
                     {
-                        player_mover.SinkDown();
-                    }
-                    else if (player_mover.underwater)
-                    {
-                        player_mover.RiseUp();
+                        bool sink_success = false;
+                        if (player_mover.on_water)
+                        {
+                            sink_success = player_mover.SinkDown();
+                        }
+                        if (player_mover.underwater && !sink_success)
+                        {
+                            player_mover.RiseUp();
+                        }
                     }
                     else if (!jump_queued)
                     {

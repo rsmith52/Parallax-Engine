@@ -22,6 +22,7 @@ MonoBehaviour:
   is_counter: 0
   is_trans: 1
   is_reflective: 1
+  is_jump: 0
   m_DefaultSprite: {fileID: 290075495, guid: 379f377ccf5b94cc2b5141620a027966, type: 3}
   m_DefaultGameObject: {fileID: 8626972231468677178, guid: a2d80ed363ab34bd7954142e519cf46c,
     type: 3}

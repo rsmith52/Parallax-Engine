@@ -6,14 +6,14 @@ Unity Project for 2.5d Parallax RPG Engine
 ## Notes To Remember TODOs
 ### Tile Replacements / Credits
 * Switch grass & tree tiles / find credit for them
-* More mushrooms
 * Finalize flowers
-* Beach decorations
 
 ### Tile Additions / Edits
-* Sand for Beach
 * Beach Water / Shore
 * Add shadows in
+* Large ferns / foliage
+* More mushrooms
+* Beach decorations
 
 ### Tile object coding
 * Reflections on ice, still water, etc.
@@ -23,10 +23,10 @@ Unity Project for 2.5d Parallax RPG Engine
 * Tiles that you can't jump in (marsh, deep sand, etc.) - includes water and underwater - jump button should probably be used to dive/rise in water?
 * Underwater tiles could have color tint in palette view - or some indicator of being underwater tiles
 * Animate still water edges
+* Forage tiles - "is_forage" flag with fields for replacement "foraged" tile, and what item(s) it drops
 
 ### Map Managing Code
 * Buttons for static functions to load/save maps as well
-* New layers could be full or empty by default? Nice to have
 * Map object stores map size? background music
 * Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
 * Would be really nice to have map managing code visible in same editor window as tile palette for map editing
@@ -86,6 +86,15 @@ Unity Project for 2.5d Parallax RPG Engine
 * Mini games / quests in each region/area
 * In tidepool tropics area (and maybe others) - some islands connected by shallow waters you can walk across, maybe tides change too? Make it accessible only sometimes
 
+### Temples / Leaders Etc.
+* Grass temple - combo of water and fire and grass to modify the nature
+* Grow / shrink vines, etc., maybe burn some stuff
+* Ariados Guy - scene in my head, rope bridge in jungle cliffs
+* Crobat Guy
+
+### People Ideas
+* Rival tribes - feebas / magikarp groups
+
 
 
 ## Pokemon to include
@@ -95,6 +104,13 @@ Unity Project for 2.5d Parallax RPG Engine
 * New primeape evo line
 * H Zoroark
 * Wyrdeer
+* Ariados
+* Breloom
+* Roserade
+* Gliscor
+* Crobat
+* Flygon
+* Gyrados & Milotic
 
 
 

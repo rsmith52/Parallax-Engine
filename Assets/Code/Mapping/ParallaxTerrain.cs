@@ -61,11 +61,14 @@ namespace Mapping
             else return (side_stair_tags.Contains(tile.terrain_tag) || up_stair_tags.Contains(tile.terrain_tag));
         }
 
-        public static bool IsWaterTile(ParallaxTileBase tile)
+        public static bool IsWaterTile(ParallaxTileBase tile, bool is_deep_only = false)
         {
             if (tile == null) return false;
-            TerrainTags[] water_tags = new TerrainTags[] { TerrainTags.WaterStill, TerrainTags.WaterOcean, TerrainTags.DeepWater };
-            return water_tags.Contains(tile.terrain_tag);
+            TerrainTags[] water_tags = new TerrainTags[] { TerrainTags.WaterStill, TerrainTags.WaterOcean };
+            TerrainTags[] deep_water_tags = new TerrainTags[] { TerrainTags.DeepWater };
+            
+            if (is_deep_only) return deep_water_tags.Contains(tile.terrain_tag);
+            else return (water_tags.Contains(tile.terrain_tag) || deep_water_tags.Contains(tile.terrain_tag));
         }
 
         public static bool IsBridgeTile(ParallaxTileBase tile)

@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34a88e4cea08841649b5b7c5cc9b2938, type: 3}
+  m_Name: White Stone Sand Stairs Up Center
+  m_EditorClassIdentifier: 
+  terrain_tag: 16
+  allow_passage: 1
+  up_passage: 1
+  left_passage: 1
+  right_passage: 1
+  down_passage: 1
+  is_bush: 0
+  is_counter: 0
+  is_trans: 0
+  is_reflective: 0
+  is_jump: 0
+  preview_sprite: {fileID: -935131090, guid: b4384b11ddea64a9997603feeeaa5760, type: 3}
+  prefab: {fileID: 6580766701242048594, guid: 8aea5a883b03b439289c7f24060bdfab, type: 3}
+  multi_tile: 0
+  tile_size:
+    x_width: 0
+    y_height: 0
+    z_layers: 0
+  prefab_offset: {x: 0.5, y: 0.5}
+  prefab_local_z: 0.5

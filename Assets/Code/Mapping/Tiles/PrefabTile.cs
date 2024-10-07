@@ -41,14 +41,6 @@ namespace Mapping
         #endregion
 
 
-        #region Fields
-
-        private GameObject instantiated_object;
-        public GameObject GetInstantiatedObject() { return instantiated_object; }
-
-        #endregion
-
-
         #region MonoBehavior
 
         public override void GetTileData(Vector3Int pos, ITilemap tilemap, ref TileData tile_data)
@@ -164,6 +156,9 @@ namespace Mapping
             tile_copy.name = base_tile.name;
             tile_copy.terrain_tag = base_tile.terrain_tag;
             tile_copy.allow_passage = base_tile.allow_passage;
+            
+            tile_copy.is_hideable = base_tile.is_hideable;
+            tile_copy.instantiated_object = base_tile.instantiated_object;
 
             return tile_copy;
         }

@@ -132,6 +132,8 @@ namespace Mapping
         private List<TilePosition> hidden_bridge;
         private bool layers_hidden;
         private List<TilePosition> hidden_layers;
+        private bool prefab_hidden;
+        private GameObject hidden_prefab;
 
         #endregion
 
@@ -235,7 +237,7 @@ namespace Mapping
         [Button("+ Object Layer")]
         public void AddNewObjectLayer(int layer_id, int object_layer_id, bool is_ground = false)
         {
-            string layer_name = is_ground ? "Ground" : "Objects " + layer_id + "." + object_layer_id;
+            string layer_name = is_ground ? "Ground " + layer_id : "Objects " + layer_id + "." + object_layer_id;
             GameObject object_layer = new GameObject(layer_name);
             object_layer.transform.parent = map_layers[layer_id].transform;
             object_layer.transform.position += new Vector3(0, 0, -1 * layer_id * Constants.MAP_LAYER_HEIGHT);
@@ -266,6 +268,8 @@ namespace Mapping
             hidden_bridge = null;
             layers_hidden = false;
             hidden_layers = null;
+            prefab_hidden = false;
+            hidden_prefab = null;
             
             // Populate Object Layers
             object_layers = new Dictionary<int, Tilemap[]>();
@@ -323,6 +327,8 @@ namespace Mapping
         */
         public bool HideBridgeAbovePosition(Vector3 pos)
         {
+            if (!Settings.SEE_THROUGH_BRIDGES) return false;
+
             NeighborTilemaps neighbor_maps = GetNeighborTileMaps(pos);
             Vector3Int int_pos = new Vector3Int (
                 (int)(pos.x),
@@ -383,6 +389,8 @@ namespace Mapping
         */
         public bool HideLayersAbovePosition(Vector3 pos, int start_n_up = 2)
         {
+            if (!Settings.SEE_THROUGH_TERRAIN) return false;
+            
             // Get layer that is start_n_up from current layer
             pos -= new Vector3(0, 0, (start_n_up * Constants.MAP_LAYER_HEIGHT));
             int start_layer_id = GetMapLayerIDFromPosition(pos);
@@ -488,10 +496,78 @@ namespace Mapping
         }
 
         /*
+        * Checks if a position is hidden by a prefab, returns true if so, false if not.
+        * If hidden by a hideable prefab, hides that prefab. If not, shows previously hidden prefab.
+        */
+        public bool HidePrefabBlockingPosition(Vector3 pos)
+        {
+            if (!Settings.SEE_THROUGH_PREFAB_OBJECTS) return false;
+
+            NeighborTilemaps neighbor_maps = GetNeighborTileMaps(pos);
+            Vector3Int int_pos = new Vector3Int (
+                (int)(pos.x),
+                (int)(pos.y) - 1,
+                0
+            );
+
+            // Get prefab
+            MatchedTile down_tile = new MatchedTile{};
+            down_tile = CheckTilePositionOnLayer (down_tile, int_pos + Vector3Int.up, neighbor_maps.layer_up, neighbor_maps.objects_up);
+            if (down_tile.tile == null)
+                down_tile = CheckTilePositionOnLayer (down_tile, int_pos, neighbor_maps.layer_up, neighbor_maps.objects_up);
+            if (down_tile.tile == null) 
+                down_tile = CheckTilePositionOnLayer (down_tile, int_pos, neighbor_maps.ground, neighbor_maps.objects);
+            GameObject prefab_obj = null;
+            if (down_tile.tile != null)
+                prefab_obj = down_tile.tile.instantiated_object;
+            
+            if (prefab_obj != null && down_tile.tile.is_hideable)
+            {
+                // Hide Prefab
+                bool needs_update = true;
+                if (prefab_hidden)
+                    needs_update = (hidden_prefab != prefab_obj);
+
+                if (needs_update)
+                {
+                    // Show the previous prefab
+                    if (prefab_hidden)
+                        ShowTiles(null, hidden_prefab);
+                    
+                    // Make all tiles transparent
+                    HideTiles(null, prefab_obj);
+                    hidden_prefab = prefab_obj;
+                }
+                prefab_hidden = true;
+                return true;
+            }
+            else
+            {
+                // Show Prefab Again
+                if (prefab_hidden)
+                {
+                    // Make prefab opaque
+                    ShowTiles(null, hidden_prefab);
+                    prefab_hidden = false;
+                }
+                return false;
+            }
+        }
+
+        /*
         * Makes all tiles in a list of tile positions transparent / hidden
         */
-        private void HideTiles (List<TilePosition> tiles)
+        private void HideTiles (List<TilePosition> tiles, GameObject prefab_obj = null)
         {
+            if (prefab_obj != null)
+            {
+                foreach (SpriteRenderer sprite in prefab_obj.GetComponentsInChildren<SpriteRenderer>())
+                {
+                    if (sprite.tag == Constants.UP_LAYER_PRIORITY_TILE_TAG)
+                        sprite.color = new Color(1,1,1,Constants.HIDDEN_LAYER_TILE_ALPHA);
+                }
+                return;
+            }
             
             foreach (TilePosition tile in tiles)
             {
@@ -531,9 +607,18 @@ namespace Mapping
         /*
         * Makes all tiles in a list of tile positions opaque / visible
         */
-        private void ShowTiles (List<TilePosition> tiles)
+        private void ShowTiles (List<TilePosition> tiles, GameObject prefab_obj = null)
         {
-            
+            if (prefab_obj != null)
+            {
+                foreach (SpriteRenderer sprite in prefab_obj.GetComponentsInChildren<SpriteRenderer>())
+                {
+                    if (sprite.tag == Constants.UP_LAYER_PRIORITY_TILE_TAG)
+                        sprite.color = new Color(1,1,1,1);
+                }
+                return;
+            }
+
             foreach (TilePosition tile in tiles)
             {
                 // Show basic tiles
@@ -547,6 +632,7 @@ namespace Mapping
                     sprite.color = new Color(1,1,1,1);
             }
         }
+        
         #endregion
 
 
@@ -768,7 +854,7 @@ namespace Mapping
             
             // Handle terrain tiles
             if (matched_tile.tile != null && (!matched_tile.object_match || 
-            (matched_tile.map.tag == Constants.GROUND_LAYER_TAG && !ParallaxTerrain.IsStairTile(matched_tile.tile))))
+            (matched_tile.map.tag == Constants.GROUND_LAYER_TAG && !ParallaxTerrain.IsStairTile(matched_tile.tile) && !ParallaxTerrain.IsWaterTile(matched_tile.tile))))
             {
                 // Extend double tall terrain front edges
                 MatchedTile up_tile = new MatchedTile{};

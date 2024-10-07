@@ -22,4 +22,5 @@ MonoBehaviour:
   is_counter: 0
   is_trans: 0
   is_reflective: 0
-  sprite: {fileID: 166402428, guid: d6831084ae5c94b2aac9c8473b693a75, type: 3}
+  is_jump: 0
+  sprite: {fileID: 373534767, guid: d6831084ae5c94b2aac9c8473b693a75, type: 3}
