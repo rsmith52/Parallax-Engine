@@ -987,7 +987,7 @@ namespace Mapping
             return matched_tile;
         }
 
-        private ParallaxTileBase ConvertTerrainRuleTile(RuleTile ruletile, Tilemap matched_map, Vector3Int pos, bool looking_up)
+        private ParallaxTileBase ConvertTerrainRuleTile(RuleTile ruletile, Tilemap matched_map, Vector3Int pos, bool looking_up = false)
         {
             if (!ruletile.is_terrain) return ruletile;
             string tile_name = ruletile.name;

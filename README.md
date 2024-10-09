@@ -47,6 +47,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Intermittent bug that happens on stairs sometimes where on_tile is null
 * Make see through tiles fade in/out rather than abrubtly change
 * Switch to blank humanoid template character, animate it
+* Remove ability to walk behind terrain edges, except underwater
 
 ### UI Code
 * Simple message boxes
