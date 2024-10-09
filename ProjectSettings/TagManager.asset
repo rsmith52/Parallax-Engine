@@ -15,6 +15,8 @@ TagManager:
   - Down Layer Priority Tile
   - Terrain Edge Tile
   - Terrain Corner Edge Tile
+  - Top Side Stair Tile
+  - Terrain Edge Corner Tile
   layers:
   - Default
   - TransparentFX

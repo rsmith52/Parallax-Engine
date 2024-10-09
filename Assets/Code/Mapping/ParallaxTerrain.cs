@@ -61,14 +61,18 @@ namespace Mapping
             else return (side_stair_tags.Contains(tile.terrain_tag) || up_stair_tags.Contains(tile.terrain_tag));
         }
 
-        public static bool IsWaterTile(ParallaxTileBase tile, bool is_deep_only = false)
+        public static bool IsWaterTile(ParallaxTileBase tile, bool is_deep_only = false, bool is_ocean_only = false, bool see_shore = false)
         {
             if (tile == null) return false;
-            TerrainTags[] water_tags = new TerrainTags[] { TerrainTags.WaterStill, TerrainTags.WaterOcean };
+            TerrainTags[] water_tags = new TerrainTags[] { TerrainTags.WaterStill };
+            TerrainTags[] ocean_tags = new TerrainTags[] { TerrainTags.WaterOcean };
             TerrainTags[] deep_water_tags = new TerrainTags[] { TerrainTags.DeepWater };
+            TerrainTags[] shore_tags = new TerrainTags[] { TerrainTags.Shore };
             
             if (is_deep_only) return deep_water_tags.Contains(tile.terrain_tag);
-            else return (water_tags.Contains(tile.terrain_tag) || deep_water_tags.Contains(tile.terrain_tag));
+            else if (is_ocean_only) return ocean_tags.Contains(tile.terrain_tag);
+            else if (see_shore) return (water_tags.Contains(tile.terrain_tag) || deep_water_tags.Contains(tile.terrain_tag) || shore_tags.Contains(tile.terrain_tag));
+            else return (water_tags.Contains(tile.terrain_tag) || ocean_tags.Contains(tile.terrain_tag) || deep_water_tags.Contains(tile.terrain_tag));
         }
 
         public static bool IsBridgeTile(ParallaxTileBase tile)
@@ -90,6 +94,13 @@ namespace Mapping
             RuleTile ruletile = tile as RuleTile;
             if (ruletile != null && ruletile.is_terrain) return true;
             else return false;
+        }
+
+        public static bool IsLedgeTile(ParallaxTileBase tile)
+        {
+            if (tile == null) return false;
+            TerrainTags[] ledge_tags = new TerrainTags[] { TerrainTags.Ledge };
+            return ledge_tags.Contains(tile.terrain_tag);
         }
 
         #endregion

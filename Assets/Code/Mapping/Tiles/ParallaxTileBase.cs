@@ -39,7 +39,10 @@ namespace Mapping
         [Title("Flags")]
         public bool is_bush = false;
         public bool is_counter = false;
+        [HideIf("@is_light_trans")]
         public bool is_trans = false;
+        [HideIf("@is_trans")]
+        public bool is_light_trans = false;
         public bool is_reflective = false;
         public bool is_jump = false;
         public bool is_hideable = false;

@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 5026164743257875226}
   m_Layer: 0
   m_Name: Back Edge
-  m_TagString: DePriority Tile
+  m_TagString: Extra DePriority Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -227,13 +227,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5998665080007633500}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.7372774, z: 0.67559016, w: 0}
-  m_LocalPosition: {x: 0, y: 0.3, z: 0}
+  m_LocalRotation: {x: 0, y: -0.60876137, z: 0.7933534, w: 0}
+  m_LocalPosition: {x: -0.3, y: 0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2112884225658579851}
-  m_LocalEulerAnglesHint: {x: 95, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 75, y: 0, z: 180}
 --- !u!212 &5026164743257875226
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -274,7 +274,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -611510623
   m_SortingLayer: 1
-  m_SortingOrder: 8
+  m_SortingOrder: 6
   m_Sprite: {fileID: -1288850714, guid: 92b8842731e424c25abb4f2c82df2a11, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

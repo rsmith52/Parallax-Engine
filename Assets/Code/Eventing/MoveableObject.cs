@@ -290,12 +290,44 @@ namespace Eventing
                     {
                         tile_activated = ActivateTile(neighbor_tiles.above_tile);
                         layer_change = LayerChange.None;
+                        
+                        // Under Bridge Flag
+                        if (map.HideBridgeAbovePosition(this.transform.position + Vector3.up + (Constants.MAP_LAYER_HEIGHT * Vector3.back)))
+                            under_bridge = true;
+                        else
+                            under_bridge = false;
+                        // Behind Terrain Flag
+                        if (map.HideLayersAbovePosition(this.transform.position + Vector3.up))
+                            behind_upper_layer = true;
+                        else   
+                            behind_upper_layer = false;
+                        // Behind Prefab Flag
+                        if (map.HidePrefabBlockingPosition(this.transform.position + Vector3.up + (Constants.MAP_LAYER_HEIGHT * Vector3.back)))
+                            behind_prefab = true;
+                        else
+                            behind_prefab = false;
                     }
                         
                     else if (layer_change == LayerChange.Down)
                     {
                         tile_activated = ActivateTile(neighbor_tiles.below_tile);
                         layer_change = LayerChange.None;
+
+                        // Under Bridge Flag
+                        if (map.HideBridgeAbovePosition(this.transform.position + Vector3.down + (Constants.MAP_LAYER_HEIGHT * Vector3.forward)))
+                            under_bridge = true;
+                        else
+                            under_bridge = false;
+                        // Behind Terrain Flag
+                        if (map.HideLayersAbovePosition(this.transform.position + Vector3.down + (Constants.MAP_LAYER_HEIGHT * Vector3.forward)))
+                            behind_upper_layer = true;
+                        else   
+                            behind_upper_layer = false;
+                        // Behind Prefab Flag
+                        if (map.HidePrefabBlockingPosition(this.transform.position + Vector3.down + (Constants.MAP_LAYER_HEIGHT * Vector3.forward)))
+                            behind_prefab = true;
+                        else
+                            behind_prefab = false;
                     }
                 }
 
@@ -1226,8 +1258,8 @@ namespace Eventing
             ParallaxTileBase check_tile = neighbor_tiles.facing_tile;
             if (move_through_walls || (neighbor_tiles.on_tile != null &&
                 ((num_tiles >2) ||
-                (num_tiles == 1 && check_tile != null && check_tile.allow_passage && check_tile.terrain_tag != TerrainTags.Ledge && !neighbor_tiles.facing_other_level) ||
-                (num_tiles == 2 && neighbor_tiles.look_ahead_tile != null && neighbor_tiles.look_ahead_tile.allow_passage && neighbor_tiles.look_ahead_tile.terrain_tag != TerrainTags.Ledge && !neighbor_tiles.look_ahead_other_level)
+                (num_tiles == 1 && check_tile != null && check_tile.allow_passage && !ParallaxTerrain.IsLedgeTile(check_tile) && !neighbor_tiles.facing_other_level && (onto_water || !ParallaxTerrain.IsWaterTile(check_tile))) ||
+                (num_tiles == 2 && neighbor_tiles.look_ahead_tile != null && neighbor_tiles.look_ahead_tile.allow_passage && !ParallaxTerrain.IsLedgeTile(neighbor_tiles.look_ahead_tile) && !neighbor_tiles.look_ahead_other_level && (onto_water || !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile)))
             )))
             {
                 float height = Constants.JUMP_HEIGHT * num_tiles;

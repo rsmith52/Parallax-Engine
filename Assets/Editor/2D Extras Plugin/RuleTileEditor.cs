@@ -93,11 +93,13 @@ namespace UnityEditor
         SerializedProperty is_bush;
         SerializedProperty is_counter;
         SerializedProperty is_trans;
+        SerializedProperty is_light_trans;
         SerializedProperty is_reflective;
         SerializedProperty is_terrain;
         SerializedProperty is_double_tall;
         SerializedProperty surface_tile;
         SerializedProperty surface_edge;
+        SerializedProperty shore_tile;
 
         public virtual void OnEnable()
         {
@@ -118,11 +120,13 @@ namespace UnityEditor
             is_bush = serializedObject.FindProperty("is_bush");
             is_counter = serializedObject.FindProperty("is_counter");
             is_trans = serializedObject.FindProperty("is_trans");
+            is_light_trans = serializedObject.FindProperty("is_light_trans");
             is_reflective = serializedObject.FindProperty("is_reflective");
             is_terrain = serializedObject.FindProperty("is_terrain");
             is_double_tall = serializedObject.FindProperty("is_double_tall");
             surface_tile = serializedObject.FindProperty("surface_tile");
             surface_edge = serializedObject.FindProperty("surface_edge");
+            shore_tile = serializedObject.FindProperty("shore_tile");
         }
 
         public virtual void OnDisable()
@@ -290,11 +294,13 @@ namespace UnityEditor
             EditorGUILayout.PropertyField(is_bush);
             EditorGUILayout.PropertyField(is_counter);
             EditorGUILayout.PropertyField(is_trans);
+            EditorGUILayout.PropertyField(is_light_trans);
             EditorGUILayout.PropertyField(is_reflective);
             EditorGUILayout.PropertyField(is_terrain);
             EditorGUILayout.PropertyField(is_double_tall);
             EditorGUILayout.PropertyField(surface_tile);
             EditorGUILayout.PropertyField(surface_edge);
+            EditorGUILayout.PropertyField(shore_tile);
 
             serializedObject.ApplyModifiedProperties();
 

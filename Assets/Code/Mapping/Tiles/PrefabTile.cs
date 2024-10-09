@@ -81,7 +81,7 @@ namespace Mapping
                 go.transform.localPosition = new Vector3(go.transform.localPosition.x,
                     go.transform.localPosition.y, prefab_local_z);
 
-                SpriteUtils.ConfigurePrefabTileSprites(tilemap.GetComponent<Tilemap>(), go, is_trans);
+                SpriteUtils.ConfigurePrefabTileSprites(tilemap.GetComponent<Tilemap>(), go, is_trans, is_light_trans);
             }
 
             return true;
@@ -107,7 +107,7 @@ namespace Mapping
             instance.transform.localPosition = new Vector3(instance.transform.localPosition.x,
                 instance.transform.localPosition.y, prefab_local_z);
 
-            SpriteUtils.ConfigurePrefabTileSprites(map, instance, is_trans);
+            SpriteUtils.ConfigurePrefabTileSprites(map, instance, is_trans, is_light_trans);
 
             // Handle multi-tile prefabs
             if (multi_tile)

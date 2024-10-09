@@ -54,6 +54,7 @@ namespace UnityEngine
         public bool is_double_tall;
         public ParallaxTileBase surface_tile;
         public ParallaxTileBase surface_edge;
+        public ParallaxTileBase shore_tile;
 
         /// <summary>
         /// The data structure holding the Rule information for matching Rule Tiles with
@@ -296,7 +297,9 @@ namespace UnityEngine
             Tilemap map = tilemap.GetComponent<Tilemap>();
 
             // Trans tile handling for flat ruletiles
-            if (is_trans)
+            if (is_light_trans)
+                map.SetColor(location, new Color(1,1,1,Constants.LIGHT_TRANS_TILE_ALPHA));
+            else if (is_trans)
                 map.SetColor(location, new Color(1,1,1,Constants.TRANS_TILE_ALPHA));
             
             if (instantiatedGameObject != null)
@@ -340,7 +343,7 @@ namespace UnityEngine
                 instantiatedGameObject.transform.localRotation = gameObjectRotation;
                 instantiatedGameObject.transform.localScale = gameObjectScale;
 
-                SpriteUtils.ConfigurePrefabTileSprites(map, instantiatedGameObject, is_trans);
+                SpriteUtils.ConfigurePrefabTileSprites(map, instantiatedGameObject, is_trans, is_light_trans);
             }
 
             return true;
@@ -387,7 +390,7 @@ namespace UnityEngine
                     Tilemap map = tilemap.GetComponent<Tilemap>();
                     if (tileData.gameObject)
                     {
-                        SpriteUtils.ConfigurePrefabTileSprites(map, rule.m_GameObject, is_trans);
+                        SpriteUtils.ConfigurePrefabTileSprites(map, rule.m_GameObject, is_trans, is_light_trans);
                                
                         // Properly hide preview sprites in editor but not in the palette
                         if (!IsTilemapFromPalette(map))

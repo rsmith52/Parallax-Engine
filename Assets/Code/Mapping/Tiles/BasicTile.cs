@@ -33,7 +33,9 @@ namespace Mapping
             Tilemap map = tilemap.GetComponent<Tilemap>();
             
             // Trans tile handling
-            if (is_trans)
+            if (is_light_trans)
+                map.SetColor(pos, new Color(1,1,1,Constants.LIGHT_TRANS_TILE_ALPHA));
+            else if (is_trans)
                 map.SetColor(pos, new Color(1,1,1,Constants.TRANS_TILE_ALPHA));
 
             return true;

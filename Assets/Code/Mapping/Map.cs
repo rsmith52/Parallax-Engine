@@ -332,12 +332,22 @@ namespace Mapping
             NeighborTilemaps neighbor_maps = GetNeighborTileMaps(pos);
             Vector3Int int_pos = new Vector3Int (
                 (int)(pos.x),
-                (int)(pos.y) + 1,
+                (int)(pos.y),
                 0
             );
 
             MatchedTile above_tile = new MatchedTile{};
             above_tile = CheckTilePositionOnLayer (above_tile, int_pos, neighbor_maps.layer_up, neighbor_maps.objects_up, true, true);
+            
+            // Detect bridges over cliff edges
+            if (above_tile.tile == null && neighbor_maps.layer_up != null)
+            {
+                GameObject go = neighbor_maps.layer_up.GetInstantiatedObject(int_pos);
+                if (go != null && (go.tag == Constants.TERRAIN_EDGE_TILE_TAG || go.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG || go.tag == Constants.TERRAIN_EDGE_CORNER_TILE_TAG))
+                    above_tile = CheckTilePositionOnLayer (above_tile, int_pos + Vector3Int.up, neighbor_maps.layer_up, neighbor_maps.objects_up, true, true);
+            }
+            
+
             if (above_tile.tile != null && ParallaxTerrain.IsBridgeTile(above_tile.tile))
             {
                 // Hide Bridge
@@ -596,7 +606,7 @@ namespace Mapping
                 {
                     if (sprite.tag == Constants.DOWN_LAYER_PRIORITY_TILE_TAG)
                         sprite.color = new Color (1,1,1,0); // Hide "gap fill" tiles entirely
-                    else if (go.tag == Constants.TERRAIN_EDGE_TILE_TAG && sprite.tag == Constants.EXTRA_DEPRIORITY_TILE_TAG)
+                    else if ((go.tag == Constants.TERRAIN_EDGE_TILE_TAG || go.tag == Constants.TERRAIN_EDGE_CORNER_TILE_TAG) && (sprite.tag == Constants.EXTRA_DEPRIORITY_TILE_TAG || sprite.tag == Constants.DEPRIORITY_TILE_TAG))
                         sprite.color = new Color (1,1,1,0); // Hide "back edge" faces entirely
                     else
                         sprite.color = new Color(1,1,1,hide_alpha);
@@ -854,7 +864,7 @@ namespace Mapping
             
             // Handle terrain tiles
             if (matched_tile.tile != null && (!matched_tile.object_match || 
-            (matched_tile.map.tag == Constants.GROUND_LAYER_TAG && !ParallaxTerrain.IsStairTile(matched_tile.tile) && !ParallaxTerrain.IsWaterTile(matched_tile.tile))))
+            (!ParallaxTerrain.IsStairTile(matched_tile.tile) && !ParallaxTerrain.IsWaterTile(matched_tile.tile))))
             {
                 // Extend double tall terrain front edges
                 MatchedTile up_tile = new MatchedTile{};
@@ -887,6 +897,23 @@ namespace Mapping
                     matched_tile = StairTileHelper(matched_tile, ruletile, pos + Vector3Int.down, neighbor_maps.layer_up, neighbor_maps.objects_up);
                     matched_tile = StairTileHelper(matched_tile, ruletile, pos + Vector3Int.down + Vector3Int.left, neighbor_maps.ground, neighbor_maps.objects);
                     matched_tile = StairTileHelper(matched_tile, ruletile, pos + Vector3Int.down + Vector3Int.right, neighbor_maps.ground, neighbor_maps.objects);
+                }
+            }
+            // Handle water / shore tiles
+            if (!looking_above && matched_tile.tile != null && ParallaxTerrain.IsWaterTile(matched_tile.tile, false, true))
+            {
+                ParallaxTileBase terrain_tile = (ParallaxTileBase)neighbor_maps.ground.GetTile(pos);
+                RuleTile ruletile = matched_tile.tile as RuleTile;
+
+                GameObject go = neighbor_maps.ground.GetInstantiatedObject(pos);
+                GameObject go_up = neighbor_maps.ground.GetInstantiatedObject(pos + Vector3Int.up);
+                
+                // Shore Flat Surface Detection
+                if (ruletile != null && ruletile.shore_tile != null && terrain_tile != null &&
+                    (go == null || go.tag == Constants.TERRAIN_EDGE_TILE_TAG || go.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG) && 
+                    (go_up == null || go_up.tag == Constants.TERRAIN_EDGE_TILE_TAG || go_up.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG))
+                {
+                    matched_tile.tile = ruletile.shore_tile;
                 }
             }
             return matched_tile;
@@ -933,7 +960,7 @@ namespace Mapping
             if (layer != null)
             {
                 if (matched_tile.tile == null || (!up && ParallaxTerrain.IsStairTile(matched_tile.tile) && go != null && go.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG) || 
-                (up && !see_bridge && go != null && (go.tag == Constants.TERRAIN_EDGE_TILE_TAG || (go.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG && !ParallaxTerrain.IsStairTile(matched_tile.tile)))) ||
+                (up && !see_bridge && go != null && (go.tag == Constants.TERRAIN_EDGE_TILE_TAG || go.tag == Constants.TERRAIN_EDGE_CORNER_TILE_TAG || (go.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG && !ParallaxTerrain.IsStairTile(matched_tile.tile)))) ||
                 (up && matched_tile.object_match && !ParallaxTerrain.IsStairTile(matched_tile.tile) && !ParallaxTerrain.IsBridgeTile(matched_tile.tile) && !ParallaxTerrain.IsWaterTile(matched_tile.tile)))
                 {
                     checked_tile = (ParallaxTileBase)layer.GetTile(pos);
@@ -948,7 +975,7 @@ namespace Mapping
 
                 // Ignore Cliff Edges on layer above, see the ground on current level instead
                 if (up && go != null && matched_tile.tile && ParallaxTerrain.IsTerrainTile(matched_tile.tile) && 
-                    (go.tag == Constants.TERRAIN_EDGE_TILE_TAG))
+                    (go.tag == Constants.TERRAIN_EDGE_TILE_TAG || go.tag == Constants.TERRAIN_EDGE_CORNER_TILE_TAG))
                 {
                     matched_tile.tile = null;
                     matched_tile.map = null;
