@@ -757,6 +757,7 @@ namespace Mapping
             bool on_stairs = false;
             bool on_water = false;
             bool on_bridge = false;
+            bool underwater = false;
 
             Vector3Int int_pos = new Vector3Int (
                 (int)(pos.x),
@@ -765,7 +766,7 @@ namespace Mapping
             );
 
             // Current Tile - modifies some behavior of neighbor tile detection/perception
-            MatchedTile on_tile = GetTileAtPosition (neighbor_maps, int_pos);
+            MatchedTile on_tile = GetTileAtPosition (neighbor_maps, int_pos, false, false, false, true);
             neighbor_tiles.on_tile = on_tile.tile;
 
             if (!look_only)
@@ -775,13 +776,14 @@ namespace Mapping
                     on_stairs = (neighbor_tiles.on_tile != null && ParallaxTerrain.IsStairTile(neighbor_tiles.on_tile));
                     on_water = (neighbor_tiles.on_tile != null && ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile));
                     on_bridge = (neighbor_tiles.on_tile != null && ParallaxTerrain.IsBridgeTile(neighbor_tiles.on_tile));
+                    underwater = (neighbor_tiles.on_tile != null && ParallaxTerrain.IsUnderwaterTile(neighbor_tiles.on_tile));
                 }
             
                 // Same Level Neighbors
                 neighbor_tiles.up_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up, on_stairs).tile;
-                neighbor_tiles.left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.left, on_stairs).tile;
-                neighbor_tiles.right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.right, on_stairs).tile;
-                neighbor_tiles.down_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down, on_stairs).tile;
+                neighbor_tiles.left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.left, on_stairs, false, false, underwater).tile;
+                neighbor_tiles.right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.right, on_stairs, false, false, underwater).tile;
+                neighbor_tiles.down_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down, on_stairs, false, false, underwater).tile;
 
                 // Above / Below Level Neighbors - primarily bridge & water use
                 neighbor_tiles.above_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up, on_stairs, true).tile;
@@ -791,8 +793,8 @@ namespace Mapping
                 // Corner Neighbors
                 neighbor_tiles.up_left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up + Vector3Int.left, on_stairs).tile;
                 neighbor_tiles.up_right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up + Vector3Int.right, on_stairs).tile;
-                neighbor_tiles.down_left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down + Vector3Int.left, on_stairs).tile;
-                neighbor_tiles.down_right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down + Vector3Int.right, on_stairs).tile;
+                neighbor_tiles.down_left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down + Vector3Int.left, on_stairs, false, false, underwater).tile;
+                neighbor_tiles.down_right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down + Vector3Int.right, on_stairs, false, false, underwater).tile;
             }
 
             // Facing & Look Ahead Tiles
@@ -825,34 +827,34 @@ namespace Mapping
                     break;
             }
 
-            MatchedTile facing_tile = GetTileAtPosition (neighbor_maps, int_pos + dir_vector, on_stairs);
+            MatchedTile facing_tile = GetTileAtPosition (neighbor_maps, int_pos + dir_vector, on_stairs, false, false, underwater);
             neighbor_tiles.facing_tile = facing_tile.tile;
             neighbor_tiles.facing_other_level = ((on_tile.layer == null && facing_tile.layer != null) || (on_tile.layer != null && facing_tile.layer == null) ||
                 (on_tile.layer != null && facing_tile.layer != null && on_tile.layer.name != facing_tile.layer.name));
 
-            MatchedTile look_ahead_tile = GetTileAtPosition (neighbor_maps, int_pos + (2 * dir_vector), on_stairs);
+            MatchedTile look_ahead_tile = GetTileAtPosition (neighbor_maps, int_pos + (2 * dir_vector), on_stairs, false, false, underwater);
             neighbor_tiles.look_ahead_tile = look_ahead_tile.tile;
             neighbor_tiles.look_ahead_other_level = ((on_tile.layer == null && look_ahead_tile.layer != null) || (on_tile.layer != null && look_ahead_tile.layer == null) ||
                 (on_tile.layer != null && look_ahead_tile.layer != null && on_tile.layer.name != look_ahead_tile.layer.name));
 
-            MatchedTile look_ahead_cw_tile = GetTileAtPosition (neighbor_maps, int_pos + cw_dir_vector, on_stairs);
+            MatchedTile look_ahead_cw_tile = GetTileAtPosition (neighbor_maps, int_pos + cw_dir_vector, on_stairs, false, false, underwater);
             neighbor_tiles.look_ahead_cw_tile = look_ahead_cw_tile.tile;
 
-            MatchedTile look_ahead_ccw_tile = GetTileAtPosition (neighbor_maps, int_pos + ccw_dir_vector, on_stairs);
+            MatchedTile look_ahead_ccw_tile = GetTileAtPosition (neighbor_maps, int_pos + ccw_dir_vector, on_stairs, false, false, underwater);
             neighbor_tiles.look_ahead_ccw_tile = look_ahead_ccw_tile.tile;
             
             return neighbor_tiles;
         }
 
         private MatchedTile GetTileAtPosition (NeighborTilemaps neighbor_maps, Vector3Int pos,
-                                                bool on_stairs = false, bool looking_above = false, bool looking_below = false)
+                                                bool on_stairs = false, bool looking_above = false, bool looking_below = false, bool underwater = false)
         {
             MatchedTile matched_tile = new MatchedTile{};
             matched_tile.object_match = false;
             
             // Check Layer Up
             if (!looking_below && neighbor_maps.layer_up != null)
-                matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.layer_up, neighbor_maps.objects_up, !looking_above);
+                matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.layer_up, neighbor_maps.objects_up, !looking_above, false, false, underwater);
             
             // Check Current Layer
             if (matched_tile.tile == null && !looking_above && !looking_below)
@@ -920,7 +922,7 @@ namespace Mapping
         }
 
         private MatchedTile CheckTilePositionOnLayer (MatchedTile matched_tile, Vector3Int pos, Tilemap layer, Tilemap[] objects,
-                                                        bool up = false, bool see_bridge = false, bool ignore_objects = false)
+                                                        bool up = false, bool see_bridge = false, bool ignore_objects = false, bool underwater = false)
         {
             GameObject go = null;
             if (layer != null)
@@ -974,7 +976,8 @@ namespace Mapping
                 }
 
                 // Ignore Cliff Edges on layer above, see the ground on current level instead
-                if (up && go != null && matched_tile.tile && ParallaxTerrain.IsTerrainTile(matched_tile.tile) && 
+                if ((Settings.ALLOW_WALK_BEHIND_TERRAIN_EDGES || underwater) && up && go != null &&
+                    matched_tile.tile && ParallaxTerrain.IsTerrainTile(matched_tile.tile) && 
                     (go.tag == Constants.TERRAIN_EDGE_TILE_TAG || go.tag == Constants.TERRAIN_EDGE_CORNER_TILE_TAG))
                 {
                     matched_tile.tile = null;

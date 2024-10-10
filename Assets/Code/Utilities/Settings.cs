@@ -15,11 +15,13 @@ namespace Utilities
         #endregion
 
 
-        #region Map Effects
+        #region Map Rules
 
+        public static readonly bool ALLOW_WALK_BEHIND_TERRAIN_EDGES = false;
+        
         public static readonly bool SEE_THROUGH_BRIDGES = true;
-        public static readonly bool SEE_THROUGH_TERRAIN = true;
         public static readonly bool SEE_THROUGH_PREFAB_OBJECTS = true;
+        public static readonly bool SEE_THROUGH_TERRAIN = false;
 
         #endregion
     }

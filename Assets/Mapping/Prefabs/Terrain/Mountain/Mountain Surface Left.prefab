@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 1127718003456596730}
   m_Layer: 0
   m_Name: Right Side
-  m_TagString: Extra DePriority Tile
+  m_TagString: Down Layer Priority Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
