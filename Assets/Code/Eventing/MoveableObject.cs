@@ -22,10 +22,10 @@ namespace Eventing
 
     public enum Directions
     {
-        Up,
-        Left,
-        Right,
-        Down
+        Up = 0,
+        Left = 1,
+        Right = 2,
+        Down = 3
     }
 
     public enum LayerChange
@@ -115,6 +115,8 @@ namespace Eventing
         private bool layer_changed;
         private bool on_stairs_changed;
 
+        [HideInInspector]
+        public Animator animator;
         private SpriteRenderer[] sprites;
         private SpriteMask bush_mask;
         private SpriteRenderer shadow;
@@ -221,7 +223,7 @@ namespace Eventing
             target_pos = transform.position;
             last_pos = transform.position;
             speed = Constants.SPEEDS[(int)movement_speed];
-            //animator = GetComponentInChildren<Animator>();
+            animator = GetComponentInChildren<Animator>();
             sprites = GetComponentsInChildren<SpriteRenderer>();
             bush_mask = GetComponentInChildren<SpriteMask>();
             foreach (SpriteRenderer sprite in sprites)
@@ -255,7 +257,7 @@ namespace Eventing
             // event_manager = FindObjectOfType<EventManager>();
 
             // Update Animator
-            // animator.SetInteger(Constants.DIRECTION_ANIMATION, (int)direction);
+            animator.SetInteger(Constants.ANIM_DIRECTION, (int)direction);
             // if (stepping_animation)
             //     animator.SetBool(Constants.STEP_ANIMATION, true);
         }
@@ -268,9 +270,9 @@ namespace Eventing
         private void Update()
         {
             // Update Animator
-            // animator.SetInteger(Constants.DIRECTION_ANIMATION, (int)direction);
-            // if (walking_animation && !stepping_animation)
-            //     animator.SetBool(Constants.WALK_ANIMATION, moving);
+            animator.SetInteger(Constants.ANIM_DIRECTION, (int)direction);
+            if (walking_animation && !stepping_animation)
+                 animator.SetBool(Constants.ANIM_WALK, moving);
             // else if (stepping_animation)
             //     animator.SetBool(Constants.WALK_ANIMATION, true);
             
@@ -453,7 +455,8 @@ namespace Eventing
                         sprite.enabled = true;
                 }
                 
-                shadow.enabled = !shore_anim;
+                shadow.enabled = !(shore_anim || on_water || underwater);
+                    
 
                 visibility_changed = false;
             }
@@ -566,7 +569,7 @@ namespace Eventing
                         behind_prefab = false;
                     // Shadow showing for leaving shore
                     if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsShoreTile(neighbor_tiles.right_tile))
-                        visibility_changed = true; // Update shadow enabled or not, desired earlier when leaving shore
+                        visibility_changed = true; // Update shadow enabled or not, desired earlier when leaving shore or entering water
 
                     if (neighbor_tiles.right_tile == null) return false;
                     // Move Onto Right Stairs
@@ -614,7 +617,11 @@ namespace Eventing
                     {
                         CancelMovement();
                         if (JumpForward(2, true))
+                        {
+                            on_water = true;
+                            visibility_changed = true;
                             return ActivateTile(neighbor_tiles.look_ahead_tile);
+                        }
                     }
                     // Move Off Water Right
                     else if (ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) &&
@@ -694,7 +701,11 @@ namespace Eventing
                     {
                         CancelMovement();
                         if (JumpForward(2, true))
+                        {
+                            on_water = true;
+                            visibility_changed = true;
                             return ActivateTile(neighbor_tiles.look_ahead_tile);
+                        }
                     }
                     // Move Off Water Left
                     else if (ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) &&
@@ -764,7 +775,11 @@ namespace Eventing
                     {
                         CancelMovement();
                         if (JumpForward(1, true))
-                            return ActivateTile(neighbor_tiles.up_tile);
+                        {
+                            on_water = true;
+                            visibility_changed = true;
+                            return ActivateTile(neighbor_tiles.look_ahead_tile);
+                        }
                     }
                     // Move Off Water Up
                     else if (ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) &&
@@ -829,7 +844,11 @@ namespace Eventing
                     {
                         CancelMovement();
                         if (JumpForward(2, true))
-                            return ActivateTile(neighbor_tiles.down_tile);
+                        {
+                            on_water = true;
+                            visibility_changed = true;
+                            return ActivateTile(neighbor_tiles.look_ahead_tile);
+                        }
                     }
                     // Move Off Water Down
                     else if (ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile) &&

@@ -28,7 +28,7 @@ namespace Utilities
         public static readonly int PRIORITY_TILE_OFFSET = 2;
         public static readonly int OBJECT_LAYER_START_OFFSET = 3;
         public static readonly int EVENT_SORTING_LAYER_OFFSET = SORTING_LAYERS_PER_MAP_LAYER + 1;
-        public static readonly int GROUND_ANIM_SORTING_LAYER_OFFSET = EVENT_SORTING_LAYER_OFFSET - 1;
+        public static readonly int GROUND_ANIM_SORTING_LAYER_OFFSET = EVENT_SORTING_LAYER_OFFSET - 3;
         public static readonly int ANIM_SORTING_LAYER_OFFSET = EVENT_SORTING_LAYER_OFFSET;
 
         public static readonly float TRANS_TILE_ALPHA = 0.75f;
@@ -65,6 +65,16 @@ namespace Utilities
         #region Sprites
 
         public static readonly string SHADOW_TAG = "Shadow";
+
+        #endregion
+
+
+        #region Animation
+
+        public static readonly string ANIM_DIRECTION = "Direction";
+        public static readonly string ANIM_WALK = "Walk";
+        public static readonly string ANIM_RUN = "Run";
+        public static readonly string ANIM_SNEAK = "Sneak";
 
         #endregion
     }

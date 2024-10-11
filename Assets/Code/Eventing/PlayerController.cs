@@ -257,26 +257,26 @@ namespace Eventing
         {
             StopSneaking();
             player_mover.ChangeSpeed(MovementSpeeds.VeryFast);
-            // player_mover.animator.SetBool(Constants.RUN_ANIMATION, true);
+            player_mover.animator.SetBool(Constants.ANIM_RUN, true);
         }
 
         private void StopRunning()
         {
             player_mover.ChangeSpeed(MovementSpeeds.Moderate);
-            // player_mover.animator.SetBool(Constants.RUN_ANIMATION, false);
+            player_mover.animator.SetBool(Constants.ANIM_RUN, false);
         }
 
         private void StartSneaking()
         {
             StopRunning();
             player_mover.ChangeSpeed(MovementSpeeds.VerySlow);
-            // player_mover.animator.SetBool(Constants.SNEAK_ANIMATION, true);
+            player_mover.animator.SetBool(Constants.ANIM_SNEAK, true);
         }
 
         private void StopSneaking()
         {
             player_mover.ChangeSpeed(MovementSpeeds.Moderate);
-            // player_mover.animator.SetBool(Constants.SNEAK_ANIMATION, false);
+            player_mover.animator.SetBool(Constants.ANIM_SNEAK, false);
         }
 
         #endregion
