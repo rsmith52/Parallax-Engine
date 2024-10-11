@@ -78,5 +78,5 @@ MonoBehaviour:
   show_effect_settings: 1
   grass_rustle: {fileID: 6572868887029596872, guid: 2add4263838194aab89fdadf631dbc4a,
     type: 3}
-  water_splash: {fileID: 6572868887029596872, guid: 2f3afb987ac06441786835f1bf1c4a8f,
+  water_splash: {fileID: 6572868887029596872, guid: 86d66c6a30ef6468e9ef4149036d6718,
     type: 3}

@@ -116,7 +116,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6274467896646466239}
   m_Layer: 0
-  m_Name: Grass Rustle
+  m_Name: Simple Grass Rustle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

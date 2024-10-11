@@ -130,7 +130,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Kymotonian
 * Speedialga
 * Thurpok
-* KleinStudio
+* KleinStudio & Richard PT (water ripple animation)
 
 ### Asset Packs / Scripts
 * Odin Inspector

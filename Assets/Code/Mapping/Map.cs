@@ -143,7 +143,9 @@ namespace Mapping
         private GameObject hidden_prefab;
 
         // Track Animations
+        private Dictionary<TilePosition, bool> cancel_anim_kill;
         private Dictionary<TilePosition, GameObject> water_splash_anims;
+        
 
         #endregion
 
@@ -282,6 +284,7 @@ namespace Mapping
             hidden_prefab = null;
 
             // Initialize animation tracking dictionaries
+            cancel_anim_kill = new Dictionary<TilePosition, bool>();
             water_splash_anims = new Dictionary<TilePosition, GameObject>(); 
             
             // Populate Object Layers
@@ -675,37 +678,44 @@ namespace Mapping
         }
 
         /* 
-        * Play water splash animation
+        * Start water splash animation
         */
         public IEnumerator WaterSplashAnimation(Vector3 pos)
         {
             int layer = GetMapLayerIDFromPosition(pos);
-            Tilemap map = map_layers[layer];            
+            Tilemap map = map_layers[layer];          
 
-            yield return new WaitForSeconds(0.1f);
-
-            GameObject anim = Instantiate(water_splash, map.transform);
-            anim.transform.position = pos;
-
-            SpriteUtils.ConfigurePrefabTileSprites(map, anim, false, false, false, true); // Same layer as player
+            yield return new WaitForSeconds(water_splash.GetComponent<MapAnimationSettings>().appear_delay);
 
             TilePosition splash_pos = new TilePosition(map, new Vector3Int((int)pos.x, (int)pos.y));
             if (!water_splash_anims.ContainsKey(splash_pos))
+            {
+                GameObject anim = Instantiate(water_splash, map.transform);
+                anim.transform.position = pos;
+                SpriteUtils.ConfigurePrefabTileSprites(map, anim, false, false, false, true); // Same layer as player
                 water_splash_anims.Add(splash_pos, anim);
+            }
+            else
+            {
+                if (!cancel_anim_kill.ContainsKey(splash_pos))
+                    cancel_anim_kill.Add(splash_pos,true);
+            }
         }
 
         /* 
-        * Kill water splace animation
+        * Kill water splash animation
         */
         public IEnumerator KillWaterSplashAnimation(Vector3 pos)
         {
             int layer = GetMapLayerIDFromPosition(pos);
             Tilemap map = map_layers[layer];
 
-            yield return new WaitForSeconds(0.25f);
-
+            yield return new WaitForSeconds(water_splash.GetComponent<MapAnimationSettings>().kill_delay);
             TilePosition splash_pos = new TilePosition(map, new Vector3Int((int)pos.x, (int)pos.y));
-            if (water_splash_anims.ContainsKey(splash_pos))
+
+            if (cancel_anim_kill.ContainsKey(splash_pos))
+                cancel_anim_kill.Remove(splash_pos);
+            else if (water_splash_anims.ContainsKey(splash_pos))
             {
                 GameObject splash = water_splash_anims[splash_pos];
                 water_splash_anims.Remove(splash_pos);

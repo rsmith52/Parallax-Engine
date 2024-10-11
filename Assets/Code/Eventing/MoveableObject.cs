@@ -405,6 +405,7 @@ namespace Eventing
                     falling = false;
                     jump_data = new JumpData{};
                     other_moved = false;
+                    visibility_changed = true; // Update shadow enabled or not based on new tile
                     if (!tile_activated)
                     {
                         tile_activated = ActivateTile(neighbor_tiles.on_tile);
@@ -451,6 +452,10 @@ namespace Eventing
                     else
                         sprite.enabled = true;
                 }
+                
+                shadow.enabled = !shore_anim;
+
+                visibility_changed = false;
             }
         }
 
@@ -491,22 +496,17 @@ namespace Eventing
                 in_bush = false;
 
             // Shore Animation
-            if (ParallaxTerrain.IsShoreTile(tile))
-            {
-                if (shore_anim)
-                {
-                    StartCoroutine(map.KillWaterSplashAnimation(last_pos));
-                    shore_anim = false;
-                }
-
-                StartCoroutine(map.WaterSplashAnimation(target_pos));
-                shore_anim = true;
-            }
-            else if (shore_anim)
+            if (shore_anim && (last_pos != target_pos))
             {
                 StartCoroutine(map.KillWaterSplashAnimation(last_pos));
                 shore_anim = false;
             }
+            if (ParallaxTerrain.IsShoreTile(tile))
+            {
+                StartCoroutine(map.WaterSplashAnimation(target_pos));
+                shore_anim = true;
+            }
+            
 
             // On Stairs Flag
             bool prev_on_stairs = on_stairs;
@@ -558,6 +558,9 @@ namespace Eventing
                         behind_prefab = true;
                     else
                         behind_prefab = false;
+                    // Shadow showing for leaving shore
+                    if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsShoreTile(neighbor_tiles.right_tile))
+                        visibility_changed = true; // Update shadow enabled or not, desired earlier when leaving shore
 
                     if (neighbor_tiles.right_tile == null) return false;
                     // Move Onto Right Stairs
@@ -603,11 +606,6 @@ namespace Eventing
                     else if (!ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.right_tile) &&
                             ParallaxTerrain.IsWaterTile(neighbor_tiles.up_right_tile) && !underwater)
                     {
-                        if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile))
-                        {
-                            StartCoroutine(map.KillWaterSplashAnimation(last_pos));
-                            shore_anim = false;
-                        }
                         CancelMovement();
                         if (JumpForward(2, true))
                             return ActivateTile(neighbor_tiles.look_ahead_tile);
@@ -640,6 +638,9 @@ namespace Eventing
                         behind_prefab = true;
                     else
                         behind_prefab = false;
+                    // Shadow showing for leaving shore
+                    if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsShoreTile(neighbor_tiles.left_tile))
+                        visibility_changed = true; // Update shadow enabled or not, desired earlier when leaving shore
 
                     if (neighbor_tiles.left_tile == null) return false;
                     // Move Onto Left Stairs
@@ -685,11 +686,6 @@ namespace Eventing
                     else if (!ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.left_tile) &&
                             ParallaxTerrain.IsWaterTile(neighbor_tiles.up_left_tile) && !underwater)
                     {
-                        if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile))
-                        {
-                            StartCoroutine(map.KillWaterSplashAnimation(last_pos));
-                            shore_anim = false;
-                        }
                         CancelMovement();
                         if (JumpForward(2, true))
                             return ActivateTile(neighbor_tiles.look_ahead_tile);
@@ -725,6 +721,9 @@ namespace Eventing
                         behind_prefab = true;
                     else
                         behind_prefab = false;
+                    // Shadow showing for leaving shore
+                    if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsShoreTile(neighbor_tiles.up_tile))
+                        visibility_changed = true; // Update shadow enabled or not, desired earlier when leaving shore
 
                     if (neighbor_tiles.up_tile == null) return false;
                     // Move Off Up Stairs
@@ -757,11 +756,6 @@ namespace Eventing
                             ParallaxTerrain.IsWaterTile(neighbor_tiles.up_left_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.up_right_tile) &&
                             !underwater)
                     {
-                        if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile))
-                        {
-                            StartCoroutine(map.KillWaterSplashAnimation(last_pos));
-                            shore_anim = false;
-                        }
                         CancelMovement();
                         if (JumpForward(1, true))
                             return ActivateTile(neighbor_tiles.up_tile);
@@ -794,6 +788,9 @@ namespace Eventing
                         behind_prefab = true;
                     else
                         behind_prefab = false;
+                    // Shadow showing for leaving shore
+                    if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsShoreTile(neighbor_tiles.down_tile))
+                        visibility_changed = true; // Update shadow enabled or not, desired earlier when leaving shore
 
                     if (neighbor_tiles.down_tile == null) return false;
                     // Move Onto Up Stairs
@@ -824,11 +821,6 @@ namespace Eventing
                     else if (!ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile) &&
                             !underwater)
                     {
-                        if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile))
-                        {
-                            StartCoroutine(map.KillWaterSplashAnimation(last_pos));
-                            shore_anim = false;
-                        }
                         CancelMovement();
                         if (JumpForward(2, true))
                             return ActivateTile(neighbor_tiles.down_tile);
@@ -1315,7 +1307,7 @@ namespace Eventing
                 (num_tiles == 1 && check_tile != null && check_tile.allow_passage && !ParallaxTerrain.IsLedgeTile(check_tile) && !neighbor_tiles.facing_other_level && (onto_water || !ParallaxTerrain.IsWaterTile(check_tile))) ||
                 (num_tiles == 2 && neighbor_tiles.look_ahead_tile != null && neighbor_tiles.look_ahead_tile.allow_passage && !ParallaxTerrain.IsLedgeTile(neighbor_tiles.look_ahead_tile) && !neighbor_tiles.look_ahead_other_level && (onto_water || !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile)))
             )))
-            {
+            {            
                 float height = Constants.JUMP_HEIGHT * num_tiles;
                 Vector3 v = new Vector3();
                 bool ledge_dir_allowed = true;
@@ -1348,6 +1340,12 @@ namespace Eventing
                 if (!ledge_dir_allowed) return false;
 
                 last_pos = transform.position;
+                if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile))
+                {
+                    StartCoroutine(map.KillWaterSplashAnimation(last_pos));
+                    shore_anim = false;
+                }
+
                 target_pos += ((height * Vector3.back) + (height * Vector3.up) + (v * (float)num_tiles / 2));
                 moving = true;
                 jumping = true;

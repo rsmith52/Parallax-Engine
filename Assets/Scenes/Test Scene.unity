@@ -1021,7 +1021,7 @@ PrefabInstance:
         type: 3}
       propertyPath: water_splash
       value: 
-      objectReference: {fileID: 6572868887029596872, guid: 2f3afb987ac06441786835f1bf1c4a8f,
+      objectReference: {fileID: 6572868887029596872, guid: 86d66c6a30ef6468e9ef4149036d6718,
         type: 3}
     - target: {fileID: 7922387815234347453, guid: 5e7974c74b31647008d7da9566609e9d,
         type: 3}
@@ -1562,7 +1562,7 @@ Camera:
   far clip plane: 5000
   field of view: 40
   orthographic: 0
-  orthographic size: 10.825
+  orthographic size: 12
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
