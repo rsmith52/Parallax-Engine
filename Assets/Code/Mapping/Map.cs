@@ -683,12 +683,13 @@ namespace Mapping
         /* 
         * Play footprints animation
         */
-        public IEnumerator FootprintsAnimation(Vector3 pos, Directions dir)
+        public IEnumerator FootprintsAnimation(Vector3 pos, Directions dir, bool sneaking)
         {
             int layer = GetMapLayerIDFromPosition(pos);
             Tilemap map = map_layers[layer];
 
-            yield return new WaitForSeconds(0.2f);
+            if (sneaking) yield return new WaitForSeconds(0.4f);
+            else yield return new WaitForSeconds(0.2f);
             
             GameObject anim = Instantiate(footprints[dir], map.transform);
             anim.transform.position = pos;

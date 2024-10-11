@@ -271,10 +271,10 @@ namespace Eventing
         {
             // Update Animator
             animator.SetInteger(Constants.ANIM_DIRECTION, (int)direction);
-            if (walking_animation && !stepping_animation)
+            if (walking_animation && !stepping_animation && !jumping && !falling)
                  animator.SetBool(Constants.ANIM_WALK, moving);
-            // else if (stepping_animation)
-            //     animator.SetBool(Constants.WALK_ANIMATION, true);
+            else if (stepping_animation)
+                animator.SetBool(Constants.ANIM_WALK, true);
             
             speed = (jumping || falling) ? (
                 jump_data.num_tiles > 0 ? Constants.SPEEDS[(int)MovementSpeeds.Fast] : Constants.SPEEDS[(int)MovementSpeeds.Moderate]) : 
@@ -480,6 +480,7 @@ namespace Eventing
         private bool ActivateTile(ParallaxTileBase tile, bool verbose = false)
         {
             if (verbose) Debug.Log("Activating tile: " + tile);
+            bool sneaking = (speed == Constants.SPEEDS[(int)MovementSpeeds.VerySlow]);
 
             // No tile, must be moving through walls
             if (tile == null)
@@ -493,8 +494,7 @@ namespace Eventing
             if (tile.is_bush)
             {
                 in_bush = true;
-                if (speed != Constants.SPEEDS[(int)MovementSpeeds.VerySlow])
-                    StartCoroutine(map.GrassRustleAnimation(target_pos));
+                if (!sneaking) StartCoroutine(map.GrassRustleAnimation(target_pos));
             }
             else
                 in_bush = false;
@@ -502,7 +502,7 @@ namespace Eventing
             // Footprint Animation
             if (ParallaxTerrain.IsSandTile(tile) || ParallaxTerrain.IsSnowTile(tile))
             {
-                StartCoroutine(map.FootprintsAnimation(target_pos, direction));
+                StartCoroutine(map.FootprintsAnimation(target_pos, direction, sneaking));
             }
 
             // Shore Animation
@@ -1311,6 +1311,12 @@ namespace Eventing
         public bool JumpInPlace() { 
             float height = Constants.JUMP_HEIGHT;
             last_pos = transform.position;
+            if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile))
+            {
+                StartCoroutine(map.KillWaterSplashAnimation(last_pos));
+                shore_anim = false;
+            }
+            
             target_pos += ((height * Vector3.back) + (height * Vector3.up));
             moving = true;
             jumping = true;
