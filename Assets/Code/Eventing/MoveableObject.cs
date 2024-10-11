@@ -106,6 +106,7 @@ namespace Eventing
         private float speed;
         private Map map;
         private Vector3 target_pos;
+        private Vector3 last_pos;
   
         private JumpData jump_data;
         private LayerChange layer_change;
@@ -118,6 +119,7 @@ namespace Eventing
         private SpriteMask bush_mask;
         private SpriteRenderer shadow;
         private bool visibility_changed;
+        private bool shore_anim;
 
         [Title("Static Flags")]
         public bool invisible = false;
@@ -217,6 +219,7 @@ namespace Eventing
         {
             // Basic Setup
             target_pos = transform.position;
+            last_pos = transform.position;
             speed = Constants.SPEEDS[(int)movement_speed];
             //animator = GetComponentInChildren<Animator>();
             sprites = GetComponentsInChildren<SpriteRenderer>();
@@ -245,6 +248,7 @@ namespace Eventing
             other_moved = false;
             in_move_route = false;
             tile_activated = false;
+            shore_anim = false;
 
             // Map Awareness Setup
             map = FindObjectOfType<Map>(); // TODO - better way to find map
@@ -483,9 +487,26 @@ namespace Eventing
                 in_bush = true;
                 StartCoroutine(map.GrassRustleAnimation(target_pos));
             }
-                
             else
                 in_bush = false;
+
+            // Shore Animation
+            if (ParallaxTerrain.IsShoreTile(tile))
+            {
+                if (shore_anim)
+                {
+                    StartCoroutine(map.KillWaterSplashAnimation(last_pos));
+                    shore_anim = false;
+                }
+
+                StartCoroutine(map.WaterSplashAnimation(target_pos));
+                shore_anim = true;
+            }
+            else if (shore_anim)
+            {
+                StartCoroutine(map.KillWaterSplashAnimation(last_pos));
+                shore_anim = false;
+            }
 
             // On Stairs Flag
             bool prev_on_stairs = on_stairs;
@@ -582,6 +603,11 @@ namespace Eventing
                     else if (!ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.right_tile) &&
                             ParallaxTerrain.IsWaterTile(neighbor_tiles.up_right_tile) && !underwater)
                     {
+                        if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile))
+                        {
+                            StartCoroutine(map.KillWaterSplashAnimation(last_pos));
+                            shore_anim = false;
+                        }
                         CancelMovement();
                         if (JumpForward(2, true))
                             return ActivateTile(neighbor_tiles.look_ahead_tile);
@@ -659,6 +685,11 @@ namespace Eventing
                     else if (!ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.left_tile) &&
                             ParallaxTerrain.IsWaterTile(neighbor_tiles.up_left_tile) && !underwater)
                     {
+                        if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile))
+                        {
+                            StartCoroutine(map.KillWaterSplashAnimation(last_pos));
+                            shore_anim = false;
+                        }
                         CancelMovement();
                         if (JumpForward(2, true))
                             return ActivateTile(neighbor_tiles.look_ahead_tile);
@@ -726,6 +757,11 @@ namespace Eventing
                             ParallaxTerrain.IsWaterTile(neighbor_tiles.up_left_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.up_right_tile) &&
                             !underwater)
                     {
+                        if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile))
+                        {
+                            StartCoroutine(map.KillWaterSplashAnimation(last_pos));
+                            shore_anim = false;
+                        }
                         CancelMovement();
                         if (JumpForward(1, true))
                             return ActivateTile(neighbor_tiles.up_tile);
@@ -788,6 +824,11 @@ namespace Eventing
                     else if (!ParallaxTerrain.IsWaterTile(neighbor_tiles.on_tile) && ParallaxTerrain.IsWaterTile(neighbor_tiles.down_tile) &&
                             !underwater)
                     {
+                        if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile))
+                        {
+                            StartCoroutine(map.KillWaterSplashAnimation(last_pos));
+                            shore_anim = false;
+                        }
                         CancelMovement();
                         if (JumpForward(2, true))
                             return ActivateTile(neighbor_tiles.down_tile);
@@ -995,7 +1036,7 @@ namespace Eventing
 
         public void CancelMovement()
         {
-            target_pos = transform.position;
+            target_pos = last_pos;
         }
 
         [VerticalGroup("Debug Actions/Split/Right")]
@@ -1017,6 +1058,7 @@ namespace Eventing
                 (ParallaxTerrain.IsStairTile(neighbor_tiles.up_tile, true) == ParallaxTerrain.IsStairTile(neighbor_tiles.on_tile, true))
                 )))
             {
+                last_pos = transform.position;
                 target_pos += Vector3.up;
                 moving = true;
                 tile_activated = false;
@@ -1039,6 +1081,7 @@ namespace Eventing
                 (!ParallaxTerrain.IsWaterTile(neighbor_tiles.left_tile) || !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) || neighbor_tiles.look_ahead_cw_tile == null || (neighbor_tiles.look_ahead_cw_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_cw_tile))))
                 ))
             {
+                last_pos = transform.position;
                 target_pos += Vector3.left;
                 moving = true;
                 tile_activated = false;
@@ -1061,6 +1104,7 @@ namespace Eventing
                 (!ParallaxTerrain.IsWaterTile(neighbor_tiles.right_tile) || !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) || neighbor_tiles.look_ahead_ccw_tile == null || (neighbor_tiles.look_ahead_ccw_tile != null && (ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile) == ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_ccw_tile))))
                 ))
             {
+                last_pos = transform.position;
                 target_pos += Vector3.right;
                 moving = true;
                 tile_activated = false;
@@ -1084,6 +1128,7 @@ namespace Eventing
                 (ParallaxTerrain.IsStairTile(neighbor_tiles.down_tile, true) == ParallaxTerrain.IsStairTile(neighbor_tiles.on_tile, true))
                 )))
             {
+                last_pos = transform.position;
                 target_pos += Vector3.down;
                 moving = true;
                 tile_activated = false;
@@ -1099,6 +1144,7 @@ namespace Eventing
             if (move_through_walls || (neighbor_tiles.on_tile != null && neighbor_tiles.up_left_tile != null &&
             neighbor_tiles.up_left_tile.allow_passage))
             {
+                last_pos = transform.position;
                 target_pos += Vector3.up + Vector3.left;
                 moving = true;
                 tile_activated = false;
@@ -1113,6 +1159,7 @@ namespace Eventing
             if (move_through_walls || (neighbor_tiles.on_tile != null && neighbor_tiles.up_right_tile != null &&
             neighbor_tiles.up_right_tile.allow_passage))
             {
+                last_pos = transform.position;
                 target_pos += Vector3.up + Vector3.right;
                 moving = true;
                 tile_activated = false;
@@ -1127,6 +1174,7 @@ namespace Eventing
             if (move_through_walls || (neighbor_tiles.on_tile != null && neighbor_tiles.down_left_tile != null &&
             neighbor_tiles.down_left_tile.allow_passage))
             {
+                last_pos = transform.position;
                 target_pos += Vector3.down + Vector3.left;
                 moving = true;
                 tile_activated = false;
@@ -1141,6 +1189,7 @@ namespace Eventing
             if (move_through_walls || (neighbor_tiles.on_tile != null && neighbor_tiles.down_right_tile != null &&
             neighbor_tiles.down_right_tile.allow_passage))
             {
+                last_pos = transform.position;
                 target_pos += Vector3.down + Vector3.right;
                 moving = true;
                 tile_activated = false;
@@ -1243,6 +1292,7 @@ namespace Eventing
         [Button("Jump in Place")]
         public bool JumpInPlace() { 
             float height = Constants.JUMP_HEIGHT;
+            last_pos = transform.position;
             target_pos += ((height * Vector3.back) + (height * Vector3.up));
             moving = true;
             jumping = true;
@@ -1297,6 +1347,7 @@ namespace Eventing
                 }
                 if (!ledge_dir_allowed) return false;
 
+                last_pos = transform.position;
                 target_pos += ((height * Vector3.back) + (height * Vector3.up) + (v * (float)num_tiles / 2));
                 moving = true;
                 jumping = true;
@@ -1319,6 +1370,7 @@ namespace Eventing
 
         public void MoveLayerUp(bool delay_until_move_comp = false)
         {
+            last_pos = transform.position;
             target_pos += (Constants.MAP_LAYER_HEIGHT * Vector3.back);
             moving = true;
             if (delay_until_move_comp) layer_up_delay = true;
@@ -1331,6 +1383,7 @@ namespace Eventing
         }
         public void MoveLayerDown(bool delay_until_move_comp = false)
         {
+            last_pos = transform.position;
             target_pos += (Constants.MAP_LAYER_HEIGHT * Vector3.forward);
             moving = true;
             if (delay_until_move_comp) layer_down_delay = true;

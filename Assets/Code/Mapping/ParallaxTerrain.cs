@@ -75,6 +75,13 @@ namespace Mapping
             else return (water_tags.Contains(tile.terrain_tag) || ocean_tags.Contains(tile.terrain_tag) || deep_water_tags.Contains(tile.terrain_tag));
         }
 
+        public static bool IsShoreTile(ParallaxTileBase tile)
+        {
+            if (tile == null) return false;
+            TerrainTags[] shore_tags = new TerrainTags[] { TerrainTags.Shore };
+            return shore_tags.Contains(tile.terrain_tag);
+        }
+
         public static bool IsBridgeTile(ParallaxTileBase tile)
         {
             if (tile == null) return false;

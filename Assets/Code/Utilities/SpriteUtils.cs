@@ -33,7 +33,8 @@ namespace Utilities
         *   - Set transparency if applicable
         *   - Set proper sorting layer
         */
-        public static void ConfigurePrefabTileSprites (Tilemap map, GameObject go, bool is_trans, bool is_light_trans, bool is_ground_anim = false)
+        public static void ConfigurePrefabTileSprites (Tilemap map, GameObject go, bool is_trans, bool is_light_trans,
+                                                        bool is_ground_anim = false, bool is_anim = false)
         {
             TilemapRenderer renderer = map.GetComponent<TilemapRenderer>();
             int layer = renderer.sortingOrder;
@@ -50,6 +51,8 @@ namespace Utilities
                 // Sorting layer handling
                 if (is_ground_anim)
                     sprite.sortingOrder = layer + Constants.GROUND_ANIM_SORTING_LAYER_OFFSET;
+                else if (is_anim)
+                    sprite.sortingOrder = layer + Constants.ANIM_SORTING_LAYER_OFFSET;
                 else if (sprite.tag == Constants.PRIORITY_TILE_TAG)
                     sprite.sortingOrder = layer + Constants.PRIORITY_TILE_OFFSET;
                 else if (sprite.tag == Constants.TERRAIN_EDGE_TILE_TAG || sprite.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG)

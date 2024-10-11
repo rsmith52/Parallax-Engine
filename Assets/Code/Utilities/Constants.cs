@@ -29,6 +29,7 @@ namespace Utilities
         public static readonly int OBJECT_LAYER_START_OFFSET = 3;
         public static readonly int EVENT_SORTING_LAYER_OFFSET = SORTING_LAYERS_PER_MAP_LAYER + 1;
         public static readonly int GROUND_ANIM_SORTING_LAYER_OFFSET = EVENT_SORTING_LAYER_OFFSET - 1;
+        public static readonly int ANIM_SORTING_LAYER_OFFSET = EVENT_SORTING_LAYER_OFFSET;
 
         public static readonly float TRANS_TILE_ALPHA = 0.75f;
         public static readonly float LIGHT_TRANS_TILE_ALPHA = 0.5f;
