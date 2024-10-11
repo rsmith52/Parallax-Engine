@@ -493,7 +493,8 @@ namespace Eventing
             if (tile.is_bush)
             {
                 in_bush = true;
-                StartCoroutine(map.GrassRustleAnimation(target_pos));
+                if (speed != Constants.SPEEDS[(int)MovementSpeeds.VerySlow])
+                    StartCoroutine(map.GrassRustleAnimation(target_pos));
             }
             else
                 in_bush = false;

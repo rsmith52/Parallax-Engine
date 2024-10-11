@@ -50,7 +50,7 @@ namespace Utilities
         // Movement Speeds and Turn Sensitivity
         public static readonly float[] SPEEDS = new float[]
         {
-            1.5f,         // VerySlow (Sneak Speed)
+            1.75f,      // VerySlow (Sneak Speed)
             3f,         // Slow
             3.5f,       // Moderate (Jump in Place Speed)
             6f,         // Fast     (Jump Speed)

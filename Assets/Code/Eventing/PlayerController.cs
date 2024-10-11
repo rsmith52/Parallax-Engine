@@ -253,41 +253,39 @@ namespace Eventing
             }
         }
 
-        private void StartRunning()
+        private void StartRunning(bool recursive = false)
         {
-            StopSneaking();
+            if (!recursive) StopSneaking();
             player_mover.ChangeSpeed(MovementSpeeds.VeryFast);
             player_mover.animator.SetBool(Constants.ANIM_RUN, true);
         }
 
         private void StopRunning()
         {
-            // if (Input.GetKeyDown(Controls.SNEAK_BUTTON))
-            //     StartSneaking();
-            // else
-            // {
+            player_mover.animator.SetBool(Constants.ANIM_RUN, false);
+
+            if (Input.GetKey(Controls.SNEAK_BUTTON))
+                StartSneaking(true);
+            else
                 player_mover.ChangeSpeed(MovementSpeeds.Moderate);
-                player_mover.animator.SetBool(Constants.ANIM_RUN, false);
-            // }
             
         }
 
-        private void StartSneaking()
+        private void StartSneaking(bool recursive = false)
         {
-            StopRunning();
+            if (!recursive) StopRunning();
             player_mover.ChangeSpeed(MovementSpeeds.VerySlow);
             player_mover.animator.SetBool(Constants.ANIM_SNEAK, true);
         }
 
         private void StopSneaking()
         {
-            // if (Input.GetKeyDown(Controls.RUN_BUTTON))
-            //     StartRunning();
-            // else
-            // {
+            player_mover.animator.SetBool(Constants.ANIM_SNEAK, false);
+
+            if (Input.GetKey(Controls.RUN_BUTTON))
+                StartRunning(true);
+            else
                 player_mover.ChangeSpeed(MovementSpeeds.Moderate);
-                player_mover.animator.SetBool(Constants.ANIM_SNEAK, false);
-            // }
         }
 
         #endregion
