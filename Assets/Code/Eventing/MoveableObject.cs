@@ -495,6 +495,12 @@ namespace Eventing
             else
                 in_bush = false;
 
+            // Footprint Animation
+            if (ParallaxTerrain.IsSandTile(tile) || ParallaxTerrain.IsSnowTile(tile))
+            {
+                StartCoroutine(map.FootprintsAnimation(target_pos, direction));
+            }
+
             // Shore Animation
             if (shore_anim && (last_pos != target_pos))
             {

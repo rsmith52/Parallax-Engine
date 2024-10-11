@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34a88e4cea08841649b5b7c5cc9b2938, type: 3}
   m_Name: Hammock Center
   m_EditorClassIdentifier: 
-  terrain_tag: 4
+  terrain_tag: 27
   allow_passage: 1
   up_passage: 1
   left_passage: 0
@@ -21,8 +21,11 @@ MonoBehaviour:
   is_bush: 0
   is_counter: 0
   is_trans: 0
+  is_light_trans: 0
   is_reflective: 0
   is_jump: 1
+  is_hideable: 0
+  instantiated_object: {fileID: 0}
   preview_sprite: {fileID: -604086155, guid: 3bc279f74cc82408a8c60a36642878a6, type: 3}
   prefab: {fileID: 8626972231468677178, guid: bc42830b3ed594f81bbeab75f62e62ed, type: 3}
   multi_tile: 0

@@ -1029,6 +1029,60 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7922387815234347453, guid: 5e7974c74b31647008d7da9566609e9d,
         type: 3}
+    - target: {fileID: 7922387815234347453, guid: 5e7974c74b31647008d7da9566609e9d,
+        type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7922387815234347453, guid: 5e7974c74b31647008d7da9566609e9d,
+        type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[0]
+      value: '"path":"footprints.{0es}","value":$eref:0'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7922387815234347453, guid: 5e7974c74b31647008d7da9566609e9d,
+        type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[1]
+      value: '"path":"footprints.{1es}","value":$eref:1'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7922387815234347453, guid: 5e7974c74b31647008d7da9566609e9d,
+        type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[2]
+      value: '"path":"footprints.{2es}","value":$eref:2'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7922387815234347453, guid: 5e7974c74b31647008d7da9566609e9d,
+        type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[3]
+      value: '"path":"footprints.{3es}","value":$eref:3'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7922387815234347453, guid: 5e7974c74b31647008d7da9566609e9d,
+        type: 3}
+      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7922387815234347453, guid: 5e7974c74b31647008d7da9566609e9d,
+        type: 3}
+      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[0]
+      value: 
+      objectReference: {fileID: 6572868887029596872, guid: f70591ae6604f4380804e2bdb9c179d0,
+        type: 3}
+    - target: {fileID: 7922387815234347453, guid: 5e7974c74b31647008d7da9566609e9d,
+        type: 3}
+      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[1]
+      value: 
+      objectReference: {fileID: 6572868887029596872, guid: afdeefadc39ae4e82af8cff929f51dbd,
+        type: 3}
+    - target: {fileID: 7922387815234347453, guid: 5e7974c74b31647008d7da9566609e9d,
+        type: 3}
+      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[2]
+      value: 
+      objectReference: {fileID: 6572868887029596872, guid: e77412b191a7b468f9f8f42df4240183,
+        type: 3}
+    - target: {fileID: 7922387815234347453, guid: 5e7974c74b31647008d7da9566609e9d,
+        type: 3}
+      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[3]
+      value: 
+      objectReference: {fileID: 6572868887029596872, guid: 5acd61e532227443d93550c9c98bb409,
+        type: 3}
     - target: {fileID: 8365779122185530598, guid: 5e7974c74b31647008d7da9566609e9d,
         type: 3}
       propertyPath: m_ChunkCullingBounds.y

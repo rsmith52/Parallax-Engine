@@ -133,6 +133,10 @@ namespace Mapping
         public GameObject grass_rustle;
         [HideIf("@!show_effect_settings")]
         public GameObject water_splash;
+        [HideIf("@!show_effect_settings")]
+        public Dictionary<Directions, GameObject> footprints = new Dictionary<Directions, GameObject>() {
+            {Directions.Up, null}, {Directions.Left, null}, {Directions.Right, null}, {Directions.Down, null}
+        };
 
         // Track Hidden Tiles / Layers
         private bool bridge_hidden;
@@ -145,7 +149,6 @@ namespace Mapping
         // Track Animations
         private Dictionary<TilePosition, bool> cancel_anim_kill;
         private Dictionary<TilePosition, GameObject> water_splash_anims;
-        
 
         #endregion
 
@@ -673,6 +676,34 @@ namespace Mapping
             SpriteUtils.ConfigurePrefabTileSprites(map, anim, false, false, true); // Behind player
 
             yield return new WaitForSeconds(0.5f);
+
+            GameObject.Destroy(anim.gameObject);
+        }
+
+        /* 
+        * Play footprints animation
+        */
+        public IEnumerator FootprintsAnimation(Vector3 pos, Directions dir)
+        {
+            int layer = GetMapLayerIDFromPosition(pos);
+            Tilemap map = map_layers[layer];
+
+            yield return new WaitForSeconds(0.2f);
+            
+            GameObject anim = Instantiate(footprints[dir], map.transform);
+            anim.transform.position = pos;
+            SpriteUtils.ConfigurePrefabTileSprites(map, anim, false, true, true); // Behind player
+
+            yield return new WaitForSeconds(0.5f);
+            
+            SpriteRenderer sprite = anim.GetComponentInChildren<SpriteRenderer>();
+            Color start = new Color(1,1,1,Constants.LIGHT_TRANS_TILE_ALPHA);
+            Color end = new Color (1,1,1,0);
+            for (int i = 0; i < 5; i++)
+            {
+                yield return new WaitForSeconds(0.1f);
+                sprite.color = Color.Lerp(start, end, (i / 5f));
+            }
 
             GameObject.Destroy(anim.gameObject);
         }

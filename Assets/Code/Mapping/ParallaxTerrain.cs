@@ -11,50 +11,79 @@ namespace Mapping
     {
         None = 0,
         // Ground Types
-        Grass,
-        Dirt,
-        Rock,
-        Sand,
-        Snow,
-        Ice,
-        Puddle,
-        Shore,
-        Underwater,
+        Grass = 1,
+        Dirt = 2,
+        Rock = 3,
+        Sand = 4,
+        Snow = 5,
+        Ice = 6,
+        Puddle = 7,
+        Shore = 8,
+        Underwater = 9,
         // Encounters
-        TallGrass,
-        ExtraTallGrass,
-        DeepSand,
-        Marsh,
-        WaterGrass,
+        TallGrass = 10,
+        ExtraTallGrass = 11,
+        DeepSand = 12,
+        DeepSnow = 28,
+        Marsh = 13,
+        WaterGrass = 14,
         // Terrain Navigation
-        Ledge,
-        StairUp,
-        StairLeft,
-        StairRight,
-        Bridge,
+        Ledge = 15,
+        StairUp = 16,
+        StairLeft = 17,
+        StairRight = 18,
+        Bridge = 19,
         // Water
-        WaterStill,
-        WaterOcean,
-        DeepWater,
+        WaterStill = 20,
+        WaterOcean = 21,
+        DeepWater = 22,
         // Special
-        Waterfall,
-        WaterfallCrest,
-        RockyLedge,
-        NoPassHelper,
-        Ignore
+        Waterfall = 23,
+        WaterfallCrest = 24,
+        RockyLedge = 25,
+        NoPassHelper = 26,
+        Ignore = 27
     }
 
     #endregion
 
     public class ParallaxTerrain
     {
+        #region Terrain Groups
+
+        // Stair Tags
+        private static TerrainTags[] up_stair_tags = new TerrainTags[] { TerrainTags.StairUp };
+        private static TerrainTags[] side_stair_tags = new TerrainTags[] { TerrainTags.StairLeft, TerrainTags.StairRight };
+
+        // Water Tags
+        private static TerrainTags[] water_tags = new TerrainTags[] { TerrainTags.WaterStill };
+        private static TerrainTags[] ocean_tags = new TerrainTags[] { TerrainTags.WaterOcean };
+        private static TerrainTags[] deep_water_tags = new TerrainTags[] { TerrainTags.DeepWater };
+        private static TerrainTags[] shore_tags = new TerrainTags[] { TerrainTags.Shore };
+
+        // Bridge Tags
+        private static TerrainTags[] bridge_tags = new TerrainTags[] { TerrainTags.Bridge };
+
+        // Underwater Tags
+        private static TerrainTags[] underwater_tags = new TerrainTags[] { TerrainTags.Underwater, TerrainTags.WaterGrass };
+
+        // Ledge Tags
+        private static TerrainTags[] ledge_tags = new TerrainTags[] { TerrainTags.Ledge };
+
+        // Sand Tags
+        private static TerrainTags[] sand_tags = new TerrainTags[] { TerrainTags.Sand };
+
+        // Snow Tags
+        private static TerrainTags[] snow_tags = new TerrainTags[] { TerrainTags.Snow };
+
+        #endregion
+        
+
         #region Static Methods
 
         public static bool IsStairTile(ParallaxTileBase tile, bool is_side_only = false, bool is_up_stair_only = false)
         {
             if (tile == null) return false;
-            TerrainTags[] up_stair_tags = new TerrainTags[] { TerrainTags.StairUp };
-            TerrainTags[] side_stair_tags = new TerrainTags[] { TerrainTags.StairLeft, TerrainTags.StairRight };
             
             if (is_side_only) return side_stair_tags.Contains(tile.terrain_tag);
             else if (is_up_stair_only) return up_stair_tags.Contains(tile.terrain_tag);
@@ -64,10 +93,6 @@ namespace Mapping
         public static bool IsWaterTile(ParallaxTileBase tile, bool is_deep_only = false, bool is_ocean_only = false, bool see_shore = false)
         {
             if (tile == null) return false;
-            TerrainTags[] water_tags = new TerrainTags[] { TerrainTags.WaterStill };
-            TerrainTags[] ocean_tags = new TerrainTags[] { TerrainTags.WaterOcean };
-            TerrainTags[] deep_water_tags = new TerrainTags[] { TerrainTags.DeepWater };
-            TerrainTags[] shore_tags = new TerrainTags[] { TerrainTags.Shore };
             
             if (is_deep_only) return deep_water_tags.Contains(tile.terrain_tag);
             else if (is_ocean_only) return ocean_tags.Contains(tile.terrain_tag);
@@ -78,36 +103,45 @@ namespace Mapping
         public static bool IsShoreTile(ParallaxTileBase tile)
         {
             if (tile == null) return false;
-            TerrainTags[] shore_tags = new TerrainTags[] { TerrainTags.Shore };
             return shore_tags.Contains(tile.terrain_tag);
         }
 
         public static bool IsBridgeTile(ParallaxTileBase tile)
         {
             if (tile == null) return false;
-            TerrainTags[] bridge_tags = new TerrainTags[] { TerrainTags.Bridge };
             return bridge_tags.Contains(tile.terrain_tag);
         }
 
         public static bool IsUnderwaterTile(ParallaxTileBase tile)
         {
             if (tile == null) return false;
-            TerrainTags[] underwater_tags = new TerrainTags[] { TerrainTags.Underwater, TerrainTags.WaterGrass };
             return underwater_tags.Contains(tile.terrain_tag);
-        }
-
-        public static bool IsTerrainTile(ParallaxTileBase tile)
-        {
-            RuleTile ruletile = tile as RuleTile;
-            if (ruletile != null && ruletile.is_terrain) return true;
-            else return false;
         }
 
         public static bool IsLedgeTile(ParallaxTileBase tile)
         {
             if (tile == null) return false;
-            TerrainTags[] ledge_tags = new TerrainTags[] { TerrainTags.Ledge };
             return ledge_tags.Contains(tile.terrain_tag);
+        }
+
+        public static bool IsSandTile(ParallaxTileBase tile)
+        {
+            if (tile == null) return false;
+            return sand_tags.Contains(tile.terrain_tag);
+        }
+
+        public static bool IsSnowTile(ParallaxTileBase tile)
+        {
+            if (tile == null) return false;
+            return snow_tags.Contains(tile.terrain_tag);
+        }
+
+        public static bool IsTerrainTile(ParallaxTileBase tile)
+        {
+            if (tile == null) return false;
+            RuleTile ruletile = tile as RuleTile;
+            if (ruletile != null && ruletile.is_terrain) return true;
+            else return false;
         }
 
         #endregion
