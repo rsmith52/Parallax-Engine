@@ -120,7 +120,7 @@ namespace Eventing
                 }
             }
             // Handle Movement Input
-            else if (Input.GetKey(Controls.MOVE_UP) && current_pos == target_pos)
+            if (Input.GetKey(Controls.MOVE_UP) && current_pos == target_pos)
             {
                 if (!player_mover.lock_direction && direction != Directions.Up)
                 {
@@ -262,8 +262,14 @@ namespace Eventing
 
         private void StopRunning()
         {
-            player_mover.ChangeSpeed(MovementSpeeds.Moderate);
-            player_mover.animator.SetBool(Constants.ANIM_RUN, false);
+            // if (Input.GetKeyDown(Controls.SNEAK_BUTTON))
+            //     StartSneaking();
+            // else
+            // {
+                player_mover.ChangeSpeed(MovementSpeeds.Moderate);
+                player_mover.animator.SetBool(Constants.ANIM_RUN, false);
+            // }
+            
         }
 
         private void StartSneaking()
@@ -275,8 +281,13 @@ namespace Eventing
 
         private void StopSneaking()
         {
-            player_mover.ChangeSpeed(MovementSpeeds.Moderate);
-            player_mover.animator.SetBool(Constants.ANIM_SNEAK, false);
+            // if (Input.GetKeyDown(Controls.RUN_BUTTON))
+            //     StartRunning();
+            // else
+            // {
+                player_mover.ChangeSpeed(MovementSpeeds.Moderate);
+                player_mover.animator.SetBool(Constants.ANIM_SNEAK, false);
+            // }
         }
 
         #endregion

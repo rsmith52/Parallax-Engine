@@ -115,7 +115,7 @@ namespace Eventing
         private bool layer_changed;
         private bool on_stairs_changed;
 
-        [HideInInspector]
+        //[HideInInspector]
         public Animator animator;
         private SpriteRenderer[] sprites;
         private SpriteMask bush_mask;

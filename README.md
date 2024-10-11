@@ -47,7 +47,6 @@ Unity Project for 2.5d Parallax RPG Engine
 * More advanced falling physics
 * Intermittent bug that happens on stairs sometimes where on_tile is null
 * Make see through tiles fade in/out rather than abrubtly change
-* Switch to blank humanoid template character, animate it
 
 ### UI Code
 * Simple message boxes
