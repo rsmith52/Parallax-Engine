@@ -21,7 +21,11 @@ MonoBehaviour:
   is_bush: 0
   is_counter: 0
   is_trans: 0
+  is_light_trans: 0
   is_reflective: 0
+  is_jump: 0
+  is_hideable: 0
+  instantiated_object: {fileID: 0}
   m_DefaultSprite: {fileID: 2065115049, guid: 92b8842731e424c25abb4f2c82df2a11, type: 3}
   m_DefaultGameObject: {fileID: 453676825057425070, guid: 1d86a864ac1c84332bcafed9f812281d,
     type: 3}
@@ -30,6 +34,7 @@ MonoBehaviour:
   is_double_tall: 1
   surface_tile: {fileID: 11400000, guid: c0c5852891cb0406394312990390cc25, type: 2}
   surface_edge: {fileID: 11400000, guid: fa833066b00ff40069872d116146f303, type: 2}
+  shore_tile: {fileID: 0}
   m_TilingRules:
   - m_Id: 10
     m_Sprites:

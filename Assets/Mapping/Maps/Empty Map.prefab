@@ -65,12 +65,16 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: object_layers
+      Entry: 6
+      Data: 
   map_id: 0
   map_name: Empty Map
   map_type: 0
   map_layers:
     keys: 
     values: []
-  object_layers:
-    keys: 
+  show_effect_settings: 1
+  grass_rustle: {fileID: 6572868887029596872, guid: 2add4263838194aab89fdadf631dbc4a,
+    type: 3}

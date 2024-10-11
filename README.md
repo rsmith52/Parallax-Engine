@@ -14,7 +14,6 @@ Unity Project for 2.5d Parallax RPG Engine
 * Large ferns / foliage
 * More mushrooms
 * Beach decorations
-* Continue tinkering with terrain back edge corners, may need new tile visual
 
 ### Tile object coding
 * Reflections on ice, still water, etc.
@@ -32,7 +31,6 @@ Unity Project for 2.5d Parallax RPG Engine
 * Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
 * Would be really nice to have map managing code visible in same editor window as tile palette for map editing
 * Fog effects, weather, etc. are in map definition
-* Fix shore detection around terrain edges
 
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines
@@ -47,7 +45,6 @@ Unity Project for 2.5d Parallax RPG Engine
 * Intermittent bug that happens on stairs sometimes where on_tile is null
 * Make see through tiles fade in/out rather than abrubtly change
 * Switch to blank humanoid template character, animate it
-* Remove ability to walk behind terrain edges, except underwater
 
 ### UI Code
 * Simple message boxes

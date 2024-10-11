@@ -479,7 +479,11 @@ namespace Eventing
 
             // Bush Flag
             if (tile.is_bush)
-                in_bush = true; // TODO - bush animation
+            {
+                in_bush = true;
+                StartCoroutine(map.GrassRustleAnimation(target_pos));
+            }
+                
             else
                 in_bush = false;
 

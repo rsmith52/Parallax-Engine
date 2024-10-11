@@ -127,6 +127,11 @@ namespace Mapping
         [ReadOnly]
         public Dictionary<int, Tilemap[]> object_layers;
 
+        [Title("Effect Prefabs")]
+        public bool show_effect_settings = false;
+        [HideIf("@!show_effect_settings")]
+        public GameObject grass_rustle;
+
         // Track Hidden Tiles / Layers
         private bool bridge_hidden;
         private List<TilePosition> hidden_bridge;
@@ -643,6 +648,22 @@ namespace Mapping
             }
         }
         
+        /*
+        * Play tall grass activated animation
+        */
+        public IEnumerator GrassRustleAnimation(Vector3 pos)
+        {
+            GameObject anim = Instantiate(grass_rustle, this.transform);
+            anim.transform.position = pos;
+
+            int layer = GetMapLayerIDFromPosition(pos);
+            SpriteUtils.ConfigurePrefabTileSprites(map_layers[layer], anim, false, false, true);
+
+            yield return new WaitForSeconds(0.5f);
+
+            GameObject.Destroy(anim.gameObject);
+        }
+        
         #endregion
 
 
@@ -908,12 +929,10 @@ namespace Mapping
                 RuleTile ruletile = matched_tile.tile as RuleTile;
 
                 GameObject go = neighbor_maps.ground.GetInstantiatedObject(pos);
-                GameObject go_up = neighbor_maps.ground.GetInstantiatedObject(pos + Vector3Int.up);
                 
                 // Shore Flat Surface Detection
                 if (ruletile != null && ruletile.shore_tile != null && terrain_tile != null &&
-                    (go == null || go.tag == Constants.TERRAIN_EDGE_TILE_TAG || go.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG) && 
-                    (go_up == null || go_up.tag == Constants.TERRAIN_EDGE_TILE_TAG || go_up.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG))
+                    (go == null || go.tag == Constants.TERRAIN_EDGE_TILE_TAG || go.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG))
                 {
                     matched_tile.tile = ruletile.shore_tile;
                 }
