@@ -101,7 +101,7 @@ namespace Mapping
             
             if (is_deep_only) return deep_water_tags.Contains(tile.terrain_tag);
             else if (is_ocean_only) return ocean_tags.Contains(tile.terrain_tag);
-            else if (see_shore) return (water_tags.Contains(tile.terrain_tag) || deep_water_tags.Contains(tile.terrain_tag) || shore_tags.Contains(tile.terrain_tag));
+            else if (see_shore) return (water_tags.Contains(tile.terrain_tag) || ocean_tags.Contains(tile.terrain_tag) || deep_water_tags.Contains(tile.terrain_tag) || shore_tags.Contains(tile.terrain_tag));
             else return (water_tags.Contains(tile.terrain_tag) || ocean_tags.Contains(tile.terrain_tag) || deep_water_tags.Contains(tile.terrain_tag));
         }
 

@@ -20,7 +20,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Underwater tiles could have color tint in palette view - or some indicator of being underwater tiles
 * Animate still water edges
 * Forage tiles - "is_forage" flag with fields for replacement "foraged" tile, and what item(s) it drops
-* Animate the fading/hiding/showing of tiles - https://docs.unity3d.com/ScriptReference/Color.Lerp.html
+* Animate the fading/hiding/showing of tiles
 
 ### Map Managing Code
 * Buttons for static functions to load/save maps as well

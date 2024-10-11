@@ -1057,13 +1057,14 @@ namespace Mapping
                     (go == null || go.tag == Constants.TERRAIN_EDGE_TILE_TAG || go.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG))
                 {
                     matched_tile.tile = ruletile.shore_tile;
+                    matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.ground, neighbor_maps.objects,false,false,false,false,true);
                 }
             }
             return matched_tile;
         }
 
         private MatchedTile CheckTilePositionOnLayer (MatchedTile matched_tile, Vector3Int pos, Tilemap layer, Tilemap[] objects,
-                                                        bool up = false, bool see_bridge = false, bool ignore_objects = false, bool underwater = false)
+                                                        bool up = false, bool see_bridge = false, bool ignore_objects = false, bool underwater = false, bool see_through_shore = false)
         {
             GameObject go = null;
             if (layer != null)
@@ -1071,16 +1072,17 @@ namespace Mapping
             
             // Check Object Layers Top to Bottom
             ParallaxTileBase checked_tile;
-            if (matched_tile.tile == null && objects != null && !ignore_objects)
+            if ((matched_tile.tile == null && objects != null && !ignore_objects) || see_through_shore)
             {
                 for (int i = objects.Length - 1; i >= 0; i--)
                 {
-                    if ((matched_tile.tile && !up && !see_bridge))
+                    if ((matched_tile.tile && !up && !see_bridge && !see_through_shore))
                         break;
 
                     checked_tile = (ParallaxTileBase)objects[i].GetTile(pos);
                     
-                    if (checked_tile && checked_tile.terrain_tag != TerrainTags.None)
+                    if (checked_tile && checked_tile.terrain_tag != TerrainTags.None && 
+                    !(see_through_shore && ParallaxTerrain.IsWaterTile(checked_tile)))
                     {
                         matched_tile.tile = checked_tile;
                         matched_tile.map = objects[i];
@@ -1100,7 +1102,7 @@ namespace Mapping
             }
 
             // Check Base Terrain Layer
-            if (layer != null)
+            if (layer != null && !see_through_shore)
             {
                 if (matched_tile.tile == null || (!up && ParallaxTerrain.IsStairTile(matched_tile.tile) && go != null && go.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG) || 
                 (up && !see_bridge && go != null && (go.tag == Constants.TERRAIN_EDGE_TILE_TAG || go.tag == Constants.TERRAIN_EDGE_CORNER_TILE_TAG || (go.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG && !ParallaxTerrain.IsStairTile(matched_tile.tile)))) ||
