@@ -63,6 +63,8 @@ namespace Utilities
                     sprite.sortingOrder = layer + (2 * Constants.PRIORITY_TILE_OFFSET);
                 else if (sprite.tag == Constants.EXTRA_DEPRIORITY_TILE_TAG)
                     sprite.sortingOrder = layer - (2 * Constants.PRIORITY_TILE_OFFSET);
+                else if (sprite.tag == Constants.COVER_PRIORITY_TILE_TAG)
+                    sprite.sortingOrder = layer + Constants.SORTING_LAYERS_PER_MAP_LAYER - Constants.OBJECT_LAYER_START_OFFSET;
                 else if (sprite.tag == Constants.UP_LAYER_PRIORITY_TILE_TAG)
                     sprite.sortingOrder = layer + Constants.SORTING_LAYERS_PER_MAP_LAYER;
                 else if (sprite.tag == Constants.DOWN_LAYER_PRIORITY_TILE_TAG)

@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Sirenix.OdinInspector;
@@ -46,6 +48,13 @@ namespace Mapping
         public bool is_reflective = false;
         public bool is_jump = false;
         public bool is_hideable = false;
+        [HideIf("@!is_hideable")]
+        public bool strict_hiding = false;
+
+        [Title("Multi Tile")]
+        public bool multi_tile;
+        [HideIf("@!multi_tile")]
+        public TileSize tile_size;
 
         #endregion
 
@@ -55,6 +64,45 @@ namespace Mapping
         [HideInInspector]
         public GameObject instantiated_object;
         public GameObject GetInstantiatedObject() { return instantiated_object; }
+
+        #endregion
+
+        
+        #region MonoBehavior
+
+        protected BasicTile MultiTileCopy(ParallaxTileBase base_tile)
+        {
+            BasicTile tile_copy = CreateInstance<BasicTile>();
+            tile_copy.name = base_tile.name;
+            tile_copy.terrain_tag = base_tile.terrain_tag;
+            tile_copy.allow_passage = base_tile.allow_passage;
+            tile_copy.is_bush = base_tile.is_bush;
+            
+            tile_copy.is_hideable = base_tile.is_hideable;
+            tile_copy.strict_hiding = base_tile.strict_hiding;
+            tile_copy.instantiated_object = base_tile.instantiated_object;
+
+            return tile_copy;
+        }
+
+        protected Tilemap GetCopyToMap(Map map, Tilemap base_layer, int layers_up)
+        {
+            int layer_up_key = 0;
+            foreach (KeyValuePair<int, Tilemap> layer in map.map_layers)
+            {
+                if (layer.Value.name == base_layer.name)
+                {
+                    layer_up_key = layer.Key + 1;
+                }
+            }
+
+            if (map.object_layers.ContainsKey(layer_up_key))
+            {
+                Tilemap[] object_layers = map.object_layers[layer_up_key];
+                return object_layers.Last();
+            }
+            else return null;
+        }
 
         #endregion
 

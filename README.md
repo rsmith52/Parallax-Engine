@@ -9,44 +9,35 @@ Unity Project for 2.5d Parallax RPG Engine
 * Finalize flowers
 
 ### Tile Additions / Edits
-* Beach Water / Shore
 * Add shadows in
 * Large ferns / foliage
 * More mushrooms
-* Beach decorations
 
 ### Tile object coding
 * Reflections on ice, still water, etc.
 * Slide on ice
-* Ice ramps?
-* Sand ramps / landslides?
 * Tiles that you can't jump in (marsh, deep sand, etc.) - includes water and underwater - jump button should probably be used to dive/rise in water?
 * Underwater tiles could have color tint in palette view - or some indicator of being underwater tiles
 * Animate still water edges
 * Forage tiles - "is_forage" flag with fields for replacement "foraged" tile, and what item(s) it drops
-* Add settings and tags in ParallaxTerrain for defining which tiles should get which animations
 * Animate the fading/hiding/showing of tiles - https://docs.unity3d.com/ScriptReference/Color.Lerp.html
 
 ### Map Managing Code
 * Buttons for static functions to load/save maps as well
-* Map object stores map size? background music
+* Map object stores background music
 * Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
 * Would be really nice to have map managing code visible in same editor window as tile palette for map editing
 * Fog effects, weather, etc. are in map definition
-* Refactor ParallaxTerrain tag checks. Gross right now in many cases
 
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines
-* Diagonal movement... maybe
 * Consider what script sprite appearance and layer handling is owned by... moveable object may not make the most sense
 * Better way to find current map in MoveableObject
 * Make shadow not jump
 * Settings for jump / swim enabled - can be unlocked?
-* Setting for allow jumping up ledges / over rocks? again can be unlocked?
 * "Selected Event" concept. Doesn't need to be directly in front, could be on ground, under, look ahead, etc.
 * More advanced falling physics
 * Intermittent bug that happens on stairs sometimes where on_tile is null
-* Make see through tiles fade in/out rather than abrubtly change
 
 ### UI Code
 * Simple message boxes

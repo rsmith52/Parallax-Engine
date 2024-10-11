@@ -30,9 +30,6 @@ namespace Mapping
         [Title("Prefab Tile Settings")]
         public Sprite preview_sprite;
         public GameObject prefab;
-        public bool multi_tile;
-        [HideIf("@!multi_tile")]
-        public TileSize tile_size;
 
         [DetailedInfoBox("Offset Considerations", "If the tile has an offset in it's tile palette, this value should be the intended offset (default 0.5, 0.5) + that grid selection transform offset.")]
         public Vector2 prefab_offset = new Vector2(0.5f, 0.5f);
@@ -118,7 +115,6 @@ namespace Mapping
                 Tilemap layer_map = map.GetComponentsInParent<Tilemap>().Last();
                 if (layer_map == null) return; // error case of object layer existing without parent layer
                 
-
                 for (int i = 0; i < tile_size.x_width; i++)
                 {
                     for (int j = 0; j < tile_size.y_height; j++)
@@ -148,38 +144,6 @@ namespace Mapping
                     }
                 }
             }
-        }
-
-        private BasicTile MultiTileCopy(PrefabTile base_tile)
-        {
-            BasicTile tile_copy = CreateInstance<BasicTile>();
-            tile_copy.name = base_tile.name;
-            tile_copy.terrain_tag = base_tile.terrain_tag;
-            tile_copy.allow_passage = base_tile.allow_passage;
-            
-            tile_copy.is_hideable = base_tile.is_hideable;
-            tile_copy.instantiated_object = base_tile.instantiated_object;
-
-            return tile_copy;
-        }
-
-        private Tilemap GetCopyToMap(Map map, Tilemap base_layer, int layers_up)
-        {
-            int layer_up_key = 0;
-            foreach (KeyValuePair<int, Tilemap> layer in map.map_layers)
-            {
-                if (layer.Value.name == base_layer.name)
-                {
-                    layer_up_key = layer.Key + 1;
-                }
-            }
-
-            if (map.object_layers.ContainsKey(layer_up_key))
-            {
-                Tilemap[] object_layers = map.object_layers[layer_up_key];
-                return object_layers.Last();
-            }
-            else return null;
         }
 
         #endregion

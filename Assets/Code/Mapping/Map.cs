@@ -311,20 +311,30 @@ namespace Mapping
                 {
                     Tilemap object_layer = object_layers[layer.Key][i];
 
-                    // Instantiate Prefab Tiles
+                    // Instantiate Prefab Tiles & Expand Multi Tiles
                     foreach (Vector3Int pos in object_layer.cellBounds.allPositionsWithin)
                     {
                         Vector3Int local_place = new Vector3Int(pos.x, pos.y, pos.z);
 
                         if (object_layer.HasTile(local_place))
                         {
-                            // Get PrefabTile for this tile
-                            PrefabTile prefab_tile = object_layer.GetTile<PrefabTile>(local_place);
-                            if (!prefab_tile)
+                            ParallaxTileBase tile = object_layer.GetTile<ParallaxTileBase>(local_place);
+                            BasicTile basic_tile = tile as BasicTile;
+                            
+                            // Expand Basic Multi Tiles
+                            if (basic_tile && basic_tile.multi_tile)
+                            {
+                                basic_tile.ExpandTile(local_place, object_layer);
                                 continue;
+                            }
 
-                            // Instantiate prefab game object
-                            prefab_tile.InstantiatePrefab(local_place, object_layer);
+                            // Instantiate & Expand Prefab Tiles
+                            PrefabTile prefab_tile = tile as PrefabTile; 
+                            if (prefab_tile)
+                            {
+                                prefab_tile.InstantiatePrefab(local_place, object_layer);
+                                continue;
+                            }
                         }
                     }
                     
@@ -550,7 +560,28 @@ namespace Mapping
             if (down_tile.tile != null)
                 prefab_obj = down_tile.tile.instantiated_object;
             
+            bool should_hide = false;
             if (prefab_obj != null && down_tile.tile.is_hideable)
+            {
+                should_hide = true;
+                if (down_tile.tile.strict_hiding)
+                {
+                    MatchedTile up_tile = new MatchedTile{};
+                    up_tile = CheckTilePositionOnLayer (up_tile, int_pos + Vector3Int.up, neighbor_maps.layer_up, neighbor_maps.objects_up);
+                    if (up_tile.tile == null) 
+                        up_tile = CheckTilePositionOnLayer (up_tile, int_pos + Vector3Int.up, neighbor_maps.ground, neighbor_maps.objects);
+                    
+                    if (up_tile.tile != null)
+                    {
+                        GameObject up_prefab_obj = up_tile.tile.instantiated_object;
+                        if (up_prefab_obj == prefab_obj)
+                            should_hide = true;
+                        else should_hide = false;
+                    }
+                    else should_hide = false;
+                }
+            }
+            if (should_hide)
             {
                 // Hide Prefab
                 bool needs_update = true;

@@ -19,6 +19,7 @@ namespace Utilities
         
         public static readonly string PRIORITY_TILE_TAG = "Priority Tile";
         public static readonly string EXTRA_PRIORITY_TILE_TAG = "Extra Priority Tile";
+        public static readonly string COVER_PRIORITY_TILE_TAG = "Cover Priority Tile";
         public static readonly string UP_LAYER_PRIORITY_TILE_TAG = "Up Layer Priority Tile";
         public static readonly string DEPRIORITY_TILE_TAG = "DePriority Tile";
         public static readonly string EXTRA_DEPRIORITY_TILE_TAG = "Extra DePriority Tile";

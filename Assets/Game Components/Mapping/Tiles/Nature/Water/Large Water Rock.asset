@@ -21,13 +21,18 @@ MonoBehaviour:
   is_bush: 0
   is_counter: 0
   is_trans: 0
+  is_light_trans: 0
   is_reflective: 0
-  preview_sprite: {fileID: -1854440006, guid: 0161e3702eea6409190cfb4269a31338, type: 3}
-  prefab: {fileID: 8626972231468677178, guid: d6e477d76e3c14363b20c480cfd06ee8, type: 3}
+  is_jump: 0
+  is_hideable: 0
+  strict_hiding: 0
   multi_tile: 1
   tile_size:
     x_width: 2
     y_height: 1
     z_layers: 2
+  instantiated_object: {fileID: 0}
+  preview_sprite: {fileID: -1854440006, guid: 0161e3702eea6409190cfb4269a31338, type: 3}
+  prefab: {fileID: 8626972231468677178, guid: d6e477d76e3c14363b20c480cfd06ee8, type: 3}
   prefab_offset: {x: 1, y: 1}
   prefab_local_z: 0

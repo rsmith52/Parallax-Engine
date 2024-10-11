@@ -15,6 +15,17 @@ namespace Utilities
         #endregion
 
 
+        #region Player Abilities
+
+        public static readonly bool ALLOW_JUMPING = true;
+        public static readonly bool ALLOW_JUMP_UP_LEDGES = false;
+        public static readonly bool ALLOW_JUMP_OVER_OBJECTS = false;
+        public static readonly bool ALLOW_SWIMMING = true;
+        public static readonly bool ALLOW_DIVING = true;
+
+        #endregion
+
+
         #region Map Rules
 
         public static readonly bool ALLOW_WALK_BEHIND_TERRAIN_EDGES = false;

@@ -41,6 +41,7 @@ namespace Mapping
         Waterfall = 23,
         WaterfallCrest = 24,
         RockyLedge = 25,
+        SlipperSlope = 29,
         NoPassHelper = 26,
         Ignore = 27
     }
@@ -75,6 +76,10 @@ namespace Mapping
 
         // Snow Tags
         private static TerrainTags[] snow_tags = new TerrainTags[] { TerrainTags.Snow };
+
+        // Grass Tags
+        private static TerrainTags[] grass_tags = new TerrainTags[] { TerrainTags.TallGrass, TerrainTags.ExtraTallGrass };
+        private static TerrainTags[] water_grass_tags = new TerrainTags[] { TerrainTags.WaterGrass };
 
         #endregion
         
@@ -134,6 +139,13 @@ namespace Mapping
         {
             if (tile == null) return false;
             return snow_tags.Contains(tile.terrain_tag);
+        }
+
+        public static bool IsGrassTile(ParallaxTileBase tile, bool dry_only = false)
+        {
+            if (tile == null) return false;
+            if (dry_only) return grass_tags.Contains(tile.terrain_tag);
+            else return grass_tags.Contains(tile.terrain_tag) || water_grass_tags.Contains(tile.terrain_tag);
         }
 
         public static bool IsTerrainTile(ParallaxTileBase tile)

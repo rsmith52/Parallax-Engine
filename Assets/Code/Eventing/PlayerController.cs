@@ -86,7 +86,7 @@ namespace Eventing
             {
                 if (current_pos == target_pos)
                 {
-                    if (player_mover.on_water || player_mover.underwater)
+                    if (Settings.ALLOW_DIVING && (player_mover.on_water || player_mover.underwater))
                     {
                         bool sink_success = false;
                         if (player_mover.on_water)
@@ -98,7 +98,7 @@ namespace Eventing
                             player_mover.RiseUp();
                         }
                     }
-                    else if (!jump_queued)
+                    else if (Settings.ALLOW_JUMPING && !jump_queued && !player_mover.on_water)
                     {
                         bool jump_success = false;
                         if (Input.GetKey(Controls.MOVE_UP) || Input.GetKey(Controls.MOVE_LEFT) ||
@@ -113,7 +113,7 @@ namespace Eventing
                             player_mover.JumpInPlace();
                     }
                 }
-                else if (!player_mover.on_water && !player_mover.underwater && !player_mover.jumping && !player_mover.falling)
+                else if (Settings.ALLOW_JUMPING && !player_mover.on_water && !player_mover.underwater && !player_mover.jumping && !player_mover.falling)
                 {
                     jump_queued = true;
                     jump_direction = direction;

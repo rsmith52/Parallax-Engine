@@ -25,6 +25,11 @@ MonoBehaviour:
   is_reflective: 1
   is_jump: 0
   is_hideable: 0
+  multi_tile: 0
+  tile_size:
+    x_width: 0
+    y_height: 0
+    z_layers: 0
   instantiated_object: {fileID: 0}
   m_DefaultSprite: {fileID: -57650070, guid: a6f9608f1fae246e594917dfcf8f3889, type: 3}
   m_DefaultGameObject: {fileID: 8626972231468677178, guid: 0694921228753454995b2d3da6a3606a,

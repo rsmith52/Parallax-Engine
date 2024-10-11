@@ -494,10 +494,13 @@ namespace Eventing
             if (tile.is_bush)
             {
                 in_bush = true;
-                if (!sneaking) StartCoroutine(map.GrassRustleAnimation(target_pos));
             }
             else
                 in_bush = false;
+
+            // Grass Animation
+            if (ParallaxTerrain.IsGrassTile(tile, true) && !sneaking)
+                StartCoroutine(map.GrassRustleAnimation(target_pos));
 
             // Footprint Animation
             if (ParallaxTerrain.IsSandTile(tile) || ParallaxTerrain.IsSnowTile(tile))
@@ -617,11 +620,14 @@ namespace Eventing
                             ParallaxTerrain.IsWaterTile(neighbor_tiles.up_right_tile) && !underwater)
                     {
                         CancelMovement();
-                        if (JumpForward(2, true))
+                        if (Settings.ALLOW_SWIMMING)
                         {
-                            on_water = true;
-                            visibility_changed = true;
-                            return ActivateTile(neighbor_tiles.look_ahead_tile);
+                            if (JumpForward(2, true))
+                            {
+                                on_water = true;
+                                visibility_changed = true;
+                                return ActivateTile(neighbor_tiles.look_ahead_tile);
+                            }
                         }
                     }
                     // Move Off Water Right
@@ -701,11 +707,14 @@ namespace Eventing
                             ParallaxTerrain.IsWaterTile(neighbor_tiles.up_left_tile) && !underwater)
                     {
                         CancelMovement();
-                        if (JumpForward(2, true))
+                        if (Settings.ALLOW_SWIMMING)
                         {
-                            on_water = true;
-                            visibility_changed = true;
-                            return ActivateTile(neighbor_tiles.look_ahead_tile);
+                            if (JumpForward(2, true))
+                            {
+                                on_water = true;
+                                visibility_changed = true;
+                                return ActivateTile(neighbor_tiles.look_ahead_tile);
+                            }
                         }
                     }
                     // Move Off Water Left
@@ -775,11 +784,14 @@ namespace Eventing
                             !underwater)
                     {
                         CancelMovement();
-                        if (JumpForward(1, true))
+                        if (Settings.ALLOW_SWIMMING)
                         {
-                            on_water = true;
-                            visibility_changed = true;
-                            return ActivateTile(neighbor_tiles.look_ahead_tile);
+                            if (JumpForward(2, true))
+                            {
+                                on_water = true;
+                                visibility_changed = true;
+                                return ActivateTile(neighbor_tiles.look_ahead_tile);
+                            }
                         }
                     }
                     // Move Off Water Up
@@ -844,11 +856,14 @@ namespace Eventing
                             !underwater)
                     {
                         CancelMovement();
-                        if (JumpForward(2, true))
+                        if (Settings.ALLOW_SWIMMING)
                         {
-                            on_water = true;
-                            visibility_changed = true;
-                            return ActivateTile(neighbor_tiles.look_ahead_tile);
+                            if (JumpForward(2, true))
+                            {
+                                on_water = true;
+                                visibility_changed = true;
+                                return ActivateTile(neighbor_tiles.look_ahead_tile);
+                            }
                         }
                     }
                     // Move Off Water Down
@@ -1316,7 +1331,7 @@ namespace Eventing
                 StartCoroutine(map.KillWaterSplashAnimation(last_pos));
                 shore_anim = false;
             }
-            
+
             target_pos += ((height * Vector3.back) + (height * Vector3.up));
             moving = true;
             jumping = true;
@@ -1336,8 +1351,8 @@ namespace Eventing
             ParallaxTileBase check_tile = neighbor_tiles.facing_tile;
             if (move_through_walls || (neighbor_tiles.on_tile != null &&
                 ((num_tiles >2) ||
-                (num_tiles == 1 && check_tile != null && check_tile.allow_passage && !ParallaxTerrain.IsLedgeTile(check_tile) && !neighbor_tiles.facing_other_level && (onto_water || !ParallaxTerrain.IsWaterTile(check_tile))) ||
-                (num_tiles == 2 && neighbor_tiles.look_ahead_tile != null && neighbor_tiles.look_ahead_tile.allow_passage && !ParallaxTerrain.IsLedgeTile(neighbor_tiles.look_ahead_tile) && !neighbor_tiles.look_ahead_other_level && (onto_water || !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile)))
+                (num_tiles == 1 && check_tile != null && check_tile.allow_passage && (!ParallaxTerrain.IsLedgeTile(check_tile)) && !neighbor_tiles.facing_other_level && (onto_water || !ParallaxTerrain.IsWaterTile(check_tile))) ||
+                (num_tiles == 2 && (Settings.ALLOW_JUMP_OVER_OBJECTS || (check_tile != null && check_tile.allow_passage)) && neighbor_tiles.look_ahead_tile != null && neighbor_tiles.look_ahead_tile.allow_passage && !ParallaxTerrain.IsLedgeTile(neighbor_tiles.look_ahead_tile) && !neighbor_tiles.look_ahead_other_level && (onto_water || !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile)))
             )))
             {            
                 float height = Constants.JUMP_HEIGHT * num_tiles;
@@ -1369,7 +1384,7 @@ namespace Eventing
                     default:
                         break;
                 }
-                if (!ledge_dir_allowed) return false;
+                if (!Settings.ALLOW_JUMP_UP_LEDGES && !ledge_dir_allowed) return false;
 
                 last_pos = transform.position;
                 if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile))

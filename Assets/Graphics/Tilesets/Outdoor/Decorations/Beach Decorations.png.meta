@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 415d7341247264cd8bf2bfc99b3eeae4
+guid: 687d383ebc64342ff90e59f177f7cefa
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,112 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Nature Decorations_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 32
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 46d505eff7c2146b1a7f78313527e4e4
-      internalID: 700500133
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Nature Decorations_1
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 32
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ae086a98023c7426b8feab8617c48ec4
-      internalID: 2145361900
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Nature Decorations_2
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 32
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7ae09c65075f94eccba7f3fe37430c0f
-      internalID: 1692628324
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Nature Decorations_3
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 32
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8cc6ebc6951ba471ab298c56850ef88b
-      internalID: 1096951043
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Nature Decorations_4
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 32
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fcaefb2bc1f834bae91e3409377ef7df
-      internalID: 1190782170
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Nature Decorations_5
+      name: Beach Decorations_0
       rect:
         serializedVersion: 2
         x: 0
@@ -216,14 +111,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 88d15b91a882849bf812e2f51d09e8f4
-      internalID: 842430624
+      spriteID: d56fab3bd8ff74680aee61d9be28ff75
+      internalID: -1699070881
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature Decorations_6
+      name: Beach Decorations_1
       rect:
         serializedVersion: 2
         x: 16
@@ -237,14 +132,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 329f06e5bb0a84b7c9ae10446b09f149
-      internalID: -1086206042
+      spriteID: 3ea07fd1def63428292e9abb9ad7f096
+      internalID: 1623201561
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature Decorations_7
+      name: Beach Decorations_2
       rect:
         serializedVersion: 2
         x: 32
@@ -258,14 +153,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c010c31964c9344b1b02306ca5dacaed
-      internalID: 390409373
+      spriteID: 676a5568bbb88478fa2032c987006e69
+      internalID: 675309998
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature Decorations_8
+      name: Beach Decorations_3
       rect:
         serializedVersion: 2
         x: 48
@@ -279,14 +174,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f5526658ea34a48b093b6eca2bd54fc3
-      internalID: 1990773255
+      spriteID: 0ef906c94513e4b9cbd16b68ccef8f73
+      internalID: 2047718900
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature Decorations_9
+      name: Beach Decorations_4
       rect:
         serializedVersion: 2
         x: 64
@@ -300,14 +195,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fc5ca4a691d304b77990aa9ae98f61a8
-      internalID: -1447927009
+      spriteID: ffbb3c42082c64b499ae111f354f88ea
+      internalID: 1240288933
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature Decorations_10
+      name: Beach Decorations_5
       rect:
         serializedVersion: 2
         x: 0
@@ -321,29 +216,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e94ff1e66f69848c690e0337f36988f9
-      internalID: 1447279185
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Nature Decorations_11
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1d1062917917240f993e399e2e75c677
-      internalID: 714266301
+      spriteID: 6c6c110a82c8f4faf92d9891508e7c1d
+      internalID: -665287624
       vertices: []
       indices: 
       edges: []
@@ -359,18 +233,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Nature Decorations_0: 700500133
-      Nature Decorations_1: 2145361900
-      Nature Decorations_10: 1447279185
-      Nature Decorations_11: 714266301
-      Nature Decorations_2: 1692628324
-      Nature Decorations_3: 1096951043
-      Nature Decorations_4: 1190782170
-      Nature Decorations_5: 842430624
-      Nature Decorations_6: -1086206042
-      Nature Decorations_7: 390409373
-      Nature Decorations_8: 1990773255
-      Nature Decorations_9: -1447927009
+      Beach Decorations_0: -1699070881
+      Beach Decorations_1: 1623201561
+      Beach Decorations_2: 675309998
+      Beach Decorations_3: 2047718900
+      Beach Decorations_4: 1240288933
+      Beach Decorations_5: -665287624
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
