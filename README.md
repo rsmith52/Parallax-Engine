@@ -37,7 +37,6 @@ Unity Project for 2.5d Parallax RPG Engine
 * "Selected Event" concept. Doesn't need to be directly in front, could be on ground, under, look ahead, etc.
 * More advanced falling physics
 * Intermittent bug that happens on stairs sometimes where on_tile is null
-* Jumping onto/off of stairs is bugged -> actually holding jump in general is bugged, is double space jumping instead of single space jumping when walking, and allowing jump onto all sorts of illegal tiles.. jumps are always going 1 further space than they should
 * Shrink shadows when jumping!
 
 ### UI Code

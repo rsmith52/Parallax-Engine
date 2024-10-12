@@ -82,7 +82,7 @@ namespace Eventing
                 StopSneaking();
 
             // Handle Jump/Dive Input
-            if (Input.GetKey(Controls.JUMP))
+            if (Input.GetKeyDown(Controls.JUMP))
             {
                 if (current_pos == target_pos)
                 {
@@ -126,111 +126,114 @@ namespace Eventing
             }
 
             // Handle Movement Input
-            if (Input.GetKey(Controls.MOVE_UP) && current_pos == target_pos)
+            if (current_pos == target_pos)
             {
-                if (!player_mover.lock_direction && direction != Directions.Up)
+                if (Input.GetKey(Controls.MOVE_UP))
                 {
-                    player_mover.TurnUp();
-                }
-                else if (Time.time - key_held_time > Constants.TAP_VS_HOLD_TIME)
-                {
-                    bool jump_success = false;
-                    if (jump_queued && jump_direction == Directions.Up)
+                    if (!player_mover.lock_direction && direction != Directions.Up)
                     {
-                        if (player_mover.movement_speed == MovementSpeeds.Moderate)
-                            jump_success = player_mover.JumpForward(1);
+                        player_mover.TurnUp();
+                    }
+                    else if (Time.time - key_held_time > Constants.TAP_VS_HOLD_TIME)
+                    {
+                        bool jump_success = false;
+                        if (jump_queued && jump_direction == Directions.Up)
+                        {
+                            if (player_mover.movement_speed == MovementSpeeds.Moderate)
+                                jump_success = player_mover.JumpForward(1);
+                                
+                            else if (player_mover.movement_speed == MovementSpeeds.Fast || player_mover.movement_speed == MovementSpeeds.VeryFast)
+                                jump_success = player_mover.JumpForward(2);
                             
-                        else if (player_mover.movement_speed == MovementSpeeds.Fast || player_mover.movement_speed == MovementSpeeds.VeryFast)
-                            jump_success = player_mover.JumpForward(2);
-                        
-                        jump_queued = false;
-                    }
-                    else if (jump_queued)
-                        jump_queued = false;
-                    if (!jump_success)
-                    {
-                        player_mover.MoveUp();
+                            jump_queued = false;
+                        }
+                        else if (jump_queued)
+                            jump_queued = false;
+                        if (!jump_success)
+                        {
+                            player_mover.MoveUp();
+                        }
                     }
                 }
-            }
-            else if (Input.GetKey(Controls.MOVE_LEFT) && current_pos == target_pos)
-            {
-                if (!player_mover.lock_direction && direction != Directions.Left)
+                else if (Input.GetKey(Controls.MOVE_LEFT))
                 {
-                    player_mover.TurnLeft();
-                }
-                else if (Time.time - key_held_time > Constants.TAP_VS_HOLD_TIME)
-                {
-                    bool jump_success = false;
-                    if (jump_queued && jump_direction == Directions.Left)
+                    if (!player_mover.lock_direction && direction != Directions.Left)
                     {
-                        if (player_mover.movement_speed == MovementSpeeds.Moderate)
-                            jump_success = player_mover.JumpForward(1);
+                        player_mover.TurnLeft();
+                    }
+                    else if (Time.time - key_held_time > Constants.TAP_VS_HOLD_TIME)
+                    {
+                        bool jump_success = false;
+                        if (jump_queued && jump_direction == Directions.Left)
+                        {
+                            if (player_mover.movement_speed == MovementSpeeds.Moderate)
+                                jump_success = player_mover.JumpForward(1);
+                                
+                            else if (player_mover.movement_speed == MovementSpeeds.Fast || player_mover.movement_speed == MovementSpeeds.VeryFast)
+                                jump_success = player_mover.JumpForward(2);
                             
-                        else if (player_mover.movement_speed == MovementSpeeds.Fast || player_mover.movement_speed == MovementSpeeds.VeryFast)
-                            jump_success = player_mover.JumpForward(2);
-                        
-                        jump_queued = false;
-                    }
-                    else if (jump_queued)
-                        jump_queued = false;
-                    if (!jump_success)
-                    {
-                        player_mover.MoveLeft();
+                            jump_queued = false;
+                        }
+                        else if (jump_queued)
+                            jump_queued = false;
+                        if (!jump_success)
+                        {
+                            player_mover.MoveLeft();
+                        }
                     }
                 }
-            }
-            else if (Input.GetKey(Controls.MOVE_RIGHT) && current_pos == target_pos)
-            {
-                if (!player_mover.lock_direction && direction != Directions.Right)
+                else if (Input.GetKey(Controls.MOVE_RIGHT))
                 {
-                    player_mover.TurnRight();
-                }
-                else if (Time.time - key_held_time > Constants.TAP_VS_HOLD_TIME)
-                {
-                    bool jump_success = false;
-                    if (jump_queued && jump_direction == Directions.Right)
+                    if (!player_mover.lock_direction && direction != Directions.Right)
                     {
-                        if (player_mover.movement_speed == MovementSpeeds.Moderate)
-                            jump_success = player_mover.JumpForward(1);
+                        player_mover.TurnRight();
+                    }
+                    else if (Time.time - key_held_time > Constants.TAP_VS_HOLD_TIME)
+                    {
+                        bool jump_success = false;
+                        if (jump_queued && jump_direction == Directions.Right)
+                        {
+                            if (player_mover.movement_speed == MovementSpeeds.Moderate)
+                                jump_success = player_mover.JumpForward(1);
+                                
+                            else if (player_mover.movement_speed == MovementSpeeds.Fast || player_mover.movement_speed == MovementSpeeds.VeryFast)
+                                jump_success = player_mover.JumpForward(2);
                             
-                        else if (player_mover.movement_speed == MovementSpeeds.Fast || player_mover.movement_speed == MovementSpeeds.VeryFast)
-                            jump_success = player_mover.JumpForward(2);
-                        
-                        jump_queued = false;
-                    }
-                    else if (jump_queued)
-                        jump_queued = false;
-                    if (!jump_success)
-                    {
-                        player_mover.MoveRight();
+                            jump_queued = false;
+                        }
+                        else if (jump_queued)
+                            jump_queued = false;
+                        if (!jump_success)
+                        {
+                            player_mover.MoveRight();
+                        }
                     }
                 }
-            }
-            else if (Input.GetKey(Controls.MOVE_DOWN) && current_pos == target_pos)
-            {
-                if (!player_mover.lock_direction && direction != Directions.Down)
+                else if (Input.GetKey(Controls.MOVE_DOWN))
                 {
-                    player_mover.TurnDown();
-                }
-                else if (Time.time - key_held_time > Constants.TAP_VS_HOLD_TIME)
-                {
-                    bool jump_success = false;
-                    if (jump_queued && jump_direction == Directions.Down)
+                    if (!player_mover.lock_direction && direction != Directions.Down)
                     {
-                        if (player_mover.movement_speed == MovementSpeeds.Moderate)
-                            jump_success = player_mover.JumpForward(1);
+                        player_mover.TurnDown();
+                    }
+                    else if (Time.time - key_held_time > Constants.TAP_VS_HOLD_TIME)
+                    {
+                        bool jump_success = false;
+                        if (jump_queued && jump_direction == Directions.Down)
+                        {
+                            if (player_mover.movement_speed == MovementSpeeds.Moderate)
+                                jump_success = player_mover.JumpForward(1);
+                                
+                            else if (player_mover.movement_speed == MovementSpeeds.Fast || player_mover.movement_speed == MovementSpeeds.VeryFast)
+                                jump_success = player_mover.JumpForward(2);
                             
-                        else if (player_mover.movement_speed == MovementSpeeds.Fast || player_mover.movement_speed == MovementSpeeds.VeryFast)
-                            jump_success = player_mover.JumpForward(2);
-                        
-                        jump_queued = false;
-                    }
-                    else if (jump_queued)
-                        jump_queued = false;
-                    if (!jump_success)
-                    {
-                        player_mover.MoveDown();
+                            jump_queued = false;
+                        }
+                        else if (jump_queued)
+                            jump_queued = false;
+                        if (!jump_success)
+                        {
+                            player_mover.MoveDown();
+                        }
                     }
                 }
             }
