@@ -105,8 +105,10 @@ namespace Eventing
 
         private float speed;
         private Map map;
-        private Vector3 target_pos;
+        public Vector3 target_pos;
         private Vector3 last_pos;
+        public Vector3 shadow_target_pos;
+        private Vector3 shadow_home_pos;
   
         private JumpData jump_data;
         private LayerChange layer_change;
@@ -224,9 +226,6 @@ namespace Eventing
             last_pos = transform.position;
             speed = Constants.SPEEDS[(int)movement_speed];
             animator = GetComponentInChildren<Animator>();
-            animator.SetBool(Constants.ANIM_RUN, false);
-            animator.SetBool(Constants.ANIM_SNEAK, false);
-            animator.SetBool(Constants.ANIM_JUMP, false);
             sprites = GetComponentsInChildren<SpriteRenderer>();
             bush_mask = GetComponentInChildren<SpriteMask>();
             foreach (SpriteRenderer sprite in sprites)
@@ -237,6 +236,8 @@ namespace Eventing
                     break;
                 }
             }
+            shadow_target_pos = shadow.transform.localPosition;
+            shadow_home_pos = shadow.transform.localPosition;
             moving = true;
             looked = true;
             jumping = false;
@@ -261,8 +262,12 @@ namespace Eventing
 
             // Update Animator
             animator.SetInteger(Constants.ANIM_DIRECTION, (int)direction);
-            // if (stepping_animation)
-            //     animator.SetBool(Constants.STEP_ANIMATION, true);
+            animator.SetBool(Constants.ANIM_WALK, false);
+            animator.SetBool(Constants.ANIM_RUN, false);
+            animator.SetBool(Constants.ANIM_SNEAK, false);
+            animator.SetBool(Constants.ANIM_JUMP, false);
+            if (stepping_animation)
+                animator.SetBool(Constants.ANIM_WALK, true);
         }
 
         public void OnSpaceEntered()
@@ -274,10 +279,12 @@ namespace Eventing
         {
             // Update Animator
             animator.SetInteger(Constants.ANIM_DIRECTION, (int)direction);
-            if (walking_animation && !stepping_animation && !jumping && !falling)
+            if (walking_animation && !stepping_animation && !jumping && !falling && (target_pos != transform.position))
                  animator.SetBool(Constants.ANIM_WALK, moving);
             else if (stepping_animation)
                 animator.SetBool(Constants.ANIM_WALK, true);
+            else
+                animator.SetBool(Constants.ANIM_WALK, false);
             
             speed = (jumping || falling) ? (
                 jump_data.num_tiles > 0 ? Constants.SPEEDS[(int)MovementSpeeds.Fast] : Constants.SPEEDS[(int)MovementSpeeds.Moderate]) : 
@@ -344,6 +351,10 @@ namespace Eventing
                 transform.position = Vector3.MoveTowards(transform.position, target_pos, Time.deltaTime * speed);
             }
 
+            // Move shadow to keep up with object
+            if (shadow.transform.localPosition != shadow_target_pos)
+                shadow.transform.localPosition = Vector3.MoveTowards(shadow.transform.localPosition, shadow_target_pos, Time.deltaTime * speed);
+
             // Update bush flag    
             if (in_bush && !jumping && !falling)
                 bush_mask.enabled = true;
@@ -367,7 +378,8 @@ namespace Eventing
                 }
                 if (jumping)
                 {
-                    target_pos += ((jump_data.height * Vector3.forward) + (jump_data.height * Vector3.down) + (jump_data.direction * (float)jump_data.num_tiles / 2));
+                    target_pos += ((jump_data.height * Vector3.forward) + (jump_data.height * Vector3.down) + (jump_data.direction * (float)jump_data.num_tiles / 2f));
+                    shadow_target_pos = shadow_home_pos;
                     jumping = false;
                     falling = true;
                 }
@@ -1336,6 +1348,7 @@ namespace Eventing
             }
 
             target_pos += ((height * Vector3.back) + (height * Vector3.up));
+            shadow_target_pos += ((height * Vector3.forward) + (height * Vector3.down));
             moving = true;
             jumping = true;
             jump_data = new JumpData (height, new Vector3(), 0);
@@ -1354,8 +1367,8 @@ namespace Eventing
             ParallaxTileBase check_tile = neighbor_tiles.facing_tile;
             if (move_through_walls || (neighbor_tiles.on_tile != null &&
                 ((num_tiles >2) ||
-                (num_tiles == 1 && check_tile != null && check_tile.allow_passage && (!ParallaxTerrain.IsLedgeTile(check_tile)) && !neighbor_tiles.facing_other_level && (onto_water || !ParallaxTerrain.IsWaterTile(check_tile))) ||
-                (num_tiles == 2 && (Settings.ALLOW_JUMP_OVER_OBJECTS || (check_tile != null && check_tile.allow_passage)) && neighbor_tiles.look_ahead_tile != null && neighbor_tiles.look_ahead_tile.allow_passage && !ParallaxTerrain.IsLedgeTile(neighbor_tiles.look_ahead_tile) && !neighbor_tiles.look_ahead_other_level && (onto_water || !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile)))
+                (num_tiles == 1 && check_tile != null && check_tile.allow_passage && !ParallaxTerrain.IsLedgeTile(check_tile) && !neighbor_tiles.facing_other_level && !ParallaxTerrain.IsStairTile(check_tile) && (onto_water || !ParallaxTerrain.IsWaterTile(check_tile))) ||
+                (num_tiles == 2 && (Settings.ALLOW_JUMP_OVER_OBJECTS || (check_tile != null && check_tile.allow_passage)) && (check_tile != null && !ParallaxTerrain.IsStairTile(check_tile)) && neighbor_tiles.look_ahead_tile != null && neighbor_tiles.look_ahead_tile.allow_passage && !ParallaxTerrain.IsLedgeTile(neighbor_tiles.look_ahead_tile) && !ParallaxTerrain.IsStairTile(neighbor_tiles.look_ahead_tile) && !neighbor_tiles.look_ahead_other_level && (onto_water || !ParallaxTerrain.IsWaterTile(neighbor_tiles.look_ahead_tile)))
             )))
             {            
                 float height = Constants.JUMP_HEIGHT * num_tiles;
@@ -1396,7 +1409,8 @@ namespace Eventing
                     shore_anim = false;
                 }
 
-                target_pos += ((height * Vector3.back) + (height * Vector3.up) + (v * (float)num_tiles / 2));
+                target_pos += ((height * Vector3.back) + (height * Vector3.up) + (v * (float)num_tiles / 2f));
+                shadow_target_pos += ((height * Vector3.forward) + (height * Vector3.down));
                 moving = true;
                 jumping = true;
                 jump_data = new JumpData (height, v, num_tiles);

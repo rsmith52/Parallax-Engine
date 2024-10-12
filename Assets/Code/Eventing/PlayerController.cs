@@ -104,6 +104,11 @@ namespace Eventing
                         if (Input.GetKey(Controls.MOVE_UP) || Input.GetKey(Controls.MOVE_LEFT) ||
                             Input.GetKey(Controls.MOVE_RIGHT) || Input.GetKey(Controls.MOVE_DOWN))
                         {
+                            if (Input.GetKey(Controls.MOVE_UP)) player_mover.TurnUp();
+                            if (Input.GetKey(Controls.MOVE_LEFT)) player_mover.TurnLeft();
+                            if (Input.GetKey(Controls.MOVE_RIGHT)) player_mover.TurnRight();
+                            if (Input.GetKey(Controls.MOVE_DOWN)) player_mover.TurnDown();
+
                             if (player_mover.movement_speed == MovementSpeeds.Moderate)
                                 jump_success = player_mover.JumpForward(1);
                             else if (player_mover.movement_speed == MovementSpeeds.Fast || player_mover.movement_speed == MovementSpeeds.VeryFast)
@@ -119,6 +124,7 @@ namespace Eventing
                     jump_direction = direction;
                 }
             }
+
             // Handle Movement Input
             if (Input.GetKey(Controls.MOVE_UP) && current_pos == target_pos)
             {

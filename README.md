@@ -20,7 +20,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Underwater tiles could have color tint in palette view - or some indicator of being underwater tiles
 * Same thing for shore tiles
 * Animate still water edges
-* Forage tiles - "is_forage" flag with fields for replacement "foraged" tile, and what item(s) it drops
+* Forage tiles - "is_forage" flag with fields for replacement "foraged" tile, and what item(s) it drops -> Probably should be events
 * Animate the fading/hiding/showing of tiles
 
 ### Map Managing Code
@@ -32,14 +32,13 @@ Unity Project for 2.5d Parallax RPG Engine
 
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines
-* Consider what script sprite appearance and layer handling is owned by... moveable object may not make the most sense
 * Better way to find current map in MoveableObject
 * Make shadow not jump
-* Settings for jump / swim enabled - can be unlocked?
 * "Selected Event" concept. Doesn't need to be directly in front, could be on ground, under, look ahead, etc.
 * More advanced falling physics
 * Intermittent bug that happens on stairs sometimes where on_tile is null
-* Fix queued jumps to use latest input direction, not previous direction!
+* Jumping onto/off of stairs is bugged -> actually holding jump in general is bugged, is double space jumping instead of single space jumping when walking, and allowing jump onto all sorts of illegal tiles.. jumps are always going 1 further space than they should
+* Shrink shadows when jumping!
 
 ### UI Code
 * Simple message boxes
