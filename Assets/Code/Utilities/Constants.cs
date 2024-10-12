@@ -76,6 +76,7 @@ namespace Utilities
         public static readonly string ANIM_WALK = "Walk";
         public static readonly string ANIM_RUN = "Run";
         public static readonly string ANIM_SNEAK = "Sneak";
+        public static readonly string ANIM_JUMP = "Jump";
 
         #endregion
     }

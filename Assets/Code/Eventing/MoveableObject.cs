@@ -224,6 +224,9 @@ namespace Eventing
             last_pos = transform.position;
             speed = Constants.SPEEDS[(int)movement_speed];
             animator = GetComponentInChildren<Animator>();
+            animator.SetBool(Constants.ANIM_RUN, false);
+            animator.SetBool(Constants.ANIM_SNEAK, false);
+            animator.SetBool(Constants.ANIM_JUMP, false);
             sprites = GetComponentsInChildren<SpriteRenderer>();
             bush_mask = GetComponentInChildren<SpriteMask>();
             foreach (SpriteRenderer sprite in sprites)
@@ -404,14 +407,16 @@ namespace Eventing
 
                     moving = false;
                     looked = false;
-                    falling = false;
+                    if (falling)
+                    {
+                        falling = false;
+                        animator.SetBool(Constants.ANIM_JUMP, false);
+                    }
                     jump_data = new JumpData{};
                     other_moved = false;
                     visibility_changed = true; // Update shadow enabled or not based on new tile
                     if (!tile_activated)
-                    {
                         tile_activated = ActivateTile(neighbor_tiles.on_tile);
-                    }  
                 }   
             }
             // Update facing & look ahead tile
@@ -456,8 +461,6 @@ namespace Eventing
                 }
                 
                 shadow.enabled = !(shore_anim || on_water || underwater);
-                    
-
                 visibility_changed = false;
             }
         }
@@ -1397,6 +1400,7 @@ namespace Eventing
                 moving = true;
                 jumping = true;
                 jump_data = new JumpData (height, v, num_tiles);
+                animator.SetBool(Constants.ANIM_JUMP, true);
                 tile_activated = false;
                 return true;
             }

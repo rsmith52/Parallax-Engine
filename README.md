@@ -18,6 +18,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Slide on ice
 * Tiles that you can't jump in (marsh, deep sand, etc.) - includes water and underwater - jump button should probably be used to dive/rise in water?
 * Underwater tiles could have color tint in palette view - or some indicator of being underwater tiles
+* Same thing for shore tiles
 * Animate still water edges
 * Forage tiles - "is_forage" flag with fields for replacement "foraged" tile, and what item(s) it drops
 * Animate the fading/hiding/showing of tiles
@@ -38,6 +39,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * "Selected Event" concept. Doesn't need to be directly in front, could be on ground, under, look ahead, etc.
 * More advanced falling physics
 * Intermittent bug that happens on stairs sometimes where on_tile is null
+* Fix queued jumps to use latest input direction, not previous direction!
 
 ### UI Code
 * Simple message boxes
