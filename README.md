@@ -38,6 +38,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * More advanced falling physics
 * Intermittent bug that happens on stairs sometimes where on_tile is null
 * Shrink shadows when jumping!
+* Everything that happens in: ActivateTile(Vector3 move_dir) -> doesn't trigger at the start
 
 ### Settings Code
 * Switch to a settings asset?

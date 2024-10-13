@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Sirenix.OdinInspector;
 using Mapping;
 using Utilities;
@@ -122,8 +123,11 @@ namespace Eventing
         public Animator animator;
         private Animator reflection_animator;
         private SpriteRenderer[] sprites;
+        private SortingGroup sprite_group;
         private SpriteRenderer main_sprite;
         private SpriteRenderer shadow;
+        private SortingGroup reflection_group;
+        private SpriteMask[] reflection_masks;
         private SpriteMask bush_mask;
         private bool visibility_changed;
         private bool shore_anim;
@@ -148,11 +152,13 @@ namespace Eventing
         [ReadOnly]
         public bool underwater;
         [ReadOnly]
+        public bool show_reflection;
+        [ReadOnly]
         public bool under_bridge;
         [ReadOnly]
-        public bool behind_upper_layer;
-        [ReadOnly]
         public bool behind_prefab;
+        [ReadOnly]
+        public bool behind_upper_layer;
 
         [TabGroup ("Movement")]
         [ReadOnly]
@@ -255,6 +261,9 @@ namespace Eventing
             // Animator / Sprite Setup
             sprites = GetComponentsInChildren<SpriteRenderer>();
             bush_mask = GetComponentInChildren<SpriteMask>();
+            sprite_group = GetComponentInChildren<SortingGroup>();
+            reflection_group = GetComponentsInChildren<SortingGroup>().Last();
+            reflection_masks = reflection_group.GetComponentsInChildren<SpriteMask>();
             foreach (SpriteRenderer sprite in sprites)
             {
                 if (sprite.tag == Constants.SPRITE_TAG)
@@ -458,9 +467,17 @@ namespace Eventing
                     if (sprite.tag == Constants.SHADOW_TAG)
                         sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.EVENT_SORTING_LAYER_OFFSET - Constants.PRIORITY_TILE_OFFSET;
                     else if (sprite.tag == Constants.REFLECTION_TAG)
-                        sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + (2 * Constants.PRIORITY_TILE_OFFSET);
+                    {
+                        int reflection_layer = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + (2 * Constants.PRIORITY_TILE_OFFSET);
+                        sprite.sortingOrder = reflection_layer;
+                        reflection_group.sortingOrder = on_stairs ? reflection_layer + Constants.OBJECT_LAYER_START_OFFSET : reflection_layer;
+                    }
                     else
-                        sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.EVENT_SORTING_LAYER_OFFSET;
+                    {
+                        int sprite_layer = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER + Constants.EVENT_SORTING_LAYER_OFFSET);
+                        sprite.sortingOrder = sprite_layer;
+                        sprite_group.sortingOrder = on_stairs ? sprite_layer + Constants.OBJECT_LAYER_START_OFFSET : sprite_layer;
+                    }
                     
                     if (on_stairs)
                         sprite.sortingOrder += Constants.OBJECT_LAYER_START_OFFSET;
@@ -472,6 +489,7 @@ namespace Eventing
             // Update visible status
             if (visibility_changed)
             {
+                // Invisibility
                 foreach (SpriteRenderer sprite in sprites)
                 {
                     if (invisible)
@@ -480,8 +498,12 @@ namespace Eventing
                         sprite.enabled = true;
                 }
 
+                // Shadow behavior
                 if (!invisible) shadow.enabled = !(shore_anim || on_water || underwater);
-                
+                // Reflection behavior
+                if (show_reflection) reflection_group.GetComponentInChildren<SpriteRenderer>().enabled = true;
+                if (target_pos == transform.position && !show_reflection) reflection_group.GetComponentInChildren<SpriteRenderer>().enabled = false;
+
                 visibility_changed = false;
             }
         }
@@ -543,7 +565,6 @@ namespace Eventing
                 StartCoroutine(map.WaterSplashAnimation(target_pos));
                 shore_anim = true;
             }
-            
 
             // On Stairs Flag
             bool prev_on_stairs = on_stairs;
@@ -598,6 +619,23 @@ namespace Eventing
                     // Shadow showing for leaving shore
                     if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsShoreTile(neighbor_tiles.right_tile))
                         visibility_changed = true; // Update shadow enabled or not, desired earlier when leaving shore or entering water
+                    // Show Reflection Flag
+                    if ((neighbor_tiles.down_tile != null && neighbor_tiles.down_tile.is_reflective) ||
+                        (neighbor_tiles.down_right_tile != null && neighbor_tiles.down_right_tile.is_reflective) ||
+                        (neighbor_tiles.down_right_two_tile != null && neighbor_tiles.down_right_two_tile.is_reflective))
+                    {
+                        if (!show_reflection)
+                        {
+                            show_reflection = true;
+                            visibility_changed = true;
+                        }
+                        map.SetReflectionMask(target_pos, reflection_masks);
+                    }
+                    else if (show_reflection)
+                    {
+                        show_reflection = false;
+                        visibility_changed = true;
+                    }
 
                     if (neighbor_tiles.right_tile == null) return false;
                     // Move Onto Right Stairs
@@ -685,6 +723,23 @@ namespace Eventing
                     // Shadow showing for leaving shore
                     if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsShoreTile(neighbor_tiles.left_tile))
                         visibility_changed = true; // Update shadow enabled or not, desired earlier when leaving shore
+                    // Show Reflection Flag
+                    if ((neighbor_tiles.down_tile != null && neighbor_tiles.down_tile.is_reflective) ||
+                        (neighbor_tiles.down_left_tile != null && neighbor_tiles.down_left_tile.is_reflective) ||
+                        (neighbor_tiles.down_left_two_tile != null && neighbor_tiles.down_left_two_tile.is_reflective))
+                    {
+                        if (!show_reflection)
+                        {
+                            show_reflection = true;
+                            visibility_changed = true;
+                        }
+                        map.SetReflectionMask(target_pos, reflection_masks);
+                    }
+                    else if (show_reflection)
+                    {
+                        show_reflection = false;
+                        visibility_changed = true;
+                    }
 
                     if (neighbor_tiles.left_tile == null) return false;
                     // Move Onto Left Stairs
@@ -775,6 +830,23 @@ namespace Eventing
                     // Shadow showing for leaving shore
                     if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsShoreTile(neighbor_tiles.up_tile))
                         visibility_changed = true; // Update shadow enabled or not, desired earlier when leaving shore
+                    // Show Reflection Flag
+                    if ((neighbor_tiles.on_tile != null && neighbor_tiles.on_tile.is_reflective) ||
+                        (neighbor_tiles.left_tile != null && neighbor_tiles.left_tile.is_reflective) ||
+                        (neighbor_tiles.right_tile != null && neighbor_tiles.right_tile.is_reflective))
+                    {
+                        if (!show_reflection)
+                        {
+                            show_reflection = true;
+                            visibility_changed = true;
+                        }
+                        map.SetReflectionMask(target_pos, reflection_masks);
+                    }
+                    else if (show_reflection)
+                    {
+                        show_reflection = false;
+                        visibility_changed = true;
+                    }
 
                     if (neighbor_tiles.up_tile == null) return false;
                     // Move Off Up Stairs
@@ -849,6 +921,23 @@ namespace Eventing
                     // Shadow showing for leaving shore
                     if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsShoreTile(neighbor_tiles.down_tile))
                         visibility_changed = true; // Update shadow enabled or not, desired earlier when leaving shore
+                    // Show Reflection Flag
+                    if ((neighbor_tiles.down_two_tile != null && neighbor_tiles.down_two_tile.is_reflective) ||
+                        (neighbor_tiles.down_two_left_tile != null && neighbor_tiles.down_two_left_tile.is_reflective) ||
+                        (neighbor_tiles.down_two_right_tile != null && neighbor_tiles.down_two_right_tile.is_reflective))
+                    {
+                        if (!show_reflection)
+                        {
+                            show_reflection = true;
+                            visibility_changed = true;
+                        }
+                        map.SetReflectionMask(target_pos, reflection_masks);
+                    }
+                    else if (show_reflection)
+                    {
+                        show_reflection = false;
+                        visibility_changed = true;
+                    }
 
                     if (neighbor_tiles.down_tile == null) return false;
                     // Move Onto Up Stairs

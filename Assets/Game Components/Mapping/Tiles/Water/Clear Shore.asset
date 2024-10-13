@@ -21,8 +21,15 @@ MonoBehaviour:
   is_bush: 0
   is_counter: 0
   is_trans: 0
-  is_reflective: 0
+  is_light_trans: 0
+  is_reflective: 1
   is_jump: 0
   is_hideable: 0
+  strict_hiding: 0
+  multi_tile: 0
+  tile_size:
+    x_width: 0
+    y_height: 0
+    z_layers: 0
   instantiated_object: {fileID: 0}
   sprite: {fileID: 0}

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.Rendering;
 using Sirenix.OdinInspector;
 using Utilities;
 using Eventing;
@@ -75,6 +76,16 @@ namespace Mapping
         public ParallaxTileBase down_left_tile;
         [HideInInspector]
         public ParallaxTileBase down_right_tile;
+        [HideInInspector]
+        public ParallaxTileBase down_two_tile;
+        [HideInInspector]
+        public ParallaxTileBase down_two_left_tile;
+        [HideInInspector]
+        public ParallaxTileBase down_two_right_tile;
+        [HideInInspector]
+        public ParallaxTileBase down_left_two_tile;
+        [HideInInspector]
+        public ParallaxTileBase down_right_two_tile;
     }
 
     [Serializable]
@@ -785,6 +796,70 @@ namespace Mapping
                 GameObject.Destroy(splash.gameObject);
             }
         }
+
+        /*
+        * Sets proper mask sprites for reflections. reflection_masks is an array in the following order:
+        * on_tile, left_tile, right_tile, down_tile, down_left_tile, down_right_tile, down_two_tile, down_two_left_tile, down_two_right_tile
+        */
+        public void SetReflectionMask(Vector3 pos, SpriteMask[] masks)
+        {
+            int layer_id = GetMapLayerIDFromPosition(pos);
+            Tilemap layer = map_layers[layer_id];
+            Tilemap[] object_layer = object_layers[layer_id];
+            Vector3Int int_pos = new Vector3Int((int)pos.x, (int)pos.y, 0);
+
+            Sprite[] sprites = new Sprite[masks.Length];
+            for (int i = 0; i < sprites.Length; i++)
+            {
+                masks[i].sprite = null;
+                sprites[i] = null;
+            }
+
+            Vector3Int[] positions = new Vector3Int[masks.Length];
+            positions[0] = int_pos;
+            positions[1] = int_pos + Vector3Int.left;
+            positions[2] = int_pos + Vector3Int.right;
+            positions[3] = int_pos + Vector3Int.down;
+            positions[4] = int_pos + Vector3Int.down + Vector3Int.left;
+            positions[5] = int_pos + Vector3Int.down + Vector3Int.right;
+            positions[6] = int_pos + Vector3Int.down + Vector3Int.down;
+            positions[7] = int_pos + Vector3Int.down + Vector3Int.down + Vector3Int.left;
+            positions[8] = int_pos + Vector3Int.down + Vector3Int.down + Vector3Int.right;
+
+            // Work from bottom layer up for each position, taking the lowest reflective tile
+            Tilemap[] layer_maps = new Tilemap[1 + object_layer.Length];
+            layer_maps[0] = layer;
+            for (int i = 0; i < object_layer.Length; i++)
+                layer_maps[i + 1] = object_layer[i];
+
+            foreach (Tilemap map in layer_maps)
+            {
+                for (int i = 0; i < masks.Length; i++)
+                {
+                    Vector3Int tile_pos = positions[i];
+                    ParallaxTileBase tile = map.GetTile<ParallaxTileBase>(tile_pos);
+                    RuleTile ruletile = tile as RuleTile;
+                    GameObject go = map.GetInstantiatedObject(tile_pos);
+                    
+                    if (sprites[i] == null || go != null)
+                    {
+                        if (tile != null && tile.is_reflective)
+                        {
+                            if (go != null)
+                            {
+                                SpriteRenderer renderer = go.GetComponentInChildren<SpriteRenderer>();
+                                sprites[i] = renderer.sprite;
+                            }
+                            else sprites[i] = map.GetSprite(tile_pos);
+                        }
+                    }
+                }
+            }
+
+            // Set masks
+            for (int i = 0; i < sprites.Length; i++)
+                masks[i].sprite = sprites[i];
+        }
         
         #endregion
 
@@ -938,6 +1013,13 @@ namespace Mapping
                 neighbor_tiles.up_right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up + Vector3Int.right, on_stairs).tile;
                 neighbor_tiles.down_left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down + Vector3Int.left, on_stairs, false, false, underwater).tile;
                 neighbor_tiles.down_right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down + Vector3Int.right, on_stairs, false, false, underwater).tile;
+                
+                // Extra Special Case Needs
+                neighbor_tiles.down_two_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down + Vector3Int.down, on_stairs, false, false, underwater).tile;
+                neighbor_tiles.down_two_left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down + Vector3Int.down + Vector3Int.left, on_stairs, false, false, underwater).tile;
+                neighbor_tiles.down_two_right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down + Vector3Int.down + Vector3Int.right, on_stairs, false, false, underwater).tile;
+                neighbor_tiles.down_left_two_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down +Vector3Int.left + Vector3Int.left, on_stairs, false, false, underwater).tile;
+                neighbor_tiles.down_right_two_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down +Vector3Int.right + Vector3Int.right, on_stairs, false, false, underwater).tile;
             }
 
             // Facing & Look Ahead Tiles

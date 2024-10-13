@@ -21,7 +21,17 @@ MonoBehaviour:
   is_bush: 0
   is_counter: 0
   is_trans: 0
-  is_reflective: 0
+  is_light_trans: 0
+  is_reflective: 1
+  is_jump: 0
+  is_hideable: 0
+  strict_hiding: 0
+  multi_tile: 0
+  tile_size:
+    x_width: 0
+    y_height: 0
+    z_layers: 0
+  instantiated_object: {fileID: 0}
   m_DefaultSprite: {fileID: -1293456762, guid: 6f8b6e6d0dee8402ab639776b1d4d661, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
@@ -29,6 +39,7 @@ MonoBehaviour:
   is_double_tall: 0
   surface_tile: {fileID: 0}
   surface_edge: {fileID: 0}
+  shore_tile: {fileID: 0}
   m_TilingRules:
   - m_Id: 0
     m_Sprites:
