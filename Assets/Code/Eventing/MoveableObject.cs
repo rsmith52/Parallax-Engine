@@ -412,7 +412,10 @@ namespace Eventing
 
             // Move reflection to keep up with object
             if (reflection.transform.localPosition != reflection_target_pos)
-                reflection.transform.localPosition = Vector3.MoveTowards(reflection.transform.localPosition, reflection_target_pos, Time.deltaTime * Constants.SPEEDS[(int)MovementSpeeds.Moderate]);
+            {
+                float ref_speed = jump_data.num_tiles > 1 ? speed : Constants.SPEEDS[(int)MovementSpeeds.Moderate];
+                reflection.transform.localPosition = Vector3.MoveTowards(reflection.transform.localPosition, reflection_target_pos, Time.deltaTime * ref_speed);
+            }
             
             // Update bush flag    
             if (in_bush && !jumping && !falling)
@@ -455,13 +458,6 @@ namespace Eventing
                 {
                     target_pos += ((jump_data.height * Vector3.forward) + (jump_data.height * Vector3.down) + (jump_data.direction * (float)jump_data.num_tiles / 2f));
                     map.SetReflectionMask(target_pos, reflection_masks);
-                    if (jump_data.num_tiles > 0)
-                    {
-                        if (jump_data.dir == Directions.Left || jump_data.dir == Directions.Right)
-                            reflection_mask_trans.localPosition += (jump_data.direction * (float)jump_data.num_tiles / 2f);
-                        else 
-                            reflection_mask_trans.localPosition -= (jump_data.direction * (float)jump_data.num_tiles / 2f);
-                    }
                     
                     shadow_target_pos = shadow_home_pos;
                     reflection_mask_target_pos = reflection_mask_home_pos;
@@ -1632,13 +1628,9 @@ namespace Eventing
 
                 target_pos += ((height * Vector3.back) + (height * Vector3.up) + (v * (float)num_tiles / 2f));
                 shadow_target_pos += (height * Vector3.forward) + (height * Vector3.down);
-                reflection_mask_target_pos += (height * Vector3.forward) + (height * Vector3.up);
-                reflection_target_pos += (height * Vector3.up);
 
-                if (direction == Directions.Left || direction == Directions.Right)
-                    reflection_mask_trans.localPosition += (v * (float)num_tiles / 2f);
-                else
-                    reflection_mask_trans.localPosition -= (v * (float)num_tiles / 2f);
+                reflection_mask_target_pos += (1.5f * Vector3.back) + (1.5f * Vector3.up);
+                reflection_target_pos += (1.5f * height * Vector3.up);
 
                 moving = true;
                 jumping = true;
