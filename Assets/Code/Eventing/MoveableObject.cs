@@ -111,6 +111,7 @@ namespace Eventing
         private Vector3 last_pos;
         private Vector3 shadow_target_pos;
         private Vector3 shadow_home_pos;
+        private Vector3 reflection_home_pos;
   
         private JumpData jump_data;
         private LayerChange layer_change;
@@ -122,13 +123,15 @@ namespace Eventing
         //[HideInInspector]
         public Animator animator;
         private Animator reflection_animator;
+
         private SpriteRenderer[] sprites;
         private SortingGroup sprite_group;
         private SpriteRenderer main_sprite;
         private SpriteRenderer shadow;
-        private SortingGroup reflection_group;
-        private SpriteMask[] reflection_masks;
         private SpriteMask bush_mask;
+        private SortingGroup reflection_group;
+        private Transform reflection_transform;
+        private SpriteMask[] reflection_masks;
         private bool visibility_changed;
         private bool shore_anim;
 
@@ -263,6 +266,7 @@ namespace Eventing
             bush_mask = GetComponentInChildren<SpriteMask>();
             sprite_group = GetComponentInChildren<SortingGroup>();
             reflection_group = GetComponentsInChildren<SortingGroup>().Last();
+            reflection_transform = reflection_group.transform.GetChild(1);
             reflection_masks = reflection_group.GetComponentsInChildren<SpriteMask>();
             foreach (SpriteRenderer sprite in sprites)
             {
@@ -274,6 +278,7 @@ namespace Eventing
             main_sprite.material = SpriteUtils.GetOutlineMaterial(outline);
             shadow_target_pos = shadow.transform.localPosition;
             shadow_home_pos = shadow.transform.localPosition;
+            reflection_home_pos = reflection_transform.localPosition;
             
             animator = GetComponentInChildren<Animator>();
             reflection_animator = GetComponentsInChildren<Animator>().Last();
@@ -370,6 +375,10 @@ namespace Eventing
             // Move shadow to keep up with object
             if (shadow.transform.localPosition != shadow_target_pos)
                 shadow.transform.localPosition = Vector3.MoveTowards(shadow.transform.localPosition, shadow_target_pos, Time.deltaTime * speed);
+
+            // Move reflection mask to keep up with object
+            if (reflection_transform.localPosition != reflection_home_pos)
+                reflection_transform.localPosition = Vector3.MoveTowards(reflection_transform.localPosition, reflection_home_pos, Time.deltaTime * speed);
 
             // Update bush flag    
             if (in_bush && !jumping && !falling)
@@ -1206,6 +1215,7 @@ namespace Eventing
             {
                 last_pos = transform.position;
                 target_pos += Vector3.up;
+                reflection_transform.localPosition += Vector3.down;
                 moving = true;
                 tile_activated = false;
                 return true;
@@ -1229,6 +1239,7 @@ namespace Eventing
             {
                 last_pos = transform.position;
                 target_pos += Vector3.left;
+                reflection_transform.localPosition += Vector3.right;
                 moving = true;
                 tile_activated = false;
                 return true;
@@ -1252,6 +1263,7 @@ namespace Eventing
             {
                 last_pos = transform.position;
                 target_pos += Vector3.right;
+                reflection_transform.localPosition += Vector3.left;
                 moving = true;
                 tile_activated = false;
                 return true;
@@ -1276,6 +1288,7 @@ namespace Eventing
             {
                 last_pos = transform.position;
                 target_pos += Vector3.down;
+                reflection_transform.localPosition += Vector3.up;
                 moving = true;
                 tile_activated = false;
                 return true;
