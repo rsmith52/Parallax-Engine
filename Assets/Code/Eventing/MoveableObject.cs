@@ -111,6 +111,7 @@ namespace Eventing
         private Vector3 last_pos;
         private Vector3 shadow_target_pos;
         private Vector3 shadow_home_pos;
+        private Vector3 reflection_target_pos;
         private Vector3 reflection_home_pos;
   
         private JumpData jump_data;
@@ -278,6 +279,7 @@ namespace Eventing
             main_sprite.material = SpriteUtils.GetOutlineMaterial(outline);
             shadow_target_pos = shadow.transform.localPosition;
             shadow_home_pos = shadow.transform.localPosition;
+            reflection_target_pos = reflection_transform.localPosition;
             reflection_home_pos = reflection_transform.localPosition;
             
             animator = GetComponentInChildren<Animator>();
@@ -377,9 +379,9 @@ namespace Eventing
                 shadow.transform.localPosition = Vector3.MoveTowards(shadow.transform.localPosition, shadow_target_pos, Time.deltaTime * speed);
 
             // Move reflection mask to keep up with object
-            if (reflection_transform.localPosition != reflection_home_pos)
-                reflection_transform.localPosition = Vector3.MoveTowards(reflection_transform.localPosition, reflection_home_pos, Time.deltaTime * speed);
-
+            if (reflection_transform.localPosition != reflection_target_pos)
+                reflection_transform.localPosition = Vector3.MoveTowards(reflection_transform.localPosition, reflection_target_pos, Time.deltaTime * speed);
+            
             // Update bush flag    
             if (in_bush && !jumping && !falling)
                 bush_mask.enabled = true;
@@ -451,7 +453,7 @@ namespace Eventing
                     }
                     jump_data = new JumpData{};
                     other_moved = false;
-                    visibility_changed = true; // Update shadow enabled or not based on new tile
+                    visibility_changed = true;
                     if (!tile_activated)
                         tile_activated = ActivateTile(neighbor_tiles.on_tile);
                 }   
@@ -510,9 +512,7 @@ namespace Eventing
                 // Shadow behavior
                 if (!invisible) shadow.enabled = !(shore_anim || on_water || underwater);
                 // Reflection behavior
-                if (show_reflection) reflection_group.GetComponentInChildren<SpriteRenderer>().enabled = true;
-                if (target_pos == transform.position && !show_reflection) reflection_group.GetComponentInChildren<SpriteRenderer>().enabled = false;
-
+                reflection_group.GetComponentInChildren<SpriteRenderer>().enabled = show_reflection;
                 visibility_changed = false;
             }
         }
@@ -1239,7 +1239,7 @@ namespace Eventing
             {
                 last_pos = transform.position;
                 target_pos += Vector3.left;
-                reflection_transform.localPosition += Vector3.right;
+                reflection_transform.localPosition += Vector3.left;
                 moving = true;
                 tile_activated = false;
                 return true;
@@ -1263,7 +1263,7 @@ namespace Eventing
             {
                 last_pos = transform.position;
                 target_pos += Vector3.right;
-                reflection_transform.localPosition += Vector3.left;
+                reflection_transform.localPosition += Vector3.right;
                 moving = true;
                 tile_activated = false;
                 return true;
