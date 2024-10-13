@@ -19,6 +19,7 @@ TagManager:
   - Terrain Edge Corner Tile
   - Cover Priority Tile
   - Sprite
+  - Reflection
   layers:
   - Default
   - TransparentFX
@@ -58,4 +59,7 @@ TagManager:
     locked: 0
   - name: Map
     uniqueID: 3683456673
+    locked: 0
+  - name: Reflections
+    uniqueID: 4125970357
     locked: 0

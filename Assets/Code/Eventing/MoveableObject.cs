@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -119,6 +120,7 @@ namespace Eventing
 
         //[HideInInspector]
         public Animator animator;
+        private Animator reflection_animator;
         private SpriteRenderer[] sprites;
         private SpriteRenderer main_sprite;
         private SpriteRenderer shadow;
@@ -265,13 +267,14 @@ namespace Eventing
             shadow_home_pos = shadow.transform.localPosition;
             
             animator = GetComponentInChildren<Animator>();
-            animator.SetInteger(Constants.ANIM_DIRECTION, (int)direction);
-            animator.SetBool(Constants.ANIM_WALK, false);
-            animator.SetBool(Constants.ANIM_RUN, false);
-            animator.SetBool(Constants.ANIM_SNEAK, false);
-            animator.SetBool(Constants.ANIM_JUMP, false);
+            reflection_animator = GetComponentsInChildren<Animator>().Last();
+            AnimSetInt(Constants.ANIM_DIRECTION, (int)direction);
+            AnimSetBool(Constants.ANIM_WALK, false);
+            AnimSetBool(Constants.ANIM_RUN, false);
+            AnimSetBool(Constants.ANIM_SNEAK, false);
+            AnimSetBool(Constants.ANIM_JUMP, false);
             if (stepping_animation)
-                animator.SetBool(Constants.ANIM_WALK, true);
+                AnimSetBool(Constants.ANIM_WALK, true);
         }
 
         public void OnSpaceEntered()
@@ -282,13 +285,13 @@ namespace Eventing
         private void Update()
         {
             // Update Animator
-            animator.SetInteger(Constants.ANIM_DIRECTION, (int)direction);
+            AnimSetInt(Constants.ANIM_DIRECTION, (int)direction);
             if (walking_animation && !stepping_animation && !jumping && !falling && (target_pos != transform.position))
-                 animator.SetBool(Constants.ANIM_WALK, moving);
+                 AnimSetBool(Constants.ANIM_WALK, moving);
             else if (stepping_animation)
-                animator.SetBool(Constants.ANIM_WALK, true);
+                AnimSetBool(Constants.ANIM_WALK, true);
             else
-                animator.SetBool(Constants.ANIM_WALK, false);
+                AnimSetBool(Constants.ANIM_WALK, false);
             
             speed = (jumping || falling) ? (
                 jump_data.num_tiles > 0 ? Constants.SPEEDS[(int)MovementSpeeds.Fast] : Constants.SPEEDS[(int)MovementSpeeds.Moderate]) : 
@@ -426,7 +429,7 @@ namespace Eventing
                     if (falling)
                     {
                         falling = false;
-                        animator.SetBool(Constants.ANIM_JUMP, false);
+                        AnimSetBool(Constants.ANIM_JUMP, false);
                     }
                     jump_data = new JumpData{};
                     other_moved = false;
@@ -452,12 +455,13 @@ namespace Eventing
             {
                 foreach (SpriteRenderer sprite in sprites)
                 {
-                    if (sprite.tag == Constants.PRIORITY_TILE_TAG)
-                        sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.EVENT_SORTING_LAYER_OFFSET + Constants.PRIORITY_TILE_OFFSET;
-                    else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG || sprite.tag == Constants.SHADOW_TAG)
+                    if (sprite.tag == Constants.SHADOW_TAG)
                         sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.EVENT_SORTING_LAYER_OFFSET - Constants.PRIORITY_TILE_OFFSET;
+                    else if (sprite.tag == Constants.REFLECTION_TAG)
+                        sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + (2 * Constants.PRIORITY_TILE_OFFSET);
                     else
                         sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.EVENT_SORTING_LAYER_OFFSET;
+                    
                     if (on_stairs)
                         sprite.sortingOrder += Constants.OBJECT_LAYER_START_OFFSET;
                 }
@@ -1419,7 +1423,7 @@ namespace Eventing
                 moving = true;
                 jumping = true;
                 jump_data = new JumpData (height, v, num_tiles);
-                animator.SetBool(Constants.ANIM_JUMP, true);
+                AnimSetBool(Constants.ANIM_JUMP, true);
                 tile_activated = false;
                 return true;
             }
@@ -1583,6 +1587,22 @@ namespace Eventing
         public void ChangeSpeed(MovementSpeeds new_speed)
         {
             movement_speed = new_speed;
+        }
+
+        #endregion
+
+
+        #region Animator Interactions
+
+        public void AnimSetInt(string variable, int value)
+        {
+            animator.SetInteger(variable, value);
+            reflection_animator.SetInteger(variable, value);
+        }
+        public void AnimSetBool(string variable, bool value)
+        {
+            animator.SetBool(variable, value);
+            reflection_animator.SetBool(variable, value);
         }
 
         #endregion

@@ -289,12 +289,12 @@ namespace Eventing
             if (player_mover.on_water || player_mover.underwater) return;
 
             player_mover.ChangeSpeed(MovementSpeeds.VeryFast);
-            player_mover.animator.SetBool(Constants.ANIM_RUN, true);
+            player_mover.AnimSetBool(Constants.ANIM_RUN, true);
         }
 
         private void StopRunning()
         {
-            player_mover.animator.SetBool(Constants.ANIM_RUN, false);
+            player_mover.AnimSetBool(Constants.ANIM_RUN, false);
 
             if (Input.GetKey(Controls.SNEAK_BUTTON))
                 StartSneaking(true);
@@ -309,12 +309,12 @@ namespace Eventing
             if (player_mover.on_water || player_mover.underwater) return;
             
             player_mover.ChangeSpeed(MovementSpeeds.VerySlow);
-            player_mover.animator.SetBool(Constants.ANIM_SNEAK, true);
+            player_mover.AnimSetBool(Constants.ANIM_SNEAK, true);
         }
 
         private void StopSneaking()
         {
-            player_mover.animator.SetBool(Constants.ANIM_SNEAK, false);
+            player_mover.AnimSetBool(Constants.ANIM_SNEAK, false);
 
             if (Input.GetKey(Controls.RUN_BUTTON))
                 StartRunning(true);

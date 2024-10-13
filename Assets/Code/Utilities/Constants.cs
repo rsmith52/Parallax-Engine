@@ -67,6 +67,7 @@ namespace Utilities
 
         public static readonly string SPRITE_TAG = "Sprite";
         public static readonly string SHADOW_TAG = "Shadow";
+        public static readonly string REFLECTION_TAG = "Reflection";
 
         #endregion
 
