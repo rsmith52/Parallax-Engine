@@ -19,6 +19,7 @@ namespace Eventing
         private float key_held_time;
         private bool jump_queued;
         private Directions jump_direction;
+        private bool prev_on_water;
 
         #endregion
 
@@ -35,6 +36,7 @@ namespace Eventing
         {
             player_mover = GetComponent<MoveableObject>();
             jump_queued = false;
+            prev_on_water = false;
         }
 
         private void OnDisable()
@@ -80,6 +82,22 @@ namespace Eventing
                 StopRunning();
             else if (Input.GetKeyUp(Controls.SNEAK_BUTTON))
                 StopSneaking();
+
+            // Handle transitions on/off water smoothly
+            // TODO - expand for other tiles that don't allow running/sneaking like deep marshes
+            if (prev_on_water != player_mover.on_water)
+            {
+                if (player_mover.on_water)
+                {
+                    StopRunning();
+                    StopSneaking();
+                }
+                else if (Input.GetKey(Controls.RUN_BUTTON))
+                    StartRunning();
+                else if (Input.GetKey(Controls.SNEAK_BUTTON))
+                    StartSneaking();
+            }
+            prev_on_water = player_mover.on_water;
 
             // Handle Jump/Dive Input
             if (Input.GetKeyDown(Controls.JUMP))
@@ -268,6 +286,8 @@ namespace Eventing
         private void StartRunning(bool recursive = false)
         {
             if (!recursive) StopSneaking();
+            if (player_mover.on_water || player_mover.underwater) return;
+
             player_mover.ChangeSpeed(MovementSpeeds.VeryFast);
             player_mover.animator.SetBool(Constants.ANIM_RUN, true);
         }
@@ -286,6 +306,8 @@ namespace Eventing
         private void StartSneaking(bool recursive = false)
         {
             if (!recursive) StopRunning();
+            if (player_mover.on_water || player_mover.underwater) return;
+            
             player_mover.ChangeSpeed(MovementSpeeds.VerySlow);
             player_mover.animator.SetBool(Constants.ANIM_SNEAK, true);
         }
