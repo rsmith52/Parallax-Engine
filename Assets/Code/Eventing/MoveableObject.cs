@@ -111,6 +111,8 @@ namespace Eventing
         private Vector3 last_pos;
         private Vector3 shadow_target_pos;
         private Vector3 shadow_home_pos;
+        private Vector3 reflection_mask_target_pos;
+        private Vector3 reflection_mask_home_pos;
         private Vector3 reflection_target_pos;
         private Vector3 reflection_home_pos;
   
@@ -129,9 +131,10 @@ namespace Eventing
         private SortingGroup sprite_group;
         private SpriteRenderer main_sprite;
         private SpriteRenderer shadow;
+        private SpriteRenderer reflection;
         private SpriteMask bush_mask;
         private SortingGroup reflection_group;
-        private Transform reflection_transform;
+        private Transform reflection_mask_trans;
         private SpriteMask[] reflection_masks;
         private bool visibility_changed;
         private bool shore_anim;
@@ -267,7 +270,7 @@ namespace Eventing
             bush_mask = GetComponentInChildren<SpriteMask>();
             sprite_group = GetComponentInChildren<SortingGroup>();
             reflection_group = GetComponentsInChildren<SortingGroup>().Last();
-            reflection_transform = reflection_group.transform.GetChild(1);
+            reflection_mask_trans = reflection_group.transform.GetChild(1);
             reflection_masks = reflection_group.GetComponentsInChildren<SpriteMask>();
             foreach (SpriteRenderer sprite in sprites)
             {
@@ -275,12 +278,16 @@ namespace Eventing
                     main_sprite = sprite;
                 else if (sprite.tag == Constants.SHADOW_TAG)
                     shadow = sprite;
+                else if (sprite.tag == Constants.REFLECTION_TAG)
+                    reflection = sprite;
             }
             main_sprite.material = SpriteUtils.GetOutlineMaterial(outline);
             shadow_target_pos = shadow.transform.localPosition;
             shadow_home_pos = shadow.transform.localPosition;
-            reflection_target_pos = reflection_transform.localPosition;
-            reflection_home_pos = reflection_transform.localPosition;
+            reflection_mask_target_pos = reflection_mask_trans.localPosition;
+            reflection_mask_home_pos = reflection_mask_trans.localPosition;
+            reflection_target_pos = reflection.transform.localPosition;
+            reflection_home_pos = reflection.transform.localPosition;
             
             animator = GetComponentInChildren<Animator>();
             reflection_animator = GetComponentsInChildren<Animator>().Last();
@@ -367,6 +374,21 @@ namespace Eventing
                             behind_prefab = true;
                         else
                             behind_prefab = false;
+                        // Show Reflection Flag
+                        if ((neighbor_tiles.above_tile != null && neighbor_tiles.above_tile.is_reflective))
+                        {
+                            if (!show_reflection)
+                            {
+                                show_reflection = true;
+                                visibility_changed = true;
+                            }
+                            map.SetReflectionMask(target_pos, reflection_masks);
+                        }
+                        else if (show_reflection)
+                        {
+                            show_reflection = false;
+                            visibility_changed = true;
+                        }
                     }
                 }
 
@@ -379,8 +401,12 @@ namespace Eventing
                 shadow.transform.localPosition = Vector3.MoveTowards(shadow.transform.localPosition, shadow_target_pos, Time.deltaTime * speed);
 
             // Move reflection mask to keep up with object
-            if (reflection_transform.localPosition != reflection_target_pos)
-                reflection_transform.localPosition = Vector3.MoveTowards(reflection_transform.localPosition, reflection_target_pos, Time.deltaTime * speed);
+            if (reflection_mask_trans.localPosition != reflection_mask_target_pos)
+                reflection_mask_trans.localPosition = Vector3.MoveTowards(reflection_mask_trans.localPosition, reflection_mask_target_pos, Time.deltaTime * speed);
+
+            // Move reflection to keep up with object
+            if (reflection.transform.localPosition != reflection_target_pos)
+                reflection.transform.localPosition = Vector3.MoveTowards(reflection.transform.localPosition, reflection_target_pos, Time.deltaTime * speed);
             
             // Update bush flag    
             if (in_bush && !jumping && !falling)
@@ -396,6 +422,22 @@ namespace Eventing
                     layer += 1;
                     layer_up_delay = false;
                     layer_changed = true;
+
+                    // Show Reflection Flag
+                    if ((neighbor_tiles.above_tile != null && neighbor_tiles.above_tile.is_reflective))
+                    {
+                        if (!show_reflection)
+                        {
+                            show_reflection = true;
+                            visibility_changed = true;
+                        }
+                        map.SetReflectionMask(target_pos, reflection_masks);
+                    }
+                    else if (show_reflection)
+                    {
+                        show_reflection = false;
+                        visibility_changed = true;
+                    }
                 }
                 else if (layer_down_delay)
                 {
@@ -406,7 +448,10 @@ namespace Eventing
                 if (jumping)
                 {
                     target_pos += ((jump_data.height * Vector3.forward) + (jump_data.height * Vector3.down) + (jump_data.direction * (float)jump_data.num_tiles / 2f));
+                    map.SetReflectionMask(target_pos, reflection_masks);
+                    
                     shadow_target_pos = shadow_home_pos;
+                    reflection_mask_target_pos = reflection_mask_home_pos;
                     reflection_target_pos = reflection_home_pos;
                     jumping = false;
                     falling = true;
@@ -480,7 +525,7 @@ namespace Eventing
                         sprite.sortingOrder = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.EVENT_SORTING_LAYER_OFFSET - Constants.PRIORITY_TILE_OFFSET;
                     else if (sprite.tag == Constants.REFLECTION_TAG)
                     {
-                        int reflection_layer = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + (2 * Constants.PRIORITY_TILE_OFFSET);
+                        int reflection_layer = (int)(layer * Constants.SORTING_LAYERS_PER_MAP_LAYER) + Constants.OBJECT_LAYER_START_OFFSET;
                         sprite.sortingOrder = reflection_layer;
                         reflection_group.sortingOrder = on_stairs ? reflection_layer + Constants.OBJECT_LAYER_START_OFFSET : reflection_layer;
                     }
@@ -639,7 +684,6 @@ namespace Eventing
                             show_reflection = true;
                             visibility_changed = true;
                         }
-                        map.SetReflectionMask(target_pos, reflection_masks);
                     }
                     else if (show_reflection)
                     {
@@ -710,6 +754,7 @@ namespace Eventing
                         if (JumpForward(2, true))
                             return ActivateTile(neighbor_tiles.look_ahead_tile);
                     }
+                    map.SetReflectionMask(target_pos, reflection_masks);
                     return ActivateTile(neighbor_tiles.right_tile);
                 }
                 // Move Left
@@ -743,7 +788,6 @@ namespace Eventing
                             show_reflection = true;
                             visibility_changed = true;
                         }
-                        map.SetReflectionMask(target_pos, reflection_masks);
                     }
                     else if (show_reflection)
                     {
@@ -814,6 +858,7 @@ namespace Eventing
                         if (JumpForward(2, true))
                             return ActivateTile(neighbor_tiles.look_ahead_tile);
                     }
+                    map.SetReflectionMask(target_pos, reflection_masks);
                     return ActivateTile(neighbor_tiles.left_tile);
                 }
             }
@@ -850,7 +895,6 @@ namespace Eventing
                             show_reflection = true;
                             visibility_changed = true;
                         }
-                        map.SetReflectionMask(target_pos, reflection_masks);
                     }
                     else if (show_reflection)
                     {
@@ -892,7 +936,7 @@ namespace Eventing
                         CancelMovement();
                         if (Settings.ALLOW_SWIMMING)
                         {
-                            if (JumpForward(2, true))
+                            if (JumpForward(1, true))
                             {
                                 on_water = true;
                                 visibility_changed = true;
@@ -908,6 +952,7 @@ namespace Eventing
                         if (JumpForward(2, true))
                             return ActivateTile(neighbor_tiles.up_tile);
                     }
+                    map.SetReflectionMask(target_pos, reflection_masks);
                     return ActivateTile(neighbor_tiles.up_tile);
                 }
                 // Move Down
@@ -941,7 +986,6 @@ namespace Eventing
                             show_reflection = true;
                             visibility_changed = true;
                         }
-                        map.SetReflectionMask(target_pos, reflection_masks);
                     }
                     else if (show_reflection)
                     {
@@ -998,6 +1042,7 @@ namespace Eventing
                         if (JumpForward(1, true))
                             return ActivateTile(neighbor_tiles.down_tile);
                     }
+                    map.SetReflectionMask(target_pos, reflection_masks);
                     return ActivateTile(neighbor_tiles.down_tile);
                 }
             }
@@ -1193,6 +1238,10 @@ namespace Eventing
         public void CancelMovement()
         {
             target_pos = last_pos;
+            shadow_target_pos = shadow_home_pos;
+            reflection_mask_trans.localPosition = reflection_mask_home_pos;
+            reflection_mask_target_pos = reflection_mask_home_pos;
+            reflection_target_pos = reflection_home_pos;
         }
 
         [VerticalGroup("Debug Actions/Split/Right")]
@@ -1216,7 +1265,7 @@ namespace Eventing
             {
                 last_pos = transform.position;
                 target_pos += Vector3.up;
-                reflection_transform.localPosition += Vector3.down;
+                reflection_mask_trans.localPosition += Vector3.down;
                 moving = true;
                 tile_activated = false;
                 return true;
@@ -1240,7 +1289,7 @@ namespace Eventing
             {
                 last_pos = transform.position;
                 target_pos += Vector3.left;
-                reflection_transform.localPosition += Vector3.left;
+                reflection_mask_trans.localPosition += Vector3.left;
                 moving = true;
                 tile_activated = false;
                 return true;
@@ -1264,7 +1313,7 @@ namespace Eventing
             {
                 last_pos = transform.position;
                 target_pos += Vector3.right;
-                reflection_transform.localPosition += Vector3.right;
+                reflection_mask_trans.localPosition += Vector3.right;
                 moving = true;
                 tile_activated = false;
                 return true;
@@ -1289,7 +1338,7 @@ namespace Eventing
             {
                 last_pos = transform.position;
                 target_pos += Vector3.down;
-                reflection_transform.localPosition += Vector3.up;
+                reflection_mask_trans.localPosition += Vector3.up;
                 moving = true;
                 tile_activated = false;
                 return true;
@@ -1459,9 +1508,10 @@ namespace Eventing
                 shore_anim = false;
             }
 
-            target_pos += ((height * Vector3.back) + (height * Vector3.up));
-            shadow_target_pos += ((height * Vector3.forward) + (height * Vector3.down));
-            reflection_target_pos += (jump_data.height * Vector3.forward) + (jump_data.height * Vector3.down);
+            target_pos += (height * Vector3.back) + (height * Vector3.up);
+            shadow_target_pos += (height * Vector3.forward) + (height * Vector3.down);
+            reflection_mask_target_pos += (height * Vector3.forward) + (height * Vector3.up);
+            reflection_target_pos += (1.5f * height * Vector3.up);
             moving = true;
             jumping = true;
             jump_data = new JumpData (height, new Vector3(), 0);
@@ -1523,16 +1573,17 @@ namespace Eventing
                 }
 
                 target_pos += ((height * Vector3.back) + (height * Vector3.up) + (v * (float)num_tiles / 2f));
-                shadow_target_pos += ((height * Vector3.forward) + (height * Vector3.down));
+                shadow_target_pos += (height * Vector3.forward) + (height * Vector3.down);
                 moving = true;
                 jumping = true;
                 jump_data = new JumpData (height, v, num_tiles);
+
                 AnimSetBool(Constants.ANIM_JUMP, true);
                 tile_activated = false;
                 return true;
             }
             // Don't jump when trying to enter/leave water that is blocked
-            if (ParallaxTerrain.IsWaterTile(neighbor_tiles.facing_tile)) return false;
+            // if (ParallaxTerrain.IsWaterTile(neighbor_tiles.facing_tile)) return false;
             // Attempt shorter jump or hop in place if long jump blocked
             else return JumpForward(num_tiles - 1);
         }
