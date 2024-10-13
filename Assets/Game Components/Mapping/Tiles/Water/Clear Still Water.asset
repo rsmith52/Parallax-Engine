@@ -21,8 +21,17 @@ MonoBehaviour:
   is_bush: 0
   is_counter: 0
   is_trans: 1
+  is_light_trans: 0
   is_reflective: 1
   is_jump: 0
+  is_hideable: 0
+  strict_hiding: 0
+  multi_tile: 0
+  tile_size:
+    x_width: 0
+    y_height: 0
+    z_layers: 0
+  instantiated_object: {fileID: 0}
   m_DefaultSprite: {fileID: 290075495, guid: 379f377ccf5b94cc2b5141620a027966, type: 3}
   m_DefaultGameObject: {fileID: 8626972231468677178, guid: a2d80ed363ab34bd7954142e519cf46c,
     type: 3}
@@ -31,6 +40,7 @@ MonoBehaviour:
   is_double_tall: 0
   surface_tile: {fileID: 0}
   surface_edge: {fileID: 0}
+  shore_tile: {fileID: 0}
   m_TilingRules:
   - m_Id: 15
     m_Sprites:
@@ -42,11 +52,10 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 0100000002000000020000000100000001000000010000000100000001000000
+    m_Neighbors: 01000000020000000100000001000000010000000100000001000000
     m_NeighborPositions:
     - {x: -1, y: 1, z: 0}
     - {x: -1, y: 0, z: 0}
-    - {x: -1, y: -1, z: 0}
     - {x: 0, y: 1, z: 0}
     - {x: 1, y: 1, z: 0}
     - {x: 1, y: 0, z: 0}
@@ -63,14 +72,13 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 0100000001000000010000000100000001000000020000000200000001000000
+    m_Neighbors: 01000000010000000100000001000000010000000200000001000000
     m_NeighborPositions:
     - {x: 1, y: 1, z: 0}
     - {x: -1, y: 0, z: 0}
     - {x: -1, y: 1, z: 0}
     - {x: 0, y: 1, z: 0}
     - {x: -1, y: -1, z: 0}
-    - {x: 1, y: -1, z: 0}
     - {x: 1, y: 0, z: 0}
     - {x: 0, y: -1, z: 0}
     m_RuleTransform: 0

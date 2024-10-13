@@ -82,12 +82,14 @@ namespace Eventing
         public float height;
         public Vector3 direction;
         public int num_tiles;
+        public Directions dir;
 
-        public JumpData(float height, Vector3 direction, int num_tiles)
+        public JumpData(float height, Vector3 direction, int num_tiles, Directions dir)
         {
             this.height = height;
             this.direction = direction;
             this.num_tiles = num_tiles;
+            this.dir = dir;
         }
     }
 
@@ -122,6 +124,7 @@ namespace Eventing
         private bool layer_down_delay;
         private bool layer_changed;
         private bool on_stairs_changed;
+        private bool initial_checks;
 
         //[HideInInspector]
         public Animator animator;
@@ -298,6 +301,9 @@ namespace Eventing
             AnimSetBool(Constants.ANIM_JUMP, false);
             if (stepping_animation)
                 AnimSetBool(Constants.ANIM_WALK, true);
+
+            // Starting Map Checks
+            initial_checks = false;
         }
 
         public void OnSpaceEntered()
@@ -375,7 +381,7 @@ namespace Eventing
                         else
                             behind_prefab = false;
                         // Show Reflection Flag
-                        if ((neighbor_tiles.above_tile != null && neighbor_tiles.above_tile.is_reflective))
+                        if (!underwater && (neighbor_tiles.below_tile != null && neighbor_tiles.below_tile.is_reflective))
                         {
                             if (!show_reflection)
                             {
@@ -424,7 +430,7 @@ namespace Eventing
                     layer_changed = true;
 
                     // Show Reflection Flag
-                    if ((neighbor_tiles.above_tile != null && neighbor_tiles.above_tile.is_reflective))
+                    if (!underwater && (neighbor_tiles.above_tile != null && neighbor_tiles.above_tile.is_reflective))
                     {
                         if (!show_reflection)
                         {
@@ -449,6 +455,13 @@ namespace Eventing
                 {
                     target_pos += ((jump_data.height * Vector3.forward) + (jump_data.height * Vector3.down) + (jump_data.direction * (float)jump_data.num_tiles / 2f));
                     map.SetReflectionMask(target_pos, reflection_masks);
+                    if (jump_data.num_tiles > 0)
+                    {
+                        if (jump_data.dir == Directions.Left || jump_data.dir == Directions.Right)
+                            reflection_mask_trans.localPosition += (jump_data.direction * (float)jump_data.num_tiles / 2f);
+                        else 
+                            reflection_mask_trans.localPosition -= (jump_data.direction * (float)jump_data.num_tiles / 2f);
+                    }
                     
                     shadow_target_pos = shadow_home_pos;
                     reflection_mask_target_pos = reflection_mask_home_pos;
@@ -460,6 +473,43 @@ namespace Eventing
                 {
                     // Get neighboring tiles
                     neighbor_tiles = map.GetNeighborTiles(this);
+                    if (!initial_checks)
+                    {
+                        // Under Bridge Flag
+                        if (map.HideBridgeAbovePosition(this.transform.position))
+                            under_bridge = true;
+                        else
+                            under_bridge = false;
+                        // Behind Terrain Flag
+                        if (map.HideLayersAbovePosition(this.transform.position))
+                            behind_upper_layer = true;
+                        else   
+                            behind_upper_layer = false;
+                        // Behind Prefab Flag
+                        if (map.HidePrefabBlockingPosition(this.transform.position))
+                            behind_prefab = true;
+                        else
+                            behind_prefab = false;
+                        // Show Reflection Flag
+                        if (!underwater && 
+                            (neighbor_tiles.on_tile != null && neighbor_tiles.on_tile.is_reflective) ||
+                            (neighbor_tiles.down_tile != null && neighbor_tiles.down_tile.is_reflective) ||
+                            (neighbor_tiles.down_right_tile != null && neighbor_tiles.down_right_tile.is_reflective) ||
+                            (neighbor_tiles.down_left_tile != null && neighbor_tiles.down_left_tile.is_reflective))
+                        {
+                            if (!show_reflection)
+                            {
+                                show_reflection = true;
+                                visibility_changed = true;
+                            }
+                            map.SetReflectionMask(target_pos, reflection_masks);
+                        }
+                        else if (show_reflection)
+                        {
+                            show_reflection = false;
+                            visibility_changed = true;
+                        }
+                    }
 
                     // Notify old neighbor events
                     // foreach (Event e in neighbor_events)
@@ -675,7 +725,9 @@ namespace Eventing
                     if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsShoreTile(neighbor_tiles.right_tile))
                         visibility_changed = true; // Update shadow enabled or not, desired earlier when leaving shore or entering water
                     // Show Reflection Flag
-                    if ((neighbor_tiles.down_tile != null && neighbor_tiles.down_tile.is_reflective) ||
+                    if (!underwater && 
+                        (neighbor_tiles.on_tile != null && neighbor_tiles.on_tile.is_reflective) ||
+                        (neighbor_tiles.down_tile != null && neighbor_tiles.down_tile.is_reflective) ||
                         (neighbor_tiles.down_right_tile != null && neighbor_tiles.down_right_tile.is_reflective) ||
                         (neighbor_tiles.down_right_two_tile != null && neighbor_tiles.down_right_two_tile.is_reflective))
                     {
@@ -779,7 +831,9 @@ namespace Eventing
                     if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsShoreTile(neighbor_tiles.left_tile))
                         visibility_changed = true; // Update shadow enabled or not, desired earlier when leaving shore
                     // Show Reflection Flag
-                    if ((neighbor_tiles.down_tile != null && neighbor_tiles.down_tile.is_reflective) ||
+                    if (!underwater && 
+                        (neighbor_tiles.on_tile != null && neighbor_tiles.on_tile.is_reflective) ||
+                        (neighbor_tiles.down_tile != null && neighbor_tiles.down_tile.is_reflective) ||
                         (neighbor_tiles.down_left_tile != null && neighbor_tiles.down_left_tile.is_reflective) ||
                         (neighbor_tiles.down_left_two_tile != null && neighbor_tiles.down_left_two_tile.is_reflective))
                     {
@@ -886,7 +940,9 @@ namespace Eventing
                     if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsShoreTile(neighbor_tiles.up_tile))
                         visibility_changed = true; // Update shadow enabled or not, desired earlier when leaving shore
                     // Show Reflection Flag
-                    if ((neighbor_tiles.on_tile != null && neighbor_tiles.on_tile.is_reflective) ||
+                    if (!underwater && 
+                        (neighbor_tiles.up_tile != null && neighbor_tiles.up_tile.is_reflective) ||
+                        (neighbor_tiles.on_tile != null && neighbor_tiles.on_tile.is_reflective) ||
                         (neighbor_tiles.left_tile != null && neighbor_tiles.left_tile.is_reflective) ||
                         (neighbor_tiles.right_tile != null && neighbor_tiles.right_tile.is_reflective))
                     {
@@ -977,7 +1033,9 @@ namespace Eventing
                     if (ParallaxTerrain.IsShoreTile(neighbor_tiles.on_tile) && !ParallaxTerrain.IsShoreTile(neighbor_tiles.down_tile))
                         visibility_changed = true; // Update shadow enabled or not, desired earlier when leaving shore
                     // Show Reflection Flag
-                    if ((neighbor_tiles.down_two_tile != null && neighbor_tiles.down_two_tile.is_reflective) ||
+                    if (!underwater &&
+                        (neighbor_tiles.down_tile != null && neighbor_tiles.down_tile.is_reflective) ||
+                        (neighbor_tiles.down_two_tile != null && neighbor_tiles.down_two_tile.is_reflective) ||
                         (neighbor_tiles.down_two_left_tile != null && neighbor_tiles.down_two_left_tile.is_reflective) ||
                         (neighbor_tiles.down_two_right_tile != null && neighbor_tiles.down_two_right_tile.is_reflective))
                     {
@@ -1514,7 +1572,7 @@ namespace Eventing
             reflection_target_pos += (1.5f * height * Vector3.up);
             moving = true;
             jumping = true;
-            jump_data = new JumpData (height, new Vector3(), 0);
+            jump_data = new JumpData (height, new Vector3(), 0, Directions.Up);
             tile_activated = false;
 
             return true;
@@ -1577,9 +1635,14 @@ namespace Eventing
                 reflection_mask_target_pos += (height * Vector3.forward) + (height * Vector3.up);
                 reflection_target_pos += (height * Vector3.up);
 
+                if (direction == Directions.Left || direction == Directions.Right)
+                    reflection_mask_trans.localPosition += (v * (float)num_tiles / 2f);
+                else
+                    reflection_mask_trans.localPosition -= (v * (float)num_tiles / 2f);
+
                 moving = true;
                 jumping = true;
-                jump_data = new JumpData (height, v, num_tiles);
+                jump_data = new JumpData (height, v, num_tiles, direction);
 
                 AnimSetBool(Constants.ANIM_JUMP, true);
                 tile_activated = false;
