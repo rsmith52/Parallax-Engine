@@ -38,6 +38,9 @@ Unity Project for 2.5d Parallax RPG Engine
 * Intermittent bug that happens on stairs sometimes where on_tile is null
 * Shrink shadows when jumping!
 
+### Settings Code
+* Switch to a settings asset?
+
 ### UI Code
 * Simple message boxes
 * Speech bubbles
