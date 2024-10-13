@@ -407,6 +407,7 @@ namespace Eventing
                 {
                     target_pos += ((jump_data.height * Vector3.forward) + (jump_data.height * Vector3.down) + (jump_data.direction * (float)jump_data.num_tiles / 2f));
                     shadow_target_pos = shadow_home_pos;
+                    reflection_target_pos = reflection_home_pos;
                     jumping = false;
                     falling = true;
                 }
@@ -1460,6 +1461,7 @@ namespace Eventing
 
             target_pos += ((height * Vector3.back) + (height * Vector3.up));
             shadow_target_pos += ((height * Vector3.forward) + (height * Vector3.down));
+            reflection_target_pos += (jump_data.height * Vector3.forward) + (jump_data.height * Vector3.down);
             moving = true;
             jumping = true;
             jump_data = new JumpData (height, new Vector3(), 0);
