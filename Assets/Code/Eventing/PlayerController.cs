@@ -98,8 +98,9 @@ namespace Eventing
                             player_mover.RiseUp();
                         }
                     }
-                    else if (Settings.ALLOW_JUMPING && !jump_queued && !player_mover.on_water)
+                    else if (Settings.ALLOW_JUMPING && !player_mover.on_water)
                     {
+                        jump_queued = false;
                         bool jump_success = false;
                         if (Input.GetKey(Controls.MOVE_UP) || Input.GetKey(Controls.MOVE_LEFT) ||
                             Input.GetKey(Controls.MOVE_RIGHT) || Input.GetKey(Controls.MOVE_DOWN))
@@ -124,6 +125,8 @@ namespace Eventing
                     jump_direction = direction;
                 }
             }
+            if (jump_queued && (Time.time - key_held_time < Constants.TAP_VS_HOLD_TIME))
+                jump_queued = false;
 
             // Handle Movement Input
             if (current_pos == target_pos)

@@ -33,7 +33,6 @@ Unity Project for 2.5d Parallax RPG Engine
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines
 * Better way to find current map in MoveableObject
-* Make shadow not jump
 * "Selected Event" concept. Doesn't need to be directly in front, could be on ground, under, look ahead, etc.
 * More advanced falling physics
 * Intermittent bug that happens on stairs sometimes where on_tile is null
