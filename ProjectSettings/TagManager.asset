@@ -17,6 +17,8 @@ TagManager:
   - Terrain Corner Edge Tile
   - Top Side Stair Tile
   - Terrain Edge Corner Tile
+  - Cover Priority Tile
+  - Sprite
   layers:
   - Default
   - TransparentFX

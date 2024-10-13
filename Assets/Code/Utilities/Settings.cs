@@ -11,6 +11,7 @@ namespace Utilities
 
         public static readonly string MATERIALS_PATH = "Materials";
         public static readonly string PIXEL_SNAPPING_MATERIAL_FILENAME = "Tilemap Pixel Snapping";
+        public static readonly string OUTLINE_MATERIAL_FILENAME_PREFIX = "Outline - ";
 
         #endregion
 

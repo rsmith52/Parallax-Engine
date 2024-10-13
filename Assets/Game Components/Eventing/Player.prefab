@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7063223213093076933}
   - component: {fileID: 8090335011079206893}
+  - component: {fileID: 6108276748655800665}
   m_Layer: 0
   m_Name: Character Sprite
-  m_TagString: Untagged
+  m_TagString: Sprite
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,6 +85,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 2
   m_SpriteSortPoint: 0
+--- !u!95 &6108276748655800665
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324751033809599187}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9be80442d9b2940da854ae7357a20bd4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 2
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2880097836887071057
 GameObject:
   m_ObjectHideFlags: 0
@@ -112,7 +134,7 @@ Transform:
   m_GameObject: {fileID: 2880097836887071057}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8, y: -20, z: 0.5}
+  m_LocalPosition: {x: 8, y: -15, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -191,12 +213,14 @@ MonoBehaviour:
   movement_speed: 2
   direction: 3
   layer: -1
+  animator: {fileID: 0}
   invisible: 0
   move_through_walls: 0
   lock_direction: 0
   walking_animation: 1
   stepping_animation: 0
   always_on_top: 0
+  outline: 0
   in_bush: 0
   on_stairs: 0
   on_water: 0

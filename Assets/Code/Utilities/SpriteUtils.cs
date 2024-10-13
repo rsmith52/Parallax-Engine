@@ -6,6 +6,19 @@ using UnityEngine.Tilemaps;
 
 namespace Utilities
 {
+
+    #region Enums
+
+    public enum OutlineColors
+    {
+        None = 0,
+        White = 1,
+        Red = 2
+    }
+
+    #endregion
+
+
     public static class SpriteUtils
     {
         #region Static Methods
@@ -79,8 +92,23 @@ namespace Utilities
         */
         public static Material GetPixelSnappingMaterial()
         {
-            Material material = Resources.Load<Material>(Path.Join(Settings.MATERIALS_PATH,Settings.PIXEL_SNAPPING_MATERIAL_FILENAME));
-            return material;
+            return Resources.Load<Material>(Path.Join(Settings.MATERIALS_PATH,Settings.PIXEL_SNAPPING_MATERIAL_FILENAME));
+        }
+
+        /*
+        * Get Outline Materials
+        */
+        public static Material GetOutlineMaterial(OutlineColors color)
+        {
+            if (color != OutlineColors.None)
+            {
+                string filename = Settings.OUTLINE_MATERIAL_FILENAME_PREFIX + color.ToString();
+                Material material = Resources.Load<Material>(Path.Join(Settings.MATERIALS_PATH,filename));
+
+                if (material != null) return material;
+            }
+            
+            return GetPixelSnappingMaterial();
         }
 
         #endregion

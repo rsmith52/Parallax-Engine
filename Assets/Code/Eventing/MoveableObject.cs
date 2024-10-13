@@ -105,9 +105,9 @@ namespace Eventing
 
         private float speed;
         private Map map;
-        public Vector3 target_pos;
+        private Vector3 target_pos;
         private Vector3 last_pos;
-        public Vector3 shadow_target_pos;
+        private Vector3 shadow_target_pos;
         private Vector3 shadow_home_pos;
   
         private JumpData jump_data;
@@ -120,18 +120,21 @@ namespace Eventing
         //[HideInInspector]
         public Animator animator;
         private SpriteRenderer[] sprites;
-        private SpriteMask bush_mask;
+        private SpriteRenderer main_sprite;
         private SpriteRenderer shadow;
+        private SpriteMask bush_mask;
         private bool visibility_changed;
         private bool shore_anim;
 
-        [Title("Static Flags")]
+        [Title("Static Settings")]
+        [InfoBox("Not previewed in scene editor")]
         public bool invisible = false;
         public bool move_through_walls = false;
         public bool lock_direction = false;
         public bool walking_animation = true;
         public bool stepping_animation = false;
         public bool always_on_top = false;
+        public OutlineColors outline = OutlineColors.None;
 
         [Title("Awareness")]
         [ReadOnly]
@@ -148,7 +151,6 @@ namespace Eventing
         public bool behind_upper_layer;
         [ReadOnly]
         public bool behind_prefab;
-        
 
         [TabGroup ("Movement")]
         [ReadOnly]
@@ -225,19 +227,7 @@ namespace Eventing
             target_pos = transform.position;
             last_pos = transform.position;
             speed = Constants.SPEEDS[(int)movement_speed];
-            animator = GetComponentInChildren<Animator>();
-            sprites = GetComponentsInChildren<SpriteRenderer>();
-            bush_mask = GetComponentInChildren<SpriteMask>();
-            foreach (SpriteRenderer sprite in sprites)
-            {
-                if (sprite.tag == Constants.SHADOW_TAG)
-                {
-                    shadow = sprite;
-                    break;
-                }
-            }
-            shadow_target_pos = shadow.transform.localPosition;
-            shadow_home_pos = shadow.transform.localPosition;
+            
             moving = true;
             looked = true;
             jumping = false;
@@ -260,7 +250,21 @@ namespace Eventing
             map = FindObjectOfType<Map>(); // TODO - better way to find map
             // event_manager = FindObjectOfType<EventManager>();
 
-            // Update Animator
+            // Animator / Sprite Setup
+            sprites = GetComponentsInChildren<SpriteRenderer>();
+            bush_mask = GetComponentInChildren<SpriteMask>();
+            foreach (SpriteRenderer sprite in sprites)
+            {
+                if (sprite.tag == Constants.SPRITE_TAG)
+                    main_sprite = sprite;
+                else if (sprite.tag == Constants.SHADOW_TAG)
+                    shadow = sprite;
+            }
+            main_sprite.material = SpriteUtils.GetOutlineMaterial(outline);
+            shadow_target_pos = shadow.transform.localPosition;
+            shadow_home_pos = shadow.transform.localPosition;
+            
+            animator = GetComponentInChildren<Animator>();
             animator.SetInteger(Constants.ANIM_DIRECTION, (int)direction);
             animator.SetBool(Constants.ANIM_WALK, false);
             animator.SetBool(Constants.ANIM_RUN, false);
@@ -471,8 +475,9 @@ namespace Eventing
                     else
                         sprite.enabled = true;
                 }
+
+                if (!invisible) shadow.enabled = !(shore_anim || on_water || underwater);
                 
-                shadow.enabled = !(shore_anim || on_water || underwater);
                 visibility_changed = false;
             }
         }
@@ -1503,11 +1508,15 @@ namespace Eventing
 
         #region Set Flags
 
+        [BoxGroup("Debug Actions/Split/Left/Static Settings")]
+        [Button("Invisible On")]
         public void InvisibleOn()
         {
             invisible = true;
             visibility_changed = true;
         }
+        [BoxGroup("Debug Actions/Split/Left/Static Settings")]
+        [Button("Invisible Off")]
         public void InvisibleOff()
         {
             invisible = false;
@@ -1541,13 +1550,24 @@ namespace Eventing
             walking_animation = true;
         }
 
+        [BoxGroup("Debug Actions/Split/Left/Static Settings")]
+        [Button("Stepping Anim On")]
         public void SteppingAnimationOn()
         {
             stepping_animation = true;
         }
+        [BoxGroup("Debug Actions/Split/Left/Static Settings")]
+        [Button("Stepping Anim Off")]
         public void SteppingAnimationOff()
         {
             stepping_animation = false;
+        }
+
+        [BoxGroup("Debug Actions/Split/Left/Static Settings")]
+        [Button("Outline")]
+        public void SetOutline(OutlineColors color)
+        {
+            main_sprite.material = SpriteUtils.GetOutlineMaterial(color);
         }
 
         #endregion
