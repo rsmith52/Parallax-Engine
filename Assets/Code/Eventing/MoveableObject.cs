@@ -83,13 +83,15 @@ namespace Eventing
         public Vector3 direction;
         public int num_tiles;
         public Directions dir;
+        public bool source_reflective;
 
-        public JumpData(float height, Vector3 direction, int num_tiles, Directions dir)
+        public JumpData(float height, Vector3 direction, int num_tiles, Directions dir, bool source_reflective)
         {
             this.height = height;
             this.direction = direction;
             this.num_tiles = num_tiles;
             this.dir = dir;
+            this.source_reflective = source_reflective;
         }
     }
 
@@ -117,6 +119,9 @@ namespace Eventing
         private Vector3 reflection_mask_home_pos;
         private Vector3 reflection_target_pos;
         private Vector3 reflection_home_pos;
+
+        public float DEBUG_JUMP_MULT = 0.75f;
+        public float DEBUG_JUMP_MULT_2 = 0.5f;
   
         private JumpData jump_data;
         private LayerChange layer_change;
@@ -458,10 +463,19 @@ namespace Eventing
                 {
                     target_pos += ((jump_data.height * Vector3.forward) + (jump_data.height * Vector3.down) + (jump_data.direction * (float)jump_data.num_tiles / 2f));
                     map.SetReflectionMask(target_pos, reflection_masks);
+
+                    if (jump_data.num_tiles > 1)
+                    {
+                        if (jump_data.dir == Directions.Left || jump_data.dir == Directions.Right)
+                            reflection_mask_trans.localPosition += 0.75f * (jump_data.direction * (float)jump_data.num_tiles / 2f);
+                        else 
+                            reflection_mask_trans.localPosition -= (jump_data.direction * (float)jump_data.num_tiles / 2f);
+                    }
                     
                     shadow_target_pos = shadow_home_pos;
                     reflection_mask_target_pos = reflection_mask_home_pos;
                     reflection_target_pos = reflection_home_pos;
+
                     jumping = false;
                     falling = true;
                 }
@@ -469,6 +483,8 @@ namespace Eventing
                 {
                     // Get neighboring tiles
                     neighbor_tiles = map.GetNeighborTiles(this);
+
+                    // Initial flag setting
                     if (!initial_checks)
                     {
                         // Under Bridge Flag
@@ -1568,7 +1584,7 @@ namespace Eventing
             reflection_target_pos += (1.5f * height * Vector3.up);
             moving = true;
             jumping = true;
-            jump_data = new JumpData (height, new Vector3(), 0, Directions.Up);
+            jump_data = new JumpData (height, new Vector3(), 0, Directions.Up, neighbor_tiles.on_tile.is_reflective);
             tile_activated = false;
 
             return true;
@@ -1632,9 +1648,15 @@ namespace Eventing
                 reflection_mask_target_pos += (1.5f * Vector3.back) + (1.5f * Vector3.up);
                 reflection_target_pos += (1.5f * height * Vector3.up);
 
+                float jump_mult = neighbor_tiles.on_tile.is_reflective ? 0.5f : 0.75f;
+                if (direction == Directions.Left || direction == Directions.Right)
+                    reflection_mask_trans.localPosition += jump_mult * ((v * (float)num_tiles) / 2f);
+                else
+                    reflection_mask_trans.localPosition -= (v * (float)num_tiles / 2f);
+
                 moving = true;
                 jumping = true;
-                jump_data = new JumpData (height, v, num_tiles, direction);
+                jump_data = new JumpData (height, v, num_tiles, direction, neighbor_tiles.on_tile.is_reflective);
 
                 AnimSetBool(Constants.ANIM_JUMP, true);
                 tile_activated = false;
