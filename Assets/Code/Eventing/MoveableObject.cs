@@ -120,8 +120,7 @@ namespace Eventing
         private Vector3 reflection_target_pos;
         private Vector3 reflection_home_pos;
 
-        public float DEBUG_JUMP_MULT = 0.75f;
-        public float DEBUG_JUMP_MULT_2 = 0.5f;
+        public float DEBUG_VAR;
   
         private JumpData jump_data;
         private LayerChange layer_change;
@@ -468,8 +467,10 @@ namespace Eventing
                     {
                         if (jump_data.dir == Directions.Left || jump_data.dir == Directions.Right)
                             reflection_mask_trans.localPosition += 0.75f * (jump_data.direction * (float)jump_data.num_tiles / 2f);
-                        else 
-                            reflection_mask_trans.localPosition -= (jump_data.direction * (float)jump_data.num_tiles / 2f);
+                        else if (jump_data.dir == Directions.Down && jump_data.source_reflective)
+                            reflection_mask_trans.localPosition -= 0.75f * (jump_data.direction * (float)jump_data.num_tiles / 2f);
+                        else if (jump_data.dir == Directions.Up)
+                            reflection_mask_trans.localPosition -= 0.75f * (jump_data.direction * (float)jump_data.num_tiles / 2f);
                     }
                     
                     shadow_target_pos = shadow_home_pos;
@@ -1648,15 +1649,21 @@ namespace Eventing
                 reflection_mask_target_pos += (1.5f * Vector3.back) + (1.5f * Vector3.up);
                 reflection_target_pos += (1.5f * height * Vector3.up);
 
-                float jump_mult = neighbor_tiles.on_tile.is_reflective ? 0.5f : 0.75f;
+                bool source_reflective = neighbor_tiles.on_tile.is_reflective;
+                float jump_mult = source_reflective ? 0.5f : 0.75f;
+
                 if (direction == Directions.Left || direction == Directions.Right)
                     reflection_mask_trans.localPosition += jump_mult * ((v * (float)num_tiles) / 2f);
-                else
-                    reflection_mask_trans.localPosition -= (v * (float)num_tiles / 2f);
+                else if (direction == Directions.Down && source_reflective)
+                    reflection_mask_trans.localPosition -= jump_mult * ((v * (float)num_tiles) / 2f);
+                else if (direction == Directions.Down && !source_reflective)
+                    reflection_mask_trans.localPosition -= 1.25f * jump_mult * ((v * (float)num_tiles) / 2f);
+                else if (direction == Directions.Up && !source_reflective)
+                    reflection_mask_trans.localPosition -= 0.75f * (v * (float)num_tiles / 2f);
 
                 moving = true;
                 jumping = true;
-                jump_data = new JumpData (height, v, num_tiles, direction, neighbor_tiles.on_tile.is_reflective);
+                jump_data = new JumpData (height, v, num_tiles, direction, source_reflective);
 
                 AnimSetBool(Constants.ANIM_JUMP, true);
                 tile_activated = false;

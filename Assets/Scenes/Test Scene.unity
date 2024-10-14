@@ -95731,6 +95731,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4439631162096395526, guid: f26f9c4a67c4646e1ae78b32098dd319,
         type: 3}
+      propertyPath: DEBUG_VAR
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4439631162096395526, guid: f26f9c4a67c4646e1ae78b32098dd319,
+        type: 3}
       propertyPath: DEBUG_JUMP_MULT_2
       value: 0.5
       objectReference: {fileID: 0}
