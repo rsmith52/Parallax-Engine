@@ -49,6 +49,12 @@ Unity Project for 2.5d Parallax RPG Engine
 
 ### AI Code
 * Path Finding will need custom logic, gonna be hard
+* State machines - AI behavior
+* Characters - NPCs, Monsters, etc.
+* Map sections as well - when to spawn something, etc.
+* Slightly wider range of sight given to AI objects, awareness of events in order to make simple decisions, choose movement based on what is seen, etc.
+* Imagine enemies gathering at the edge of a ledge trying to reach the player but unable to - different creatures have different range of movement, some could jump up that ledge!
+* Enemies jumping at you in general, good visual / feel - cool mix of movement options different creatures will have
 
 ### NLP Code
 * Consider GPT or...
@@ -83,9 +89,12 @@ Unity Project for 2.5d Parallax RPG Engine
 * Bamboo in dark mountain caves exterior
 * Mini games / quests in each region/area
 * In tidepool tropics area (and maybe others) - some islands connected by shallow waters you can walk across, maybe tides change too? Make it accessible only sometimes
+* In tidepool tropics need a blue hole
+* Syrup trees - side quest related to apple pokemon
 
 ### Temples / Leaders Etc.
 * Grass temple - combo of water and fire and grass to modify the nature
+* Grass temple - vileplume's poison vs. bellossom - let sunlight in to cleanse it
 * Grow / shrink vines, etc., maybe burn some stuff
 * Ariados Guy - scene in my head, rope bridge in jungle cliffs
 * Crobat Guy
