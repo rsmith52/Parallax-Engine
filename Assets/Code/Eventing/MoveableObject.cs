@@ -6,98 +6,12 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using Sirenix.OdinInspector;
 using Mapping;
+using Mapping.Tiles;
 using Utilities;
 using Eventing;
 
 namespace Eventing
 {
-    #region Enums
-
-    public enum MovementSpeeds
-    {
-        VerySlow,
-        Slow,
-        Moderate,
-        Fast,
-        VeryFast
-    }
-
-    public enum Directions
-    {
-        Up = 0,
-        Left = 1,
-        Right = 2,
-        Down = 3
-    }
-
-    public enum LayerChange
-    {
-        None,
-        Up,
-        Down
-    }
-
-    public enum MoveCommands
-    {
-        TurnUp,
-        TurnLeft,
-        TurnRight,
-        TurnDown,
-        Turn90DegreesCW,
-        Turn90DegreesCCW,
-        Turn180Degrees,
-        TurnAtRandom,
-        TurnTowardsPlayer,
-        MoveUp,
-        MoveLeft,
-        MoveRight,
-        MoveDown,
-        StepForward,
-        StepBackward,
-        MoveAtRandom,
-        Jump,
-        JumpForward,
-        JumpBackward,
-        MoveLayerUp,
-        MoveLayerDown,
-        RiseUp,
-        SinkDown,
-        SetInvisibleFlag,
-        SetThroughFlag,
-        SetLockDirectionFlag,
-        SetWalkingFlag,
-        SetSteppingFlag,
-        Wait,
-        ChangeSpeed
-    }
-
-    #endregion
-
-
-    #region Structs
-
-    [Serializable]
-    public struct JumpData
-    {
-        public float height;
-        public Vector3 direction;
-        public int num_tiles;
-        public Directions dir;
-        public bool source_reflective;
-
-        public JumpData(float height, Vector3 direction, int num_tiles, Directions dir, bool source_reflective)
-        {
-            this.height = height;
-            this.direction = direction;
-            this.num_tiles = num_tiles;
-            this.dir = dir;
-            this.source_reflective = source_reflective;
-        }
-    }
-
-    #endregion
-
-
     public class MoveableObject : SerializedMonoBehaviour
     {
         #region Fields
@@ -119,8 +33,6 @@ namespace Eventing
         private Vector3 reflection_mask_home_pos;
         private Vector3 reflection_target_pos;
         private Vector3 reflection_home_pos;
-
-        public float DEBUG_VAR;
   
         private JumpData jump_data;
         private LayerChange layer_change;

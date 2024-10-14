@@ -5,20 +5,8 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Sirenix.OdinInspector;
 
-namespace Mapping
+namespace Mapping.Tiles
 {
-    #region Structs
-    
-    [Serializable]
-    public struct HelperTile
-    {
-        public ParallaxTileBase tile;
-        public Vector2Int offsets;
-    }
-    
-    #endregion
-
-    
     [Serializable]
     public class ParallaxTileBase : TileBase
     {

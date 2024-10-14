@@ -6,19 +6,6 @@ using UnityEngine.Tilemaps;
 
 namespace Utilities
 {
-
-    #region Enums
-
-    public enum OutlineColors
-    {
-        None = 0,
-        White = 1,
-        Red = 2
-    }
-
-    #endregion
-
-
     public static class SpriteUtils
     {
         #region Static Methods

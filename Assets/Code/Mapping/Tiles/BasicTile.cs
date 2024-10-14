@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 using Sirenix.OdinInspector;
 using Utilities;
 
-namespace Mapping
+namespace Mapping.Tiles
 {    
     [CreateAssetMenu(menuName = "Parallax Tiles/Basic Tile", fileName = "Basic Tile")]
     [Serializable]

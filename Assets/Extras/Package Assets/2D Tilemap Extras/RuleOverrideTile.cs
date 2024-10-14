@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Scripting.APIUpdating;
 using Mapping;
+using Mapping.Tiles;
 
 namespace UnityEngine.Tilemaps
 {

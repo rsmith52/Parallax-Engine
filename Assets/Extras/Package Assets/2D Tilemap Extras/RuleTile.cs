@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine.Tilemaps;
 using Mapping;
+using Mapping.Tiles;
 using Utilities;
 
 namespace UnityEngine

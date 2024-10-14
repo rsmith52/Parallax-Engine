@@ -6,21 +6,8 @@ using UnityEngine.Tilemaps;
 using Sirenix.OdinInspector;
 using Utilities;
 
-namespace Mapping
+namespace Mapping.Tiles
 {
-    #region Structs
-
-    [Serializable]
-    public struct TileSize
-    {
-        public int x_width;
-        public int y_height;
-        public int z_layers;
-    }
-
-    #endregion
-
-
     [CreateAssetMenu(menuName = "Parallax Tiles/Prefab Tile", fileName = "Prefab Tile")]
     [Serializable]
     public class PrefabTile : ParallaxTileBase

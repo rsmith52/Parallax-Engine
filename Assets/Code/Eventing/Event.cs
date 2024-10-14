@@ -6,17 +6,6 @@ using Sirenix.OdinInspector;
 
 namespace Eventing
 {
-    #region Enums
-
-    public enum EventTriggers
-    {
-        IsPlayer,
-        ActionButton
-        // TODO
-    }
-
-    #endregion
-
     [Serializable]
     public class Event : SerializedMonoBehaviour
     {

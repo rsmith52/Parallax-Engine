@@ -21,6 +21,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Animate still water edges
 * Forage tiles - "is_forage" flag with fields for replacement "foraged" tile, and what item(s) it drops -> Probably should be events
 * Animate the fading/hiding/showing of tiles
+* Reflection bug when walking up into blocked tile while showing reflection below, head gets cut off - setting new mask tiles without actually moving
 
 ### Map Managing Code
 * Buttons for static functions to load/save maps as well
@@ -37,6 +38,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * More advanced falling physics
 * Intermittent bug that happens on stairs sometimes where on_tile is null
 * Shrink shadows when jumping!
+* Consider splitting up sprite / animation / visual code out of moveable object
 
 ### Settings Code
 * Switch to a settings asset?
