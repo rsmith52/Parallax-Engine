@@ -50,14 +50,6 @@ namespace Mapping
             {Directions.Up, null}, {Directions.Left, null}, {Directions.Right, null}, {Directions.Down, null}
         };
 
-        // Track Hidden Tiles / Layers
-        private bool bridge_hidden;
-        private List<TilePosition> hidden_bridge;
-        private bool layers_hidden;
-        private List<TilePosition> hidden_layers;
-        private bool prefab_hidden;
-        private GameObject hidden_prefab;
-
         // Track Animations
         private Dictionary<TilePosition, bool> cancel_anim_kill;
         private Dictionary<TilePosition, GameObject> water_splash_anims;
@@ -190,18 +182,6 @@ namespace Mapping
 
         private void Start()
         {
-            // Start with nothing hidden
-            bridge_hidden = false;
-            hidden_bridge = null;
-            layers_hidden = false;
-            hidden_layers = null;
-            prefab_hidden = false;
-            hidden_prefab = null;
-
-            // Initialize animation tracking dictionaries
-            cancel_anim_kill = new Dictionary<TilePosition, bool>();
-            water_splash_anims = new Dictionary<TilePosition, GameObject>(); 
-            
             // Populate Object Layers
             object_layers = new Dictionary<int, Tilemap[]>();
             foreach (KeyValuePair<int, Tilemap> layer in map_layers)
@@ -256,7 +236,12 @@ namespace Mapping
                 }
             }
 
+            // Setup map cache if not already done
             if (map_cache == null) map_cache = MapCache.Create(this);
+
+            // Initialize animation tracking dictionaries
+            cancel_anim_kill = new Dictionary<TilePosition, bool>();
+            water_splash_anims = new Dictionary<TilePosition, GameObject>(); 
         }
         
         #endregion
@@ -294,10 +279,11 @@ namespace Mapping
             if (above_tile.tile != null && ParallaxTerrain.IsBridgeTile(above_tile.tile))
             {
                 // Hide Bridge
-                if (!bridge_hidden)
+                if (!map_cache.bridge_hidden)
                 {
-                    // See if this bridge was recently hidden
-                    if (hidden_bridge != null && hidden_bridge.Contains(new TilePosition (above_tile.map, int_pos)))
+                    // See if this bridge was previously hidden
+                    List<TilePosition> hidden_bridge = map_cache.GetBridge(new TilePosition(above_tile.map, int_pos));
+                    if (hidden_bridge != null)
                     {
                         // Bridge already found / saved
                         // Debug.Log("Bridge already saved!");
@@ -316,8 +302,10 @@ namespace Mapping
                     }
 
                     // Make all tiles transparent
-                    HideTiles(hidden_bridge);
-                    bridge_hidden = true;
+                    map_cache.bridge_hidden = true;
+                    map_cache.cur_bridge = hidden_bridge;
+                    map_cache.CacheBridge(hidden_bridge);
+                    HideTiles(map_cache.cur_bridge);
                 }
 
                 return true;
@@ -325,11 +313,11 @@ namespace Mapping
             else 
             {
                 // Show Bridge Again
-                if (bridge_hidden)
+                if (map_cache.bridge_hidden)
                 {
                     // Make all tiles opaque
-                    ShowTiles(hidden_bridge);
-                    bridge_hidden = false;
+                    ShowTiles(map_cache.cur_bridge);
+                    map_cache.bridge_hidden = false;
                 }
 
                 return false;
@@ -380,13 +368,17 @@ namespace Mapping
             {
                 // Hide Terrain
                 bool needs_update = true;
-                if (layers_hidden)
-                    needs_update = hidden_layers != null && !hidden_layers.Contains(new TilePosition (start_tile.map, int_pos + new Vector3Int(0, 1, 0)));
+                if (map_cache.terrain_hidden && map_cache.cur_terrain.Contains(new TilePosition (start_tile.map, int_pos)))
+                {
+                    needs_update = false;
+                    // Debug.Log("No update needed.");
+                }
 
                 if (needs_update)
                 {
-                    // See if this terrain was recently hidden
-                    if (hidden_layers != null && hidden_layers.Contains(new TilePosition (start_tile.map, int_pos + new Vector3Int(0, 1, 0))))
+                    // See if this terrain was previously hidden
+                    List<TilePosition> hidden_layers = map_cache.GetTerrain(new TilePosition (start_tile.map, int_pos));
+                    if (hidden_layers != null)
                     {
                         // Terrain already found / saved
                         // Debug.Log("Terrain already saved!");
@@ -430,19 +422,21 @@ namespace Mapping
                     }
 
                     // Make all tiles transparent
-                    HideTiles(hidden_layers);
-                    layers_hidden = true;
+                    map_cache.terrain_hidden = true;
+                    map_cache.cur_terrain = hidden_layers;
+                    map_cache.CacheTerrain(hidden_layers);
+                    HideTiles(map_cache.cur_terrain);
                 }
                 return true;
             }
             else 
             {
                 // Show Terrain Again
-                if (layers_hidden)
+                if (map_cache.terrain_hidden)
                 {
                     // Make all tiles opaque
-                    ShowTiles(hidden_layers);
-                    layers_hidden = false;
+                    ShowTiles(map_cache.cur_terrain);
+                    map_cache.terrain_hidden = false;
                 }
                 return false;
             }
@@ -499,30 +493,30 @@ namespace Mapping
             {
                 // Hide Prefab
                 bool needs_update = true;
-                if (prefab_hidden)
-                    needs_update = (hidden_prefab != prefab_obj);
+                if (map_cache.prefab_hidden)
+                    needs_update = (map_cache.cur_prefab != prefab_obj);
 
                 if (needs_update)
                 {
                     // Show the previous prefab
-                    if (prefab_hidden)
-                        ShowTiles(null, hidden_prefab);
+                    if (map_cache.prefab_hidden)
+                        ShowTiles(null, map_cache.cur_prefab);
                     
                     // Make all tiles transparent
                     HideTiles(null, prefab_obj);
-                    hidden_prefab = prefab_obj;
+                    map_cache.cur_prefab = prefab_obj;
                 }
-                prefab_hidden = true;
+                map_cache.prefab_hidden = true;
                 return true;
             }
             else
             {
                 // Show Prefab Again
-                if (prefab_hidden)
+                if (map_cache.prefab_hidden)
                 {
                     // Make prefab opaque
-                    ShowTiles(null, hidden_prefab);
-                    prefab_hidden = false;
+                    ShowTiles(null, map_cache.cur_prefab);
+                    map_cache.prefab_hidden = false;
                 }
                 return false;
             }

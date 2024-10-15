@@ -40,7 +40,7 @@ namespace Eventing
         private bool layer_down_delay;
         private bool layer_changed;
         private bool on_stairs_changed;
-        private bool initial_checks;
+        private bool initial_checks_done;
 
         //[HideInInspector]
         public Animator animator;
@@ -219,7 +219,7 @@ namespace Eventing
                 AnimSetBool(Constants.ANIM_WALK, true);
 
             // Starting Map Checks
-            initial_checks = false;
+            initial_checks_done = false;
         }
 
         public void OnSpaceEntered()
@@ -398,7 +398,7 @@ namespace Eventing
                     neighbor_tiles = map.GetNeighborTiles(this);
 
                     // Initial flag setting
-                    if (!initial_checks)
+                    if (!initial_checks_done)
                     {
                         // Under Bridge Flag
                         if (map.HideBridgeAbovePosition(this.transform.position))
@@ -434,6 +434,8 @@ namespace Eventing
                             show_reflection = false;
                             visibility_changed = true;
                         }
+
+                        initial_checks_done = true;
                     }
 
                     // Notify old neighbor events
@@ -480,7 +482,7 @@ namespace Eventing
                 }   
             }
             // Update facing & look ahead tile
-            else if (looked)
+            else if (looked && transform.position == target_pos)
             {
                 neighbor_tiles = map.GetNeighborTiles(this, true);
                 looked = false;

@@ -32,7 +32,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Map creation code -> new file
 * Refactor considering what should go in start vs awake.
 * Build on cache so it can be generated and saved off in editor
-* Fix cache bugs around underwater cases
+* Hidden bridge case of going from one to another
 
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines

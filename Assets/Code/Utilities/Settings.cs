@@ -33,7 +33,7 @@ namespace Utilities
         
         public static readonly bool SEE_THROUGH_BRIDGES = true;
         public static readonly bool SEE_THROUGH_PREFAB_OBJECTS = true;
-        public static readonly bool SEE_THROUGH_TERRAIN = false;
+        public static readonly bool SEE_THROUGH_TERRAIN = true;
 
         #endregion
     }

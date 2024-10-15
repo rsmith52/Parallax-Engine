@@ -34,6 +34,18 @@ namespace Mapping
         public Map map;
         public SerializableDictionary<int, MapLayer> layers;
 
+        // Bridges
+        public bool bridge_hidden;
+        public List<TilePosition> cur_bridge;
+        public List<List<TilePosition>> bridges;
+        // Prefab Tiles
+        public bool prefab_hidden;
+        public GameObject cur_prefab;
+        // Terrain Edges
+        public bool terrain_hidden;
+        public List<TilePosition> cur_terrain;
+        public List<List<TilePosition>> terrain;
+
         public static MapCache Create(Map map)
         {
             MapCache cache = ScriptableObject.CreateInstance<MapCache>();
@@ -50,6 +62,18 @@ namespace Mapping
                 MapLayer map_layer = new MapLayer(layer_id);
                 layers.Add(layer_id, map_layer);
             }
+
+            // Hideable Object Tracking Initialization
+            bridge_hidden = false;
+            cur_bridge = null;
+            bridges = new List<List<TilePosition>>();
+
+            prefab_hidden = false;
+            cur_prefab = null;
+
+            terrain_hidden = false;
+            cur_terrain = null;
+            terrain = new List<List<TilePosition>>();
         }
         public override string ToString()
         {
@@ -101,6 +125,40 @@ namespace Mapping
             if (!layers[layer_id].tiles.ContainsKey(pos)) return new MatchedTile{};
             
             return layers[layer_id].tiles[pos];
+        }
+
+        /* 
+        * Hideable Object Cacheing
+        */
+        public void CacheBridge(List<TilePosition> bridge)
+        {
+            bridges.Add(bridge);
+        }
+        public void CacheTerrain(List<TilePosition> edges)
+        {
+            terrain.Add(edges);
+        }
+
+        /*
+        * Hideable Object Retrieval
+        */
+        public List<TilePosition> GetBridge(TilePosition tile_pos)
+        {
+            foreach (List<TilePosition> bridge in bridges)
+            {
+                if (bridge.Contains(tile_pos)) return bridge;
+            }
+
+            return null;
+        }
+        public List<TilePosition> GetTerrain(TilePosition tile_pos)
+        {
+            foreach (List<TilePosition> edge in terrain)
+            {
+                if (edge.Contains(tile_pos)) return edge;
+            }
+
+            return null;
         }
 
         #endregion
