@@ -27,6 +27,7 @@ namespace Eventing
         private Map map;
         private Vector3 target_pos;
         private Vector3 last_pos;
+        public Vector3 target_rotation;
         private Vector3 shadow_target_pos;
         private Vector3 shadow_home_pos;
         private Vector3 reflection_mask_target_pos;
@@ -92,7 +93,9 @@ namespace Eventing
         [TabGroup ("Movement")]
         [ReadOnly]
         public bool looked;
-        [TabGroup ("Movement")]
+        [TabGroup("Movement")]
+        [ReadOnly]
+        public bool rotating;
         [ReadOnly]
         public bool jumping;
         [TabGroup ("Movement")]
@@ -160,10 +163,12 @@ namespace Eventing
             // Basic Setup
             target_pos = transform.position;
             last_pos = transform.position;
+            target_rotation = transform.localEulerAngles;
             speed = Constants.SPEEDS[(int)movement_speed];
             
             moving = true;
             looked = true;
+            rotating = true;
             jumping = false;
             falling = false;
             jump_data = new JumpData{};
@@ -181,7 +186,7 @@ namespace Eventing
             shore_anim = false;
 
             // Map Awareness Setup
-            map = FindObjectOfType<Map>(); // TODO - better way to find map
+            map = FindFirstObjectByType<Map>(); // TODO - better way to find map
             // event_manager = FindObjectOfType<EventManager>();
 
             // Animator / Sprite Setup
@@ -318,6 +323,17 @@ namespace Eventing
                 transform.position = Vector3.MoveTowards(transform.position, target_pos, Time.deltaTime * speed);
             }
 
+            // Handle camera angle rotation changes
+            if (rotating && target_rotation != transform.localEulerAngles)
+            {
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(target_rotation.x, target_rotation.y, target_rotation.z), Time.deltaTime * speed);
+                transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0, 0);
+
+                if (Math.Abs(360 - (transform.localEulerAngles.x - target_rotation.x)) < Constants.ROTATION_SMOOTHING_CUTOFF)
+                    transform.localEulerAngles = target_rotation;
+            }
+            if (target_rotation == transform.localEulerAngles) rotating = false;
+
             // Move shadow to keep up with object
             if (shadow.transform.localPosition != shadow_target_pos)
                 shadow.transform.localPosition = Vector3.MoveTowards(shadow.transform.localPosition, shadow_target_pos, Time.deltaTime * speed);
@@ -434,6 +450,9 @@ namespace Eventing
                             show_reflection = false;
                             visibility_changed = true;
                         }
+
+                        if (underwater) transform.localEulerAngles = Constants.UNDERWATER_PERSPECTIVE_ANGLE;
+                        target_rotation = transform.localEulerAngles;
 
                         initial_checks_done = true;
                     }
@@ -1630,6 +1649,12 @@ namespace Eventing
         {
             if (neighbor_tiles.above_tile != null && neighbor_tiles.above_tile.allow_passage)
             {
+                if (underwater && ParallaxTerrain.IsWaterTile(neighbor_tiles.above_tile) && !ParallaxTerrain.IsUnderwaterTile(neighbor_tiles.above_tile))
+                {
+                    target_rotation = Constants.DEFAULT_PERSPECTIVE_ANGLE;
+                    rotating = true;
+                }
+
                 bool prev_move_through_walls = move_through_walls;
                 bool prev_lock_direction = lock_direction;
                 MoveThroughWallsOn();
@@ -1650,6 +1675,12 @@ namespace Eventing
         {
             if (fall || (neighbor_tiles.below_tile != null && neighbor_tiles.below_tile.allow_passage))
             {
+                if (!underwater && ParallaxTerrain.IsUnderwaterTile(neighbor_tiles.below_tile))
+                {
+                    target_rotation = Constants.UNDERWATER_PERSPECTIVE_ANGLE;
+                    rotating = true;
+                }
+
                 bool prev_move_through_walls = move_through_walls;
                 bool prev_lock_direction = lock_direction;
                 MoveThroughWallsOn();

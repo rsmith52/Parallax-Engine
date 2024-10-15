@@ -49,6 +49,7 @@ Unity Project for 2.5d Parallax RPG Engine
 
 ### Camera
 * Setting events, the player and camera at a ~ -15 X angle looks much, much better. Worth reworking terrain etc. to look correct...
+* Reflection will need work especially - already offset to match adding 15 back to the rotation, but needs more
 
 ### Settings Code
 * Switch to a settings asset?

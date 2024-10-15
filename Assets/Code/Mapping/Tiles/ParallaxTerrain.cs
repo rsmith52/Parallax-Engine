@@ -59,7 +59,7 @@ namespace Mapping.Tiles
             if (is_deep_only) return deep_water_tags.Contains(tile.terrain_tag);
             else if (is_ocean_only) return ocean_tags.Contains(tile.terrain_tag);
             else if (see_shore) return (water_tags.Contains(tile.terrain_tag) || ocean_tags.Contains(tile.terrain_tag) || deep_water_tags.Contains(tile.terrain_tag) || shore_tags.Contains(tile.terrain_tag));
-            else return (water_tags.Contains(tile.terrain_tag) || ocean_tags.Contains(tile.terrain_tag) || deep_water_tags.Contains(tile.terrain_tag));
+            else return (water_tags.Contains(tile.terrain_tag) || ocean_tags.Contains(tile.terrain_tag)) || deep_water_tags.Contains(tile.terrain_tag);
         }
 
         public static bool IsShoreTile(ParallaxTileBase tile)
@@ -77,7 +77,7 @@ namespace Mapping.Tiles
         public static bool IsUnderwaterTile(ParallaxTileBase tile)
         {
             if (tile == null) return false;
-            return underwater_tags.Contains(tile.terrain_tag);
+            return (underwater_tags.Contains(tile.terrain_tag) || deep_water_tags.Contains(tile.terrain_tag));
         }
 
         public static bool IsLedgeTile(ParallaxTileBase tile)
