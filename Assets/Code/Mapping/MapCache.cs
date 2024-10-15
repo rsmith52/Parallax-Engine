@@ -77,6 +77,7 @@ namespace Mapping
         }
         public void SetTile(int layer_id, Vector2Int pos, MatchedTile tile)
         {
+            if (!layers.ContainsKey(layer_id)) return;
             layers[layer_id].tiles[pos] = tile;
         }
 

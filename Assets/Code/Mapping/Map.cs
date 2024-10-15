@@ -902,19 +902,19 @@ namespace Mapping
                 }
             
                 // Same Level Neighbors
-                neighbor_tiles.up_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up, on_stairs).tile;
+                neighbor_tiles.up_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up, on_stairs, false, false, underwater).tile;
                 neighbor_tiles.left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.left, on_stairs, false, false, underwater).tile;
                 neighbor_tiles.right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.right, on_stairs, false, false, underwater).tile;
                 neighbor_tiles.down_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down, on_stairs, false, false, underwater).tile;
 
                 // Above / Below Level Neighbors - primarily bridge & water use
-                neighbor_tiles.above_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up, on_stairs, true).tile;
+                neighbor_tiles.above_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up, on_stairs, true, false, underwater).tile;
                 if (on_bridge || on_water)
-                    neighbor_tiles.below_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down, on_stairs, false, true).tile;
+                    neighbor_tiles.below_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down, on_stairs, false, true, underwater).tile;
 
                 // Corner Neighbors
-                neighbor_tiles.up_left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up + Vector3Int.left, on_stairs).tile;
-                neighbor_tiles.up_right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up + Vector3Int.right, on_stairs).tile;
+                neighbor_tiles.up_left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up + Vector3Int.left, on_stairs, false, false, underwater).tile;
+                neighbor_tiles.up_right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up + Vector3Int.right, on_stairs, false, false, underwater).tile;
                 neighbor_tiles.down_left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down + Vector3Int.left, on_stairs, false, false, underwater).tile;
                 neighbor_tiles.down_right_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down + Vector3Int.right, on_stairs, false, false, underwater).tile;
                 
@@ -956,35 +956,34 @@ namespace Mapping
                     break;
             }
 
-            MatchedTile facing_tile = GetTileAtPosition (neighbor_maps, int_pos + dir_vector, on_stairs, false, false, underwater);
+            MatchedTile facing_tile = GetTileAtPosition (neighbor_maps, int_pos + dir_vector, on_stairs, false, false, underwater, false);
             neighbor_tiles.facing_tile = facing_tile.tile;
             neighbor_tiles.facing_other_level = ((on_tile.layer == null && facing_tile.layer != null) || (on_tile.layer != null && facing_tile.layer == null) ||
                 (on_tile.layer != null && facing_tile.layer != null && on_tile.layer.name != facing_tile.layer.name));
 
-            MatchedTile look_ahead_tile = GetTileAtPosition (neighbor_maps, int_pos + (2 * dir_vector), on_stairs, false, false, underwater);
+            MatchedTile look_ahead_tile = GetTileAtPosition (neighbor_maps, int_pos + (2 * dir_vector), on_stairs, false, false, underwater, false);
             neighbor_tiles.look_ahead_tile = look_ahead_tile.tile;
             neighbor_tiles.look_ahead_other_level = ((on_tile.layer == null && look_ahead_tile.layer != null) || (on_tile.layer != null && look_ahead_tile.layer == null) ||
                 (on_tile.layer != null && look_ahead_tile.layer != null && on_tile.layer.name != look_ahead_tile.layer.name));
 
-            MatchedTile look_ahead_cw_tile = GetTileAtPosition (neighbor_maps, int_pos + cw_dir_vector, on_stairs, false, false, underwater);
+            MatchedTile look_ahead_cw_tile = GetTileAtPosition (neighbor_maps, int_pos + cw_dir_vector, on_stairs, false, false, underwater, false);
             neighbor_tiles.look_ahead_cw_tile = look_ahead_cw_tile.tile;
 
-            MatchedTile look_ahead_ccw_tile = GetTileAtPosition (neighbor_maps, int_pos + ccw_dir_vector, on_stairs, false, false, underwater);
+            MatchedTile look_ahead_ccw_tile = GetTileAtPosition (neighbor_maps, int_pos + ccw_dir_vector, on_stairs, false, false, underwater, false);
             neighbor_tiles.look_ahead_ccw_tile = look_ahead_ccw_tile.tile;
             
             return neighbor_tiles;
         }
 
         private MatchedTile GetTileAtPosition (NeighborTilemaps neighbor_maps, Vector3Int pos,
-                                                bool on_stairs = false, bool looking_above = false, bool looking_below = false, bool underwater = false)
+                                                bool on_stairs = false, bool looking_above = false, bool looking_below = false,
+                                                bool underwater = false, bool cache_result = true)
         {
             // Check Cache First
             int cache_layer = neighbor_maps.ground_layer_id + (1 * looking_above.ToInt()) - (1 * looking_below.ToInt());
-            MatchedTile matched_tile = map_cache.GetTile(cache_layer, pos);
-            if (matched_tile.tile != null) 
-            {
-                return matched_tile;
-            }
+            MatchedTile matched_tile = new MatchedTile{};
+            matched_tile = map_cache.GetTile(cache_layer, pos);
+            if (matched_tile.tile != null) return matched_tile;
             
             // Otherwise, find this tile
             matched_tile.object_match = false;
@@ -1056,7 +1055,7 @@ namespace Mapping
             }
 
             // Cache the newly found tile before returning it
-            map_cache.SetTile(cache_layer, pos, matched_tile);
+            if (cache_result) map_cache.SetTile(cache_layer, pos, matched_tile);
             return matched_tile;
         }
 
