@@ -12,6 +12,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Add shadows in
 * Large ferns / foliage
 * More mushrooms
+* Buildings - think of them more like terrain than trees for how they are setup
 
 ### Tile object coding
 * Slide on ice
@@ -22,9 +23,11 @@ Unity Project for 2.5d Parallax RPG Engine
 * Forage tiles - "is_forage" flag with fields for replacement "foraged" tile, and what item(s) it drops -> Probably should be events
 * Animate the fading/hiding/showing of tiles
 * Reflection bug when walking up into blocked tile while showing reflection below, head gets cut off - setting new mask tiles without actually moving
+* Consider playing with particle effects for grass rustle, water, etc. Have some randomness involved.
 
 ### Map Managing Code
 * Buttons for static functions to load/save maps as well
+* Upon saving, create a cache as well. Map Data objects contain a map and a cache and are saved/loaded together. Cache assigned to map at load time.
 * Map object stores background music
 * Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
 * Would be really nice to have map managing code visible in same editor window as tile palette for map editing
@@ -43,6 +46,9 @@ Unity Project for 2.5d Parallax RPG Engine
 * Shrink shadows when jumping!
 * Consider splitting up sprite / animation / visual code out of moveable object
 * Refactor considering what should go in start vs awake.
+
+### Camera
+* Setting events, the player and camera at a ~ -15 X angle looks much, much better. Worth reworking terrain etc. to look correct...
 
 ### Settings Code
 * Switch to a settings asset?

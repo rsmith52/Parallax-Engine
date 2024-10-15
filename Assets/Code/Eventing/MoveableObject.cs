@@ -535,6 +535,7 @@ namespace Eventing
                 // Shadow behavior
                 if (!invisible) shadow.enabled = !(shore_anim || on_water || underwater);
                 // Reflection behavior
+
                 reflection_group.GetComponentInChildren<SpriteRenderer>().enabled = show_reflection;
                 visibility_changed = false;
             }
@@ -653,10 +654,10 @@ namespace Eventing
                         visibility_changed = true; // Update shadow enabled or not, desired earlier when leaving shore or entering water
                     // Show Reflection Flag
                     if (!underwater && 
-                        (neighbor_tiles.on_tile != null && neighbor_tiles.on_tile.is_reflective) ||
+                        ((neighbor_tiles.on_tile != null && neighbor_tiles.on_tile.is_reflective) ||
                         (neighbor_tiles.down_tile != null && neighbor_tiles.down_tile.is_reflective) ||
                         (neighbor_tiles.down_right_tile != null && neighbor_tiles.down_right_tile.is_reflective) ||
-                        (neighbor_tiles.down_right_two_tile != null && neighbor_tiles.down_right_two_tile.is_reflective))
+                        (neighbor_tiles.down_right_two_tile != null && neighbor_tiles.down_right_two_tile.is_reflective)))
                     {
                         if (!show_reflection)
                         {
@@ -759,10 +760,10 @@ namespace Eventing
                         visibility_changed = true; // Update shadow enabled or not, desired earlier when leaving shore
                     // Show Reflection Flag
                     if (!underwater && 
-                        (neighbor_tiles.on_tile != null && neighbor_tiles.on_tile.is_reflective) ||
+                        ((neighbor_tiles.on_tile != null && neighbor_tiles.on_tile.is_reflective) ||
                         (neighbor_tiles.down_tile != null && neighbor_tiles.down_tile.is_reflective) ||
                         (neighbor_tiles.down_left_tile != null && neighbor_tiles.down_left_tile.is_reflective) ||
-                        (neighbor_tiles.down_left_two_tile != null && neighbor_tiles.down_left_two_tile.is_reflective))
+                        (neighbor_tiles.down_left_two_tile != null && neighbor_tiles.down_left_two_tile.is_reflective)))
                     {
                         if (!show_reflection)
                         {
@@ -868,10 +869,10 @@ namespace Eventing
                         visibility_changed = true; // Update shadow enabled or not, desired earlier when leaving shore
                     // Show Reflection Flag
                     if (!underwater && 
-                        (neighbor_tiles.up_tile != null && neighbor_tiles.up_tile.is_reflective) ||
+                        ((neighbor_tiles.up_tile != null && neighbor_tiles.up_tile.is_reflective) ||
                         (neighbor_tiles.on_tile != null && neighbor_tiles.on_tile.is_reflective) ||
                         (neighbor_tiles.left_tile != null && neighbor_tiles.left_tile.is_reflective) ||
-                        (neighbor_tiles.right_tile != null && neighbor_tiles.right_tile.is_reflective))
+                        (neighbor_tiles.right_tile != null && neighbor_tiles.right_tile.is_reflective)))
                     {
                         if (!show_reflection)
                         {
@@ -961,10 +962,10 @@ namespace Eventing
                         visibility_changed = true; // Update shadow enabled or not, desired earlier when leaving shore
                     // Show Reflection Flag
                     if (!underwater &&
-                        (neighbor_tiles.down_tile != null && neighbor_tiles.down_tile.is_reflective) ||
+                        ((neighbor_tiles.down_tile != null && neighbor_tiles.down_tile.is_reflective) ||
                         (neighbor_tiles.down_two_tile != null && neighbor_tiles.down_two_tile.is_reflective) ||
                         (neighbor_tiles.down_two_left_tile != null && neighbor_tiles.down_two_left_tile.is_reflective) ||
-                        (neighbor_tiles.down_two_right_tile != null && neighbor_tiles.down_two_right_tile.is_reflective))
+                        (neighbor_tiles.down_two_right_tile != null && neighbor_tiles.down_two_right_tile.is_reflective)))
                     {
                         if (!show_reflection)
                         {

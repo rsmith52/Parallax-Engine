@@ -902,9 +902,9 @@ namespace Mapping
                 neighbor_tiles.down_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down, on_stairs, false, false, underwater).tile;
 
                 // Above / Below Level Neighbors - primarily bridge & water use
-                neighbor_tiles.above_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up, on_stairs, true, false, underwater).tile;
+                neighbor_tiles.above_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up, on_stairs, true, false, underwater, false).tile;
                 if (on_bridge || on_water)
-                    neighbor_tiles.below_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down, on_stairs, false, true, underwater).tile;
+                    neighbor_tiles.below_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.down, on_stairs, false, true, underwater, false).tile;
 
                 // Corner Neighbors
                 neighbor_tiles.up_left_tile = GetTileAtPosition (neighbor_maps, int_pos + Vector3Int.up + Vector3Int.left, on_stairs, false, false, underwater).tile;

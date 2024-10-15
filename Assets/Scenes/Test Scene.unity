@@ -95538,7 +95538,7 @@ Camera:
   far clip plane: 5000
   field of view: 40
   orthographic: 0
-  orthographic size: 10.825
+  orthographic size: 12
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -95639,6 +95639,7 @@ GameObject:
   - component: {fileID: 1603119446}
   - component: {fileID: 1603119447}
   - component: {fileID: 1603119448}
+  - component: {fileID: 1603119449}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -95716,6 +95717,19 @@ MonoBehaviour:
   m_MaximumFOV: 60
   m_MinimumOrthoSize: 1
   m_MaximumOrthoSize: 5000
+--- !u!114 &1603119449
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603119445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4c41ac9245b87c4192012080077d830, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Damping: 0
 --- !u!1001 &4530581919089750066
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -95759,6 +95773,31 @@ PrefabInstance:
     - target: {fileID: 5053996002852008266, guid: f26f9c4a67c4646e1ae78b32098dd319,
         type: 3}
       propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063223213093076933, guid: f26f9c4a67c4646e1ae78b32098dd319,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063223213093076933, guid: f26f9c4a67c4646e1ae78b32098dd319,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063223213093076933, guid: f26f9c4a67c4646e1ae78b32098dd319,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063223213093076933, guid: f26f9c4a67c4646e1ae78b32098dd319,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063223213093076933, guid: f26f9c4a67c4646e1ae78b32098dd319,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7384702778170570640, guid: f26f9c4a67c4646e1ae78b32098dd319,
