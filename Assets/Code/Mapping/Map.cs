@@ -36,6 +36,8 @@ namespace Mapping
         public SerializableDictionary<int, Tilemap> map_layers;
         [ReadOnly]
         public Dictionary<int, Tilemap[]> object_layers;
+        [ShowInInspector]
+        private MapCache map_cache;
 
         [Title("Effect Prefabs")]
         public bool show_effect_settings = false;
@@ -253,6 +255,8 @@ namespace Mapping
                     renderer.sortingOrder = sorting_layer + i + Constants.OBJECT_LAYER_START_OFFSET;                        
                 }
             }
+
+            if (map_cache == null) map_cache = MapCache.Create(this);
         }
         
         #endregion
@@ -765,7 +769,7 @@ namespace Mapping
 
         #region Map Awareness
         
-        private int GetMapLayerIDFromPosition (Vector3 pos)
+        public int GetMapLayerIDFromPosition (Vector3 pos)
         {
             foreach (KeyValuePair<int, Tilemap> layer in map_layers)
             {
@@ -785,6 +789,7 @@ namespace Mapping
                 Tilemap map = layer.Value;
                 if (map.transform.position.z == pos.z)
                 {
+                    neighbor_maps.ground_layer_id = layer.Key;
                     neighbor_maps.ground = map;
                     neighbor_maps.objects = object_layers[layer.Key];
                 }
@@ -973,7 +978,15 @@ namespace Mapping
         private MatchedTile GetTileAtPosition (NeighborTilemaps neighbor_maps, Vector3Int pos,
                                                 bool on_stairs = false, bool looking_above = false, bool looking_below = false, bool underwater = false)
         {
-            MatchedTile matched_tile = new MatchedTile{};
+            // Check Cache First
+            int cache_layer = neighbor_maps.ground_layer_id + (1 * looking_above.ToInt()) - (1 * looking_below.ToInt());
+            MatchedTile matched_tile = map_cache.GetTile(cache_layer, pos);
+            if (matched_tile.tile != null) 
+            {
+                return matched_tile;
+            }
+            
+            // Otherwise, find this tile
             matched_tile.object_match = false;
             
             // Check Layer Up
@@ -1041,6 +1054,9 @@ namespace Mapping
                     matched_tile = CheckTilePositionOnLayer(matched_tile, pos, neighbor_maps.ground, neighbor_maps.objects,false,false,false,false,true);
                 }
             }
+
+            // Cache the newly found tile before returning it
+            map_cache.SetTile(cache_layer, pos, matched_tile);
             return matched_tile;
         }
 

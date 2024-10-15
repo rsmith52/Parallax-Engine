@@ -45,6 +45,8 @@ namespace Mapping
     [Serializable]
     public struct NeighborTilemaps
     {
+        public int ground_layer_id;
+        
         public Tilemap ground;
         public Tilemap layer_up;
         public Tilemap layer_down;

@@ -30,6 +30,8 @@ Unity Project for 2.5d Parallax RPG Engine
 * Would be really nice to have map managing code visible in same editor window as tile palette for map editing
 * Fog effects, weather, etc. are in map definition
 * Map creation code -> new file
+* Refactor considering what should go in start vs awake.
+* Build on cache so it can be generated and saved off in editor
 
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines
@@ -39,6 +41,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Intermittent bug that happens on stairs sometimes where on_tile is null
 * Shrink shadows when jumping!
 * Consider splitting up sprite / animation / visual code out of moveable object
+* Refactor considering what should go in start vs awake.
 
 ### Settings Code
 * Switch to a settings asset?
@@ -46,6 +49,7 @@ Unity Project for 2.5d Parallax RPG Engine
 ### UI Code
 * Simple message boxes
 * Speech bubbles
+* Consider Unity 2023.2 version for UI Toolkit updates...
 
 ### AI Code
 * Path Finding will need custom logic, gonna be hard
@@ -79,6 +83,8 @@ Unity Project for 2.5d Parallax RPG Engine
 * Skyrim esque random encounters
 * Followers / companions
 * Perks / stats/ point buy etc. No forced classes, build out what you care about. Invest directly in base stats.
+* Courier NPC like in Skyrim
+* Level scaling -> Assing difficulty ratings to everyting, from simple to boss. Zones get assigned a scaling based on game objectives completed at that point. Locked at that point.
 
 
 
