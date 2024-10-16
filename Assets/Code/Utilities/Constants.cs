@@ -45,9 +45,11 @@ namespace Utilities
         public static readonly int OBJ_SORTING_LAYER_ID = -242371227;
         public static readonly string OBJ_SORTING_LAYER_NAME = "Objects & Characters";
 
+        public static readonly Vector3 WORLD_ANGLE = new Vector3(0, 0, 0);
         public static readonly Vector3 DEFAULT_PERSPECTIVE_ANGLE = new Vector3 (-15, 0, 0);
         public static readonly Vector3 UNDERWATER_PERSPECTIVE_ANGLE = new Vector3(5, 0, 0);
         public static readonly float ROTATION_SMOOTHING_CUTOFF = 2.5f;
+        public static readonly Vector3 DEFAULT_SPRITE_POS = new Vector3(0.5f, 1, 0);
         public static readonly Vector3 UNDERWATER_SPRITE_OFFSET = new Vector3(0, 0.5f, 0);
 
         #endregion

@@ -164,7 +164,7 @@ namespace Eventing
             // Basic Setup
             target_pos = transform.position;
             last_pos = transform.position;
-            target_rotation = transform.localEulerAngles;
+            target_rotation = Constants.DEFAULT_PERSPECTIVE_ANGLE;
             speed = Constants.SPEEDS[(int)movement_speed];
             
             moving = true;
@@ -207,7 +207,7 @@ namespace Eventing
                     reflection = sprite;
             }
             main_sprite.material = SpriteUtils.GetOutlineMaterial(outline);
-            main_sprite_target_pos = main_sprite.transform.localPosition;
+            main_sprite_target_pos = Constants.DEFAULT_SPRITE_POS;
             shadow_target_pos = shadow.transform.localPosition;
             shadow_home_pos = shadow.transform.localPosition;
             reflection_mask_target_pos = reflection_mask_trans.localPosition;
@@ -238,7 +238,7 @@ namespace Eventing
         {
             // Update Animator
             AnimSetInt(Constants.ANIM_DIRECTION, (int)direction);
-            if (walking_animation && !stepping_animation && !jumping && !falling && !underwater && (target_pos != transform.position))
+            if (walking_animation && !stepping_animation && !jumping && !falling && !on_water && !underwater && (target_pos != transform.position))
                  AnimSetBool(Constants.ANIM_WALK, moving);
             else if (stepping_animation)
                 AnimSetBool(Constants.ANIM_WALK, true);

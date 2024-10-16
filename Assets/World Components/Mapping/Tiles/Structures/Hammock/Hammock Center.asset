@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34a88e4cea08841649b5b7c5cc9b2938, type: 3}
+  m_Name: Hammock Center
+  m_EditorClassIdentifier: 
+  terrain_tag: 27
+  allow_passage: 1
+  up_passage: 1
+  left_passage: 0
+  right_passage: 0
+  down_passage: 1
+  is_bush: 0
+  is_counter: 0
+  is_trans: 0
+  is_light_trans: 0
+  is_reflective: 0
+  is_jump: 1
+  is_hideable: 0
+  instantiated_object: {fileID: 0}
+  preview_sprite: {fileID: -604086155, guid: 3bc279f74cc82408a8c60a36642878a6, type: 3}
+  prefab: {fileID: 8626972231468677178, guid: bc42830b3ed594f81bbeab75f62e62ed, type: 3}
+  multi_tile: 0
+  tile_size:
+    x_width: 1
+    y_height: 2
+    z_layers: 1
+  prefab_offset: {x: 0.5, y: 0}
+  prefab_local_z: 0

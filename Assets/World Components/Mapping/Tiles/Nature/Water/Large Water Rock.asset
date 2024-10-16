@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34a88e4cea08841649b5b7c5cc9b2938, type: 3}
+  m_Name: Large Water Rock
+  m_EditorClassIdentifier: 
+  terrain_tag: 20
+  allow_passage: 0
+  up_passage: 0
+  left_passage: 0
+  right_passage: 0
+  down_passage: 0
+  is_bush: 0
+  is_counter: 0
+  is_trans: 0
+  is_light_trans: 0
+  is_reflective: 0
+  is_jump: 0
+  is_hideable: 0
+  strict_hiding: 0
+  multi_tile: 1
+  tile_size:
+    x_width: 2
+    y_height: 1
+    z_layers: 2
+  instantiated_object: {fileID: 0}
+  preview_sprite: {fileID: -1854440006, guid: 0161e3702eea6409190cfb4269a31338, type: 3}
+  prefab: {fileID: 8626972231468677178, guid: d6e477d76e3c14363b20c480cfd06ee8, type: 3}
+  prefab_offset: {x: 1, y: 1}
+  prefab_local_z: 0

@@ -57,7 +57,6 @@ namespace Mapping
         // Track Hiding/Showing Animations
         private Dictionary<SpriteRenderer, HidingStatus> vis_transition_sprites;
         private bool any_hiding;
-        private bool any_showing;
 
         #endregion
 
@@ -246,12 +245,14 @@ namespace Mapping
 
             // Initialize animation tracking dictionaries
             cancel_anim_kill = new Dictionary<TilePosition, bool>();
-            water_splash_anims = new Dictionary<TilePosition, GameObject>(); 
+            water_splash_anims = new Dictionary<TilePosition, GameObject>();
+            vis_transition_sprites = new Dictionary<SpriteRenderer, HidingStatus>();
+            any_hiding = false;
         }
 
         private void Update()
         {
-            if (any_hiding || any_showing)
+            if (any_hiding)
             {
                 foreach (KeyValuePair<SpriteRenderer, HidingStatus> entry in vis_transition_sprites)
                 {
@@ -268,7 +269,6 @@ namespace Mapping
                 if (vis_transition_sprites.Count() == 0)
                 {
                     any_hiding = false;
-                    any_showing = false;
                 }
             }
         }
@@ -608,7 +608,7 @@ namespace Mapping
         */
         private void ShowTiles (List<TilePosition> tiles, GameObject prefab_obj = null)
         {
-            any_showing = true;
+            any_hiding = true;
 
             if (prefab_obj != null)
             {
@@ -687,15 +687,17 @@ namespace Mapping
         public IEnumerator WaterSplashAnimation(Vector3 pos)
         {
             int layer = GetMapLayerIDFromPosition(pos);
-            Tilemap map = map_layers[layer];          
+            Tilemap map = map_layers[layer];
+            MapAnimationSettings settings = water_splash.GetComponent<MapAnimationSettings>();
 
-            yield return new WaitForSeconds(water_splash.GetComponent<MapAnimationSettings>().appear_delay);
+            yield return new WaitForSeconds(settings.appear_delay);
 
             TilePosition splash_pos = new TilePosition(map, new Vector3Int((int)pos.x, (int)pos.y));
             if (!water_splash_anims.ContainsKey(splash_pos))
             {
                 GameObject anim = Instantiate(water_splash, map.transform);
                 anim.transform.position = pos;
+                anim.transform.localEulerAngles = settings.anim_angle;
                 SpriteUtils.ConfigurePrefabTileSprites(map, anim, false, false, false, true); // Same layer as player
                 water_splash_anims.Add(splash_pos, anim);
             }

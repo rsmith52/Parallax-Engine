@@ -47,6 +47,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Shrink shadows when jumping!
 * Consider splitting up sprite / animation / visual code out of moveable object
 * Refactor considering what should go in start vs awake.
+* Refactor update method in moveable object to put everything in smaller functions
 
 ### Camera
 * Reflection could use a bit more work again
