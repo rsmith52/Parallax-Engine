@@ -48,6 +48,7 @@ namespace Utilities
         public static readonly Vector3 DEFAULT_PERSPECTIVE_ANGLE = new Vector3 (-15, 0, 0);
         public static readonly Vector3 UNDERWATER_PERSPECTIVE_ANGLE = new Vector3(5, 0, 0);
         public static readonly float ROTATION_SMOOTHING_CUTOFF = 2.5f;
+        public static readonly Vector3 UNDERWATER_SPRITE_OFFSET = new Vector3(0, 0.5f, 0);
 
         #endregion
 

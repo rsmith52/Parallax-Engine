@@ -54,6 +54,11 @@ namespace Mapping
         private Dictionary<TilePosition, bool> cancel_anim_kill;
         private Dictionary<TilePosition, GameObject> water_splash_anims;
 
+        // Track Hiding/Showing Animations
+        private Dictionary<SpriteRenderer, HidingStatus> vis_transition_sprites;
+        private bool any_hiding;
+        private bool any_showing;
+
         #endregion
 
 
@@ -243,7 +248,31 @@ namespace Mapping
             cancel_anim_kill = new Dictionary<TilePosition, bool>();
             water_splash_anims = new Dictionary<TilePosition, GameObject>(); 
         }
-        
+
+        private void Update()
+        {
+            if (any_hiding || any_showing)
+            {
+                foreach (KeyValuePair<SpriteRenderer, HidingStatus> entry in vis_transition_sprites)
+                {
+                    SpriteRenderer sprite = entry.Key;
+                    HidingStatus h_status = entry.Value;
+
+                    sprite.color = Color.Lerp(h_status.cur_color, h_status.target_color, (h_status.step / h_status.total_steps));
+
+                    if (h_status.step == h_status.total_steps)
+                        vis_transition_sprites.Remove(entry.Key);
+                    h_status.step++;
+                }
+
+                if (vis_transition_sprites.Count() == 0)
+                {
+                    any_hiding = false;
+                    any_showing = false;
+                }
+            }
+        }
+
         #endregion
 
 
@@ -527,6 +556,8 @@ namespace Mapping
         */
         private void HideTiles (List<TilePosition> tiles, GameObject prefab_obj = null)
         {
+            any_hiding = true;
+
             if (prefab_obj != null)
             {
                 foreach (SpriteRenderer sprite in prefab_obj.GetComponentsInChildren<SpriteRenderer>())
@@ -577,6 +608,8 @@ namespace Mapping
         */
         private void ShowTiles (List<TilePosition> tiles, GameObject prefab_obj = null)
         {
+            any_showing = true;
+
             if (prefab_obj != null)
             {
                 foreach (SpriteRenderer sprite in prefab_obj.GetComponentsInChildren<SpriteRenderer>())

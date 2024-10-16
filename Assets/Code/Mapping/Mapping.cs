@@ -37,6 +37,12 @@ namespace Mapping
         StormySea = 10
     }
 
+    public enum HidingStatuses
+    {
+        Hiding = 0,
+        Showing = 1
+    }
+
     #endregion
 
 
@@ -122,6 +128,25 @@ namespace Mapping
             map = m;
             pos = p;
             is_object = o;
+        }
+    }
+
+    [Serializable]
+    public struct HidingStatus
+    {
+        public HidingStatuses status;
+        public int step;
+        public int total_steps;
+        public Color cur_color;
+        public Color target_color;
+
+        public HidingStatus(HidingStatuses status, int step, int total_steps, Color cur_color, Color target_color)
+        {
+            this.status = status;
+            this.step = step;
+            this.total_steps = total_steps;
+            this.cur_color = cur_color;
+            this.target_color = target_color;
         }
     }
 

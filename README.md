@@ -16,7 +16,7 @@ Unity Project for 2.5d Parallax RPG Engine
 
 ### Tile object coding
 * Slide on ice
-* Tiles that you can't jump in (marsh, deep sand, etc.) - includes water and underwater - jump button should probably be used to dive/rise in water?
+* Tiles that you can't jump in (marsh, deep sand, etc.)
 * Underwater tiles could have color tint in palette view - or some indicator of being underwater tiles
 * Same thing for shore tiles
 * Animate still water edges
@@ -33,7 +33,6 @@ Unity Project for 2.5d Parallax RPG Engine
 * Nice to have - brush code for water / terraforming - automatically apply correct tiles to multiple layers, add/delete layers dynamically
 * Would be really nice to have map managing code visible in same editor window as tile palette for map editing
 * Fog effects, weather, etc. are in map definition
-* Map creation code -> new file
 * Refactor considering what should go in start vs awake.
 * Build on cache so it can be generated and saved off in editor
 * Hidden bridge case of going from one to another
@@ -50,10 +49,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Refactor considering what should go in start vs awake.
 
 ### Camera
-* Setting events, the player and camera at a ~ -15 X angle looks much, much better. Worth reworking terrain etc. to look correct...
-* Reflection will need work especially - already offset to match adding 15 back to the rotation, but needs more
-* Prefab tile angles, should they match player or stay flat?
-* Terrain edges need to be higher priority than water to properly cover it...
+* Reflection could use a bit more work again
 
 ### Settings Code
 * Switch to a settings asset?

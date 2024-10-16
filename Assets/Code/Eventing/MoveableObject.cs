@@ -28,6 +28,7 @@ namespace Eventing
         private Vector3 target_pos;
         private Vector3 last_pos;
         public Vector3 target_rotation;
+        private Vector3 main_sprite_target_pos;
         private Vector3 shadow_target_pos;
         private Vector3 shadow_home_pos;
         private Vector3 reflection_mask_target_pos;
@@ -206,6 +207,7 @@ namespace Eventing
                     reflection = sprite;
             }
             main_sprite.material = SpriteUtils.GetOutlineMaterial(outline);
+            main_sprite_target_pos = main_sprite.transform.localPosition;
             shadow_target_pos = shadow.transform.localPosition;
             shadow_home_pos = shadow.transform.localPosition;
             reflection_mask_target_pos = reflection_mask_trans.localPosition;
@@ -236,7 +238,7 @@ namespace Eventing
         {
             // Update Animator
             AnimSetInt(Constants.ANIM_DIRECTION, (int)direction);
-            if (walking_animation && !stepping_animation && !jumping && !falling && (target_pos != transform.position))
+            if (walking_animation && !stepping_animation && !jumping && !falling && !underwater && (target_pos != transform.position))
                  AnimSetBool(Constants.ANIM_WALK, moving);
             else if (stepping_animation)
                 AnimSetBool(Constants.ANIM_WALK, true);
@@ -335,6 +337,12 @@ namespace Eventing
                     transform.localEulerAngles = target_rotation;
                     rotating = false;
                 } 
+            }
+
+            // Shift player sprite for floating underwater
+            if (main_sprite.transform.localPosition != main_sprite_target_pos)
+            {
+                main_sprite.transform.localPosition = Vector3.MoveTowards(main_sprite.transform.localPosition, main_sprite_target_pos, Time.deltaTime * speed);
             }
 
             // Move shadow to keep up with object
@@ -461,8 +469,14 @@ namespace Eventing
                             visibility_changed = true;
                         }
 
-                        if (underwater) transform.localEulerAngles = Constants.UNDERWATER_PERSPECTIVE_ANGLE;
+                        if (underwater)
+                        {
+                            transform.localEulerAngles = Constants.UNDERWATER_PERSPECTIVE_ANGLE;
+                            main_sprite.transform.localPosition = Constants.UNDERWATER_SPRITE_OFFSET;
+                        }
                         target_rotation = transform.localEulerAngles;
+                        main_sprite_target_pos = main_sprite.transform.localPosition;
+
 
                         initial_checks_done = true;
                     }
@@ -566,6 +580,8 @@ namespace Eventing
                 // Reflection behavior
 
                 reflection_group.GetComponentInChildren<SpriteRenderer>().enabled = show_reflection;
+                foreach (SpriteMask mask in reflection_masks)
+                    mask.enabled = show_reflection;
                 visibility_changed = false;
             }
         }
@@ -1662,6 +1678,7 @@ namespace Eventing
                 if (underwater && ParallaxTerrain.IsWaterTile(neighbor_tiles.above_tile) && !ParallaxTerrain.IsUnderwaterTile(neighbor_tiles.above_tile))
                 {
                     target_rotation = Constants.DEFAULT_PERSPECTIVE_ANGLE;
+                    main_sprite_target_pos -= Constants.UNDERWATER_SPRITE_OFFSET;
                     rotating = true;
                 }
 
@@ -1688,6 +1705,7 @@ namespace Eventing
                 if (!underwater && ParallaxTerrain.IsUnderwaterTile(neighbor_tiles.below_tile))
                 {
                     target_rotation = Constants.UNDERWATER_PERSPECTIVE_ANGLE;
+                    main_sprite_target_pos += Constants.UNDERWATER_SPRITE_OFFSET;
                     rotating = true;
                 }
 
