@@ -354,9 +354,16 @@ namespace Eventing
             
             // Update bush flag    
             if (in_bush && !jumping && !falling)
-                bush_mask.enabled = true;
+            {
+                foreach (SpriteMask mask in bush_mask.GetComponentsInChildren<SpriteMask>())
+                    mask.enabled = true;
+            }
+                
             else
-                bush_mask.enabled = false;
+            {
+                foreach (SpriteMask mask in bush_mask.GetComponentsInChildren<SpriteMask>())
+                    mask.enabled = false;
+            }
 
             // Tilemap and Event awareness check
             if ((other_moved || moving) && transform.position == target_pos)

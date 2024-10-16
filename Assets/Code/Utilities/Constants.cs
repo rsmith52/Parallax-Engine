@@ -15,6 +15,7 @@ namespace Utilities
         public static readonly string TERRAIN_EDGE_TILE_TAG = "Terrain Edge Tile";
         public static readonly string TERRAIN_CORNER_EDGE_TILE_TAG = "Terrain Corner Edge Tile";
         public static readonly string TERRAIN_EDGE_CORNER_TILE_TAG = "Terrain Edge Corner Tile"; // yes these names suck
+        public static readonly string WATER_TILE_TAG = "Water Tile";
         public static readonly string TOP_SIDE_STAIR_TILE = "Top Side Stair Tile";
         
         public static readonly string PRIORITY_TILE_TAG = "Priority Tile";
@@ -26,6 +27,7 @@ namespace Utilities
         public static readonly string DOWN_LAYER_PRIORITY_TILE_TAG = "Down Layer Priority Tile";
         
         public static readonly int TERRAIN_EDGE_TILE_OFFSET = 2;
+        public static readonly int WATER_TILE_OFFSET = -1;
         public static readonly int PRIORITY_TILE_OFFSET = 2;
         public static readonly int OBJECT_LAYER_START_OFFSET = 3;
         public static readonly int EVENT_SORTING_LAYER_OFFSET = SORTING_LAYERS_PER_MAP_LAYER + 1;

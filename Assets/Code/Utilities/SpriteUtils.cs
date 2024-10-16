@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.Rendering;
 
 namespace Utilities
 {
@@ -53,12 +52,27 @@ namespace Utilities
                     sprite.sortingOrder = layer + Constants.GROUND_ANIM_SORTING_LAYER_OFFSET;
                 else if (is_anim)
                     sprite.sortingOrder = layer + Constants.ANIM_SORTING_LAYER_OFFSET;
+
                 else if (sprite.tag == Constants.PRIORITY_TILE_TAG)
                     sprite.sortingOrder = layer + Constants.PRIORITY_TILE_OFFSET;
                 else if (sprite.tag == Constants.TERRAIN_EDGE_TILE_TAG || sprite.tag == Constants.TERRAIN_CORNER_EDGE_TILE_TAG)
+                {
                     sprite.sortingOrder = layer + Constants.TERRAIN_EDGE_TILE_OFFSET;
+                    SortingGroup group = sprite.GetComponent<SortingGroup>();
+                    if (group != null) group.sortingOrder = layer + Constants.TERRAIN_EDGE_TILE_OFFSET;
+                }
+                else if (sprite.tag == Constants.WATER_TILE_TAG)
+                {
+                    sprite.sortingOrder = layer + Constants.WATER_TILE_OFFSET;
+                    SortingGroup group = sprite.GetComponentInParent<SortingGroup>();
+                    if (group != null) group.sortingOrder = layer + Constants.WATER_TILE_OFFSET;
+                }   
                 else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG)
+                {
                     sprite.sortingOrder = layer - Constants.PRIORITY_TILE_OFFSET;
+                    SortingGroup group = sprite.GetComponent<SortingGroup>();
+                    if (group != null) group.sortingOrder = layer - Constants.PRIORITY_TILE_OFFSET;
+                }
                 else if (sprite.tag == Constants.EXTRA_PRIORITY_TILE_TAG)
                     sprite.sortingOrder = layer + (2 * Constants.PRIORITY_TILE_OFFSET);
                 else if (sprite.tag == Constants.EXTRA_DEPRIORITY_TILE_TAG)

@@ -20,6 +20,7 @@ TagManager:
   - Cover Priority Tile
   - Sprite
   - Reflection
+  - Water Tile
   layers:
   - Default
   - TransparentFX

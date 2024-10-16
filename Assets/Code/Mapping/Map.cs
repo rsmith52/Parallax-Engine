@@ -46,7 +46,7 @@ namespace Mapping
         [HideIf("@!show_effect_settings")]
         public GameObject water_splash;
         [HideIf("@!show_effect_settings")]
-        public Dictionary<Directions, GameObject> footprints = new Dictionary<Directions, GameObject>() {
+        public SerializableDictionary<Directions, GameObject> footprints = new SerializableDictionary<Directions, GameObject>() {
             {Directions.Up, null}, {Directions.Left, null}, {Directions.Right, null}, {Directions.Down, null}
         };
 

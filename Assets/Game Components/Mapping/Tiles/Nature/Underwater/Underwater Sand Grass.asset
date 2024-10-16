@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 06acc72d434f245648b6d2d5e6d686fe, type: 3}
-  m_Name: Blue Clam
+  m_Name: Underwater Sand Grass
   m_EditorClassIdentifier: 
-  terrain_tag: 8
+  terrain_tag: 9
   allow_passage: 1
   up_passage: 1
   left_passage: 1
@@ -22,7 +22,7 @@ MonoBehaviour:
   is_counter: 0
   is_trans: 0
   is_light_trans: 0
-  is_reflective: 1
+  is_reflective: 0
   is_jump: 0
   is_hideable: 0
   strict_hiding: 0
@@ -32,4 +32,4 @@ MonoBehaviour:
     y_height: 0
     z_layers: 0
   instantiated_object: {fileID: 0}
-  sprite: {fileID: 675309998, guid: 687d383ebc64342ff90e59f177f7cefa, type: 3}
+  sprite: {fileID: 1623201561, guid: 687d383ebc64342ff90e59f177f7cefa, type: 3}

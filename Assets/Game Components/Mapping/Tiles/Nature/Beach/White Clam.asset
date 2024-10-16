@@ -32,4 +32,4 @@ MonoBehaviour:
     y_height: 0
     z_layers: 0
   instantiated_object: {fileID: 0}
-  sprite: {fileID: 1240288933, guid: 687d383ebc64342ff90e59f177f7cefa, type: 3}
+  sprite: {fileID: 2047718900, guid: 687d383ebc64342ff90e59f177f7cefa, type: 3}

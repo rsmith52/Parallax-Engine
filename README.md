@@ -52,13 +52,15 @@ Unity Project for 2.5d Parallax RPG Engine
 ### Camera
 * Setting events, the player and camera at a ~ -15 X angle looks much, much better. Worth reworking terrain etc. to look correct...
 * Reflection will need work especially - already offset to match adding 15 back to the rotation, but needs more
+* Prefab tile angles, should they match player or stay flat?
+* Terrain edges need to be higher priority than water to properly cover it...
 
 ### Settings Code
 * Switch to a settings asset?
 
 ### UI Code
 * Simple message boxes
-* Speech bubbles
+* Speech bubbles -> Pop up automatically as NPCs come into hearing range, trying to start a conversation with you! Can be many popped up at once.
 * Consider Unity 2023.2 version for UI Toolkit updates...
 
 ### AI Code
@@ -69,6 +71,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Slightly wider range of sight given to AI objects, awareness of events in order to make simple decisions, choose movement based on what is seen, etc.
 * Imagine enemies gathering at the edge of a ledge trying to reach the player but unable to - different creatures have different range of movement, some could jump up that ledge!
 * Enemies jumping at you in general, good visual / feel - cool mix of movement options different creatures will have
+* State control - idea on how to make it swappable at runtime via enum selection -> public and internal state, if they ever don't match, queue a transition
 
 ### NLP Code
 * Consider GPT or...

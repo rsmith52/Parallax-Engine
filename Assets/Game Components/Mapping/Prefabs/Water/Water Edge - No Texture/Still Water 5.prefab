@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7747291055122472498}
   m_Layer: 0
   m_Name: Water
-  m_TagString: Untagged
+  m_TagString: Water Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -611510623
   m_SortingLayer: 1
-  m_SortingOrder: -6
+  m_SortingOrder: -7
   m_Sprite: {fileID: 630937368, guid: 95a115310e58a4cfc9e30084b1fef531, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.5}
   m_FlipX: 0
