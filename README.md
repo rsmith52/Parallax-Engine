@@ -24,6 +24,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Animate the fading/hiding/showing of tiles
 * Reflection bug when walking up into blocked tile while showing reflection below, head gets cut off - setting new mask tiles without actually moving
 * Consider playing with particle effects for grass rustle, water, etc. Have some randomness involved.
+* Water splash doesn't look quite right anymore with the camera rotation
 
 ### Map Managing Code
 * Buttons for static functions to load/save maps as well
@@ -36,6 +37,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Refactor considering what should go in start vs awake.
 * Build on cache so it can be generated and saved off in editor
 * Hidden bridge case of going from one to another
+* Hiding terrain is broken again :(
 
 ### Eventing Code
 * Look into tasks/jobs instead of coroutines

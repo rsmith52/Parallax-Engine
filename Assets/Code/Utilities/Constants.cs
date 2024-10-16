@@ -44,8 +44,8 @@ namespace Utilities
         public static readonly string OBJ_SORTING_LAYER_NAME = "Objects & Characters";
 
         public static readonly Vector3 DEFAULT_PERSPECTIVE_ANGLE = new Vector3 (-15, 0, 0);
-        public static readonly Vector3 UNDERWATER_PERSPECTIVE_ANGLE = new Vector3(0, 0, 0);
-        public static readonly float ROTATION_SMOOTHING_CUTOFF = 1.5f;
+        public static readonly Vector3 UNDERWATER_PERSPECTIVE_ANGLE = new Vector3(5, 0, 0);
+        public static readonly float ROTATION_SMOOTHING_CUTOFF = 2.5f;
 
         #endregion
 

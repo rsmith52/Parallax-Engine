@@ -29,7 +29,7 @@ namespace Utilities
 
         #region Map Rules
 
-        public static readonly bool ALLOW_WALK_BEHIND_TERRAIN_EDGES = true;
+        public static readonly bool ALLOW_WALK_BEHIND_TERRAIN_EDGES = false;
         
         public static readonly bool SEE_THROUGH_BRIDGES = true;
         public static readonly bool SEE_THROUGH_PREFAB_OBJECTS = true;

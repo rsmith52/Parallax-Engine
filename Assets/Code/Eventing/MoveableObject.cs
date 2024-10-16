@@ -329,10 +329,13 @@ namespace Eventing
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(target_rotation.x, target_rotation.y, target_rotation.z), Time.deltaTime * speed);
                 transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0, 0);
 
-                if (Math.Abs(360 - (transform.localEulerAngles.x - target_rotation.x)) < Constants.ROTATION_SMOOTHING_CUTOFF)
+                if (Math.Abs(360 - (transform.localEulerAngles.x - target_rotation.x)) < Constants.ROTATION_SMOOTHING_CUTOFF ||
+                    Math.Abs(transform.localEulerAngles.x - target_rotation.x) < Constants.ROTATION_SMOOTHING_CUTOFF)
+                {
                     transform.localEulerAngles = target_rotation;
+                    rotating = false;
+                } 
             }
-            if (target_rotation == transform.localEulerAngles) rotating = false;
 
             // Move shadow to keep up with object
             if (shadow.transform.localPosition != shadow_target_pos)
