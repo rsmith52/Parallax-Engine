@@ -26,14 +26,16 @@
     max-height: 24px;
     min-height: 24px;
     align-self: flex-start;
+    flex-direction: row;
 }
 
 .messageBox {
     width: 100%;
-    align-items: auto;
+    align-items: flex-start;
     align-self: center;
     bottom: auto;
     justify-content: flex-end;
+    flex-wrap: nowrap;
 }
 
 .messageBoxScaleHeight {
@@ -46,7 +48,8 @@
 
 .transparent {
     background-color: rgba(0, 0, 0, 0);
-    opacity: 0.75;
+    opacity: 0.95;
+    display: flex;
 }
 
 .messageBoxMidRow {
@@ -54,4 +57,33 @@
     min-width: 24px;
     min-height: 24px;
     width: 100%;
+    height: auto;
+    max-height: 15%;
+    flex-direction: row;
+}
+
+.textContainer {
+    color: rgb(0, 0, 0);
+    flex-wrap: wrap;
+    align-items: flex-start;
+    flex-direction: column;
+    align-self: flex-start;
+    width: 100%;
+    height: 100%;
+    margin-top: -10px;
+    margin-right: 0;
+    margin-bottom: -10px;
+    margin-left: 0;
+    justify-content: flex-start;
+}
+
+.text {
+    color: rgb(255, 255, 255);
+    text-shadow: 2px 2px 0 rgb(128, 128, 128);
+    -unity-text-outline-width: 0;
+    flex-wrap: wrap;
+    text-overflow: clip;
+    max-width: none;
+    font-size: 16px;
+    -unity-font-style: normal;
 }

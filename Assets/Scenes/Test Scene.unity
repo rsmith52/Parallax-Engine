@@ -249,8 +249,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1261380466}
   - component: {fileID: 1261380465}
+  - component: {fileID: 1261380467}
   m_Layer: 5
-  m_Name: Overworld UI
+  m_Name: Message Box UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -288,6 +289,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1261380467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1261380464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 626a7acb05180418b90e4928eb367985, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message_text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+    quis nostrud
 --- !u!1001 &4530581919089750066
 PrefabInstance:
   m_ObjectHideFlags: 0
