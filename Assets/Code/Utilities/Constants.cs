@@ -93,5 +93,14 @@ namespace Utilities
         public static readonly string ANIM_JUMP = "Jump";
 
         #endregion
+
+
+        #region UI
+
+        public static readonly string TEXT_LABEL = "Text";
+
+        public static readonly string MESSAGE_BOX_RICH_TEXT = "<line-height=115%>";
+
+        #endregion
     }
 }

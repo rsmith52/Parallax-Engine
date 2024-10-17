@@ -301,9 +301,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626a7acb05180418b90e4928eb367985, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  message_text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud
+  text_speed: 1
+  auto_start: 0
+  message_text: Different text blah blah blah
 --- !u!1001 &4530581919089750066
 PrefabInstance:
   m_ObjectHideFlags: 0

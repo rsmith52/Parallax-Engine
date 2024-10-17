@@ -18,11 +18,7 @@
             </engine:VisualElement>
             <engine:VisualElement name="Mid" class="messageBoxFreeScale transparent" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Fill%20-%20Black.png?fileID=-1234111136&amp;guid=c5315fea417fb45c397c8c0d612fda36&amp;type=3#Fill - Black_4&quot;);">
                 <engine:VisualElement name="TextContainer" class="textContainer" style="flex-grow: 1;">
-                    <engine:Label text="Label" name="Text" class="text" style="white-space: normal;">
-                        <Bindings>
-                            <engine:DataBinding property="text" binding-mode="ToSource" data-source-type="UI.MessageBox, Assembly-CSharp" data-source-path="message_text" />
-                        </Bindings>
-                    </engine:Label>
+                    <engine:Label name="Text" text="&lt;line-height=115%&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud" emoji-fallback-support="true" class="text" style="white-space: normal;" />
                 </engine:VisualElement>
             </engine:VisualElement>
             <engine:VisualElement name="MidRight" class="messageBoxScaleHeight transparent" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Fill%20-%20Black.png?fileID=-690103907&amp;guid=c5315fea417fb45c397c8c0d612fda36&amp;type=3#Fill - Black_5&quot;);">

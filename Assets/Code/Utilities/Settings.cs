@@ -36,5 +36,17 @@ namespace Utilities
         public static readonly bool SEE_THROUGH_TERRAIN = false;
 
         #endregion
+
+
+        #region UI
+
+        public static readonly float[] TEXT_SPEEDS = new float[]
+        {
+            20,          // Slow
+            35,          // Moderate
+            50           // Fast
+        };
+
+        #endregion
     }
 }
