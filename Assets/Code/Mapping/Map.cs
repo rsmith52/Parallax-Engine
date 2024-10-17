@@ -54,10 +54,6 @@ namespace Mapping
         private Dictionary<TilePosition, bool> cancel_anim_kill;
         private Dictionary<TilePosition, GameObject> water_splash_anims;
 
-        // Track Hiding/Showing Animations
-        private Dictionary<SpriteRenderer, HidingStatus> vis_transition_sprites;
-        private bool any_hiding;
-
         #endregion
 
 
@@ -246,31 +242,6 @@ namespace Mapping
             // Initialize animation tracking dictionaries
             cancel_anim_kill = new Dictionary<TilePosition, bool>();
             water_splash_anims = new Dictionary<TilePosition, GameObject>();
-            vis_transition_sprites = new Dictionary<SpriteRenderer, HidingStatus>();
-            any_hiding = false;
-        }
-
-        private void Update()
-        {
-            if (any_hiding)
-            {
-                foreach (KeyValuePair<SpriteRenderer, HidingStatus> entry in vis_transition_sprites)
-                {
-                    SpriteRenderer sprite = entry.Key;
-                    HidingStatus h_status = entry.Value;
-
-                    sprite.color = Color.Lerp(h_status.cur_color, h_status.target_color, (h_status.step / h_status.total_steps));
-
-                    if (h_status.step == h_status.total_steps)
-                        vis_transition_sprites.Remove(entry.Key);
-                    h_status.step++;
-                }
-
-                if (vis_transition_sprites.Count() == 0)
-                {
-                    any_hiding = false;
-                }
-            }
         }
 
         #endregion
@@ -556,14 +527,13 @@ namespace Mapping
         */
         private void HideTiles (List<TilePosition> tiles, GameObject prefab_obj = null)
         {
-            any_hiding = true;
-
             if (prefab_obj != null)
             {
                 foreach (SpriteRenderer sprite in prefab_obj.GetComponentsInChildren<SpriteRenderer>())
                 {
                     if (sprite.tag == Constants.UP_LAYER_PRIORITY_TILE_TAG)
-                        sprite.color = new Color(1,1,1,Constants.HIDDEN_LAYER_TILE_ALPHA);
+                        StartCoroutine(SpriteUtils.FadeSprite(sprite, Constants.HIDDEN_LAYER_TILE_ALPHA, Constants.FADE_DURATION));
+                        
                 }
                 return;
             }
@@ -583,22 +553,30 @@ namespace Mapping
                 }
 
                 float hide_alpha = hide_entirely ? 0 : Constants.HIDDEN_LAYER_TILE_ALPHA;
-                
+
                 // Hide basic tiles
-                tile.map.SetColor(tile.pos, new Color(1,1,1,hide_alpha));
+                StartCoroutine(SpriteUtils.FadeTile(tile, hide_alpha, Constants.FADE_DURATION));
 
                 // Hide prefabs / game objects
                 GameObject go = null;
                 go = GetGameObjectOnLayer(go, tile.pos, null, null, tile.map);
                 if (go != null)
-                foreach (SpriteRenderer sprite in go.GetComponentsInChildren<SpriteRenderer>())
                 {
-                    if (sprite.tag == Constants.DOWN_LAYER_PRIORITY_TILE_TAG)
-                        sprite.color = new Color (1,1,1,0); // Hide "gap fill" tiles entirely
-                    else if ((go.tag == Constants.TERRAIN_EDGE_TILE_TAG || go.tag == Constants.TERRAIN_EDGE_CORNER_TILE_TAG) && (sprite.tag == Constants.EXTRA_DEPRIORITY_TILE_TAG || sprite.tag == Constants.DEPRIORITY_TILE_TAG))
-                        sprite.color = new Color (1,1,1,0); // Hide "back edge" faces entirely
-                    else
-                        sprite.color = new Color(1,1,1,hide_alpha);
+                    foreach (SpriteRenderer sprite in go.GetComponentsInChildren<SpriteRenderer>())
+                    {
+                        if (sprite.tag == Constants.DOWN_LAYER_PRIORITY_TILE_TAG)
+                        {
+                            // Hide "gap fill" tiles entirely
+                            StartCoroutine(SpriteUtils.FadeSprite(sprite, 0, Constants.FADE_DURATION));
+                        }
+                        else if ((go.tag == Constants.TERRAIN_EDGE_TILE_TAG || go.tag == Constants.TERRAIN_EDGE_CORNER_TILE_TAG) && (sprite.tag == Constants.EXTRA_DEPRIORITY_TILE_TAG || sprite.tag == Constants.DEPRIORITY_TILE_TAG))
+                        {
+                            // Hide "back edge" faces entirely
+                            StartCoroutine(SpriteUtils.FadeSprite(sprite, 0, Constants.FADE_DURATION));
+                        }
+                        else
+                            StartCoroutine(SpriteUtils.FadeSprite(sprite, hide_alpha, Constants.FADE_DURATION));
+                    }
                 }
             }
         }
@@ -608,14 +586,12 @@ namespace Mapping
         */
         private void ShowTiles (List<TilePosition> tiles, GameObject prefab_obj = null)
         {
-            any_hiding = true;
-
             if (prefab_obj != null)
             {
                 foreach (SpriteRenderer sprite in prefab_obj.GetComponentsInChildren<SpriteRenderer>())
                 {
                     if (sprite.tag == Constants.UP_LAYER_PRIORITY_TILE_TAG)
-                        sprite.color = new Color(1,1,1,1);
+                        StartCoroutine(SpriteUtils.FadeSprite(sprite, 1, Constants.FADE_DURATION));
                 }
                 return;
             }
@@ -623,17 +599,19 @@ namespace Mapping
             foreach (TilePosition tile in tiles)
             {
                 // Show basic tiles
-                tile.map.SetColor(tile.pos, new Color(1,1,1,1));
+                StartCoroutine(SpriteUtils.FadeTile(tile, 1, Constants.FADE_DURATION));
 
                 // Show prefabs
                 GameObject go = null;
                 go = GetGameObjectOnLayer(go, tile.pos, null, null, tile.map);
                 if (go != null)
-                foreach (SpriteRenderer sprite in go.GetComponentsInChildren<SpriteRenderer>())
-                    sprite.color = new Color(1,1,1,1);
+                {
+                    foreach (SpriteRenderer sprite in go.GetComponentsInChildren<SpriteRenderer>())
+                        StartCoroutine(SpriteUtils.FadeSprite(sprite, 1, Constants.FADE_DURATION));
+                }
             }
         }
-        
+
         /*
         * Play tall grass activated animation
         */

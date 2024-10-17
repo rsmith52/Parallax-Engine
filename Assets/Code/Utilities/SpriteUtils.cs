@@ -1,7 +1,9 @@
+using System.Collections;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.Rendering;
+using Mapping;
 
 namespace Utilities
 {
@@ -85,6 +87,33 @@ namespace Utilities
                     sprite.sortingOrder = layer - Constants.SORTING_LAYERS_PER_MAP_LAYER + (2 * Constants.PRIORITY_TILE_OFFSET); // Gap Fill Use
                 else
                     sprite.sortingOrder = layer;
+            }
+        }
+
+        public static IEnumerator FadeSprite(SpriteRenderer sprite, float target_alpha, float time)
+        {
+            float elapsed_time = 0;
+            float start_alpha = sprite.color.a;
+            while (elapsed_time < time)
+            {
+                elapsed_time += Time.deltaTime;
+                float new_alpha = Mathf.Lerp(start_alpha, target_alpha, elapsed_time / time);
+                sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, new_alpha);
+                yield return null;
+            }
+        }
+
+        public static IEnumerator FadeTile(TilePosition tile, float target_alpha, float time)
+        {
+            float elapsed_time = 0;
+            Color color = tile.map.GetColor(tile.pos);
+            float start_alpha = color.a;
+            while (elapsed_time < time)
+            {
+                elapsed_time += Time.deltaTime;
+                float new_alpha = Mathf.Lerp(start_alpha, target_alpha, elapsed_time / time);
+                tile.map.SetColor(tile.pos, new Color(color.r, color.g, color.b, new_alpha));
+                yield return null;
             }
         }
 

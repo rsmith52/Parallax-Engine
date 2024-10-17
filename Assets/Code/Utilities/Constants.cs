@@ -37,6 +37,7 @@ namespace Utilities
         public static readonly float TRANS_TILE_ALPHA = 0.75f;
         public static readonly float LIGHT_TRANS_TILE_ALPHA = 0.5f;
         public static readonly float HIDDEN_LAYER_TILE_ALPHA = 0.5f;
+        public static readonly float FADE_DURATION = 0.25f;
 
         public static readonly int MAP_SORTING_LAYER_ID = -611510623;
         public static readonly string MAP_SORTING_LAYER_NAME = "Map";
@@ -46,7 +47,7 @@ namespace Utilities
         public static readonly string OBJ_SORTING_LAYER_NAME = "Objects & Characters";
 
         public static readonly Vector3 WORLD_ANGLE = new Vector3(0, 0, 0);
-        public static readonly Vector3 DEFAULT_PERSPECTIVE_ANGLE = new Vector3 (-15, 0, 0);
+        public static readonly Vector3 DEFAULT_PERSPECTIVE_ANGLE = new Vector3 (-15, 0, 0); // Changing this will break visuals for reflections and many 3d tiles
         public static readonly Vector3 UNDERWATER_PERSPECTIVE_ANGLE = new Vector3(5, 0, 0);
         public static readonly float ROTATION_SMOOTHING_CUTOFF = 2.5f;
         public static readonly Vector3 DEFAULT_SPRITE_POS = new Vector3(0.5f, 1, 0);

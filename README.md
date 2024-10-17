@@ -21,7 +21,6 @@ Unity Project for 2.5d Parallax RPG Engine
 * Same thing for shore tiles
 * Animate still water edges
 * Forage tiles - "is_forage" flag with fields for replacement "foraged" tile, and what item(s) it drops -> Probably should be events
-* Animate the fading/hiding/showing of tiles
 * Reflection bug when walking up into blocked tile while showing reflection below, head gets cut off - setting new mask tiles without actually moving
 * Consider playing with particle effects for grass rustle, water, etc. Have some randomness involved.
 * Water splash doesn't look quite right anymore with the camera rotation

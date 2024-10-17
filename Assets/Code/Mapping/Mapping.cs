@@ -40,7 +40,8 @@ namespace Mapping
     public enum HidingStatuses
     {
         Hiding = 0,
-        Showing = 1
+        Showing = 1,
+        Done = 2
     }
 
     #endregion
@@ -137,15 +138,13 @@ namespace Mapping
         public HidingStatuses status;
         public int step;
         public int total_steps;
-        public Color cur_color;
         public Color target_color;
 
-        public HidingStatus(HidingStatuses status, int step, int total_steps, Color cur_color, Color target_color)
+        public HidingStatus(HidingStatuses status, int step, int total_steps, Color target_color)
         {
             this.status = status;
             this.step = step;
             this.total_steps = total_steps;
-            this.cur_color = cur_color;
             this.target_color = target_color;
         }
     }
