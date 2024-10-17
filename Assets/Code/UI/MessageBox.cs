@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Utilities;
+using NLP;
 
 namespace UI
 {
@@ -24,6 +26,8 @@ namespace UI
         public string message_text;
         private string display_text;
 
+        private bool drawing;
+
         #endregion
 
 
@@ -34,8 +38,11 @@ namespace UI
             ui_doc = GetComponent<UIDocument>();
             root_elmt = ui_doc.rootVisualElement;
             label = root_elmt.Q<Label>(Constants.TEXT_LABEL);
+
             display_text = Constants.MESSAGE_BOX_RICH_TEXT;
             label.text = display_text;
+
+            drawing = false;
 
             if (auto_start) StartCoroutine(DrawText());
         }
@@ -64,17 +71,49 @@ namespace UI
             }
             else
             {
-                for (int i = 0; i < message_text.Length; i++)
+                List<TextPiece> text_pieces = TextUtils.GetTextPieces(message_text);
+                TextPiece last = text_pieces.Last();
+
+                foreach (TextPiece piece in text_pieces)
                 {
-                    yield return new WaitForSeconds(1 / Settings.TEXT_SPEEDS[(int)text_speed]);
+                    yield return new WaitUntil(() => !drawing);
 
-                    TextCodes code = TextUtils.GetTextCode(message_text, i);
-                    string word = TextUtils.GetWord(message_text, i);
-
-                    display_text += message_text[i];
-                    label.text = display_text;
+                    switch (piece.type)
+                    {
+                        case TextType.Word:
+                            bool is_last = (piece.Equals(last));
+                            StartCoroutine(DrawWord(piece, is_last));
+                            break;
+                        case TextType.Code:
+                            string replacement = TextUtils.TextCodeReplace(piece.code);
+                            display_text += replacement;
+                            break;
+                        default:
+                            break;
+                    }
+                    
                 }
             }
+        }
+
+        private IEnumerator DrawWord(TextPiece word, bool last = false)
+        {
+            drawing = true;
+
+            for (int i = 0; i < word.length; i++)
+            {
+                yield return new WaitForSeconds(1 / Settings.TEXT_SPEEDS[(int)text_speed]);
+                display_text += word.text[i];
+                label.text = display_text;
+            }
+
+            if (!last)
+            {
+                yield return new WaitForSeconds(1 / Settings.TEXT_SPEEDS[(int)text_speed]);
+                display_text += " ";
+            }
+
+            drawing = false;
         }
 
         #endregion

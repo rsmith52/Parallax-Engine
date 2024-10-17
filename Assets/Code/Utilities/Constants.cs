@@ -104,7 +104,7 @@ namespace Utilities
         public static readonly string[] TEXT_CODES = new string[]
         {
             "",         // None
-            "\n"        // NewLine
+            "\\n"        // NewLine
         };
 
         #endregion

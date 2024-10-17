@@ -303,7 +303,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text_speed: 1
   auto_start: 0
-  message_text: Different text blah blah blah
+  message_text: Different text blah {variable} blah blah \n test newline <rich-text>
 --- !u!1001 &4530581919089750066
 PrefabInstance:
   m_ObjectHideFlags: 0
