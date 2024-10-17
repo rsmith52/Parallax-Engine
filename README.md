@@ -24,6 +24,7 @@ Unity Project for 2.5d Parallax RPG Engine
 * Reflection bug when walking up into blocked tile while showing reflection below, head gets cut off - setting new mask tiles without actually moving
 * Consider playing with particle effects for grass rustle, water, etc. Have some randomness involved.
 * Water splash doesn't look quite right anymore with the camera rotation
+* One specific prefab tile (small normal rock) won't hide properly when on a bridge
 
 ### Map Managing Code
 * Buttons for static functions to load/save maps as well

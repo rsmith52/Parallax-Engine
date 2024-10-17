@@ -68,7 +68,7 @@ namespace Utilities
                     sprite.sortingOrder = layer + Constants.WATER_TILE_OFFSET;
                     SortingGroup group = sprite.GetComponentInParent<SortingGroup>();
                     if (group != null) group.sortingOrder = layer + Constants.WATER_TILE_OFFSET;
-                }   
+                }
                 else if (sprite.tag == Constants.DEPRIORITY_TILE_TAG)
                 {
                     sprite.sortingOrder = layer - Constants.PRIORITY_TILE_OFFSET;
@@ -86,7 +86,11 @@ namespace Utilities
                 else if (sprite.tag == Constants.DOWN_LAYER_PRIORITY_TILE_TAG)
                     sprite.sortingOrder = layer - Constants.SORTING_LAYERS_PER_MAP_LAYER + (2 * Constants.PRIORITY_TILE_OFFSET); // Gap Fill Use
                 else
+                {
                     sprite.sortingOrder = layer;
+                    SortingGroup group = sprite.GetComponent<SortingGroup>();
+                    if (group != null) group.sortingOrder = layer;
+                }
             }
         }
 

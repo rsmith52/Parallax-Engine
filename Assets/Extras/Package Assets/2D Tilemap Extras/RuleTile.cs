@@ -340,9 +340,19 @@ namespace UnityEngine
                     gameObjectScale = orientMatrix.lossyScale;
                 }
 
+                
+                Transform terrain = tmpMap.transform.Find("Terrain");
+                if (terrain == null && is_terrain)
+                {
+                    GameObject terrain_obj = new GameObject("Terrain");
+                    terrain_obj.transform.SetParent(tmpMap.transform);
+                    terrain = terrain_obj.transform;
+                }    
+
                 instantiatedGameObject.transform.localPosition = gameObjectTranslation + tmpMap.CellToLocalInterpolated(location + tmpMap.tileAnchor);
                 instantiatedGameObject.transform.localRotation = gameObjectRotation;
                 instantiatedGameObject.transform.localScale = gameObjectScale;
+                if (is_terrain) instantiatedGameObject.transform.SetParent(terrain);
 
                 SpriteUtils.ConfigurePrefabTileSprites(map, instantiatedGameObject, is_trans, is_light_trans);
             }

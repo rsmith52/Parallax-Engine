@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34a88e4cea08841649b5b7c5cc9b2938, type: 3}
+  m_Name: Big SandCastle
+  m_EditorClassIdentifier: 
+  terrain_tag: 4
+  allow_passage: 0
+  up_passage: 1
+  left_passage: 1
+  right_passage: 1
+  down_passage: 1
+  is_bush: 0
+  is_counter: 0
+  is_trans: 0
+  is_light_trans: 0
+  is_reflective: 0
+  is_jump: 0
+  is_hideable: 0
+  strict_hiding: 0
+  multi_tile: 1
+  tile_size:
+    x_width: 2
+    y_height: 2
+    z_layers: 1
+  instantiated_object: {fileID: 0}
+  preview_sprite: {fileID: -199044100, guid: 4e8383d4cb3544464b697847d332d0fd, type: 3}
+  prefab: {fileID: 3828754339515514504, guid: a0ce9a5f1608c4d46b138a82fbe470c6, type: 3}
+  prefab_offset: {x: 1, y: 1}
+  prefab_local_z: 0

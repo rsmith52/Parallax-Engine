@@ -473,6 +473,7 @@ namespace Eventing
                         {
                             transform.localEulerAngles = Constants.UNDERWATER_PERSPECTIVE_ANGLE;
                             main_sprite.transform.localPosition = Constants.UNDERWATER_SPRITE_OFFSET;
+                            bush_mask.transform.localPosition += Constants.UNDERWATER_BUSH_MASK_OFFSET;
                         }
                         target_rotation = transform.localEulerAngles;
                         main_sprite_target_pos = main_sprite.transform.localPosition;
@@ -1679,6 +1680,7 @@ namespace Eventing
                 {
                     target_rotation = Constants.DEFAULT_PERSPECTIVE_ANGLE;
                     main_sprite_target_pos -= Constants.UNDERWATER_SPRITE_OFFSET;
+                    bush_mask.transform.localPosition -= Constants.UNDERWATER_BUSH_MASK_OFFSET;
                     rotating = true;
                 }
 
@@ -1706,6 +1708,7 @@ namespace Eventing
                 {
                     target_rotation = Constants.UNDERWATER_PERSPECTIVE_ANGLE;
                     main_sprite_target_pos += Constants.UNDERWATER_SPRITE_OFFSET;
+                    bush_mask.transform.localPosition += Constants.UNDERWATER_BUSH_MASK_OFFSET;
                     rotating = true;
                 }
 

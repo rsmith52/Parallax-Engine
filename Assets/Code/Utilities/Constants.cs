@@ -48,10 +48,12 @@ namespace Utilities
 
         public static readonly Vector3 WORLD_ANGLE = new Vector3(0, 0, 0);
         public static readonly Vector3 DEFAULT_PERSPECTIVE_ANGLE = new Vector3 (-15, 0, 0); // Changing this will break visuals for reflections and many 3d tiles
-        public static readonly Vector3 UNDERWATER_PERSPECTIVE_ANGLE = new Vector3(5, 0, 0);
-        public static readonly float ROTATION_SMOOTHING_CUTOFF = 2.5f;
+        public static readonly Vector3 UNDERWATER_PERSPECTIVE_ANGLE = new Vector3(0, 0, 0); // Have played with setting x up to 5, but think this is better
+        public static readonly float ROTATION_SMOOTHING_CUTOFF = 1.5f; // Should increase roughly by 1 for each 5 added to underwater x angle
         public static readonly Vector3 DEFAULT_SPRITE_POS = new Vector3(0.5f, 1, 0);
+        public static readonly Vector3 DEFAULT_BUSH_MASK_POS = new Vector3(0, -0.75f, 0);
         public static readonly Vector3 UNDERWATER_SPRITE_OFFSET = new Vector3(0, 0.5f, 0);
+        public static readonly Vector3 UNDERWATER_BUSH_MASK_OFFSET = new Vector3(0, -0.25f, 0);
 
         #endregion
 

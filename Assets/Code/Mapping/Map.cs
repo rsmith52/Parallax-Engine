@@ -73,17 +73,6 @@ namespace Mapping
         [HorizontalGroup("Expand Map/Split")]
         [VerticalGroup("Expand Map/Split/Left")]
         [BoxGroup("Expand Map/Split/Left/Add Layers")]
-        [Button("+ Bottom Layer")]
-        public void AddNewBottomLayer()
-        {
-            int lowest_layer = 1;
-            foreach (int key in map_layers.Keys)
-                lowest_layer = (key < lowest_layer) ? key : lowest_layer;
-                
-            CreateNewMapLayer(lowest_layer - 1);
-        }
-
-        [BoxGroup("Expand Map/Split/Left/Add Layers")]
         [Button("+ Top Layer")]
         public void AddNewTopLayer()
         {
@@ -94,12 +83,23 @@ namespace Mapping
             CreateNewMapLayer(highest_layer + 1);
         }
 
+        [BoxGroup("Expand Map/Split/Left/Add Layers")]
+        [Button("+ Bottom Layer")]
+        public void AddNewBottomLayer()
+        {
+            int lowest_layer = 1;
+            foreach (int key in map_layers.Keys)
+                lowest_layer = (key < lowest_layer) ? key : lowest_layer;
+                
+            CreateNewMapLayer(lowest_layer - 1);
+        }
+
         private void CreateNewMapLayer(int layer_id, int num_object_layers = 2)
         {
             GameObject layer = new GameObject("Layer " + layer_id);
             layer.transform.parent = this.transform;
             layer.transform.position = new Vector3(0, 0, -1 * layer_id * Constants.MAP_LAYER_HEIGHT);
-            if (layer_id < 0)
+            if (layer_id > 0)
                 layer.transform.SetSiblingIndex(0);
             
             layer.AddComponent<Tilemap>();
@@ -120,19 +120,11 @@ namespace Mapping
                 // Object Layers
                 AddNewObjectLayer(layer_id, i + 1);
             }
+
+            GameObject terrain_obj = new GameObject("Terrain");
+            terrain_obj.transform.SetParent(layer.transform);
         }
         
-        [BoxGroup("Expand Map/Split/Left/Delete Layers")]
-        [Button("- Bottom Layer")]
-        public void DeleteBottomLayer()
-        {
-            int lowest_layer = 1;
-            foreach (int key in map_layers.Keys)
-                lowest_layer = (key < lowest_layer) ? key : lowest_layer;
-
-            DeleteMapLayer(lowest_layer);
-        }
-
         [BoxGroup("Expand Map/Split/Left/Delete Layers")]
         [Button("- Top Layer")]
         public void DeleteTopLayer()
@@ -142,6 +134,17 @@ namespace Mapping
                 highest_layer = (key > highest_layer) ? key : highest_layer;
 
             DeleteMapLayer(highest_layer);
+        }
+
+        [BoxGroup("Expand Map/Split/Left/Delete Layers")]
+        [Button("- Bottom Layer")]
+        public void DeleteBottomLayer()
+        {
+            int lowest_layer = 1;
+            foreach (int key in map_layers.Keys)
+                lowest_layer = (key < lowest_layer) ? key : lowest_layer;
+
+            DeleteMapLayer(lowest_layer);
         }
 
         private void DeleteMapLayer(int layer_id)
@@ -612,6 +615,19 @@ namespace Mapping
             }
         }
 
+        private Transform GetEffectsTransform(Tilemap map)
+        {
+            Transform effects = map.transform.transform.Find("Effects");
+            if (effects == null)
+            {
+                GameObject effects_obj = new GameObject("Effects");
+                effects_obj.transform.SetParent(map.transform);
+                effects = effects_obj.transform;
+            }
+
+            return effects;
+        }
+
         /*
         * Play tall grass activated animation
         */
@@ -620,7 +636,7 @@ namespace Mapping
             int layer = GetMapLayerIDFromPosition(pos);
             Tilemap map = map_layers[layer];
 
-            GameObject anim = Instantiate(grass_rustle, map.transform);
+            GameObject anim = Instantiate(grass_rustle, GetEffectsTransform(map));
             anim.transform.position = pos;
 
             SpriteUtils.ConfigurePrefabTileSprites(map, anim, false, false, true); // Behind player
@@ -641,7 +657,7 @@ namespace Mapping
             if (sneaking) yield return new WaitForSeconds(0.4f);
             else yield return new WaitForSeconds(0.2f);
             
-            GameObject anim = Instantiate(footprints[dir], map.transform);
+            GameObject anim = Instantiate(footprints[dir], GetEffectsTransform(map));
             anim.transform.position = pos;
             SpriteUtils.ConfigurePrefabTileSprites(map, anim, false, true, true); // Behind player
 
@@ -673,7 +689,7 @@ namespace Mapping
             TilePosition splash_pos = new TilePosition(map, new Vector3Int((int)pos.x, (int)pos.y));
             if (!water_splash_anims.ContainsKey(splash_pos))
             {
-                GameObject anim = Instantiate(water_splash, map.transform);
+                GameObject anim = Instantiate(water_splash, GetEffectsTransform(map));
                 anim.transform.position = pos;
                 anim.transform.localEulerAngles = settings.anim_angle;
                 SpriteUtils.ConfigurePrefabTileSprites(map, anim, false, false, false, true); // Same layer as player
@@ -833,7 +849,7 @@ namespace Mapping
 
         private GameObject GetGameObjectOnLayer (GameObject go, Vector3Int pos, Tilemap layer, Tilemap[] objects, Tilemap map = null)
         {
-            ParallaxTileBase tile = null;
+            ParallaxTileBase tile;
 
             if (map != null)
             {
@@ -1301,12 +1317,21 @@ namespace Mapping
                 {
                     ParallaxTileBase tile = (ParallaxTileBase)object_map.GetTile(tile_pos.pos);
                     if (tile != null)
-                        object_positions.Add(new TilePosition(object_map, tile_pos.pos, true));
+                    {
+                        TilePosition obj_pos = new TilePosition(object_map, tile_pos.pos, true);
+                        if (!tile_positions.Contains(obj_pos))
+                            object_positions.Add(obj_pos);
+                    }
                         
                     // Get stairs too!
                     ParallaxTileBase below_tile = (ParallaxTileBase)object_map.GetTile(tile_pos.pos + Vector3Int.down);
                     if (below_tile != null && ParallaxTerrain.IsStairTile(below_tile, false, true))
-                        object_positions.Add(new TilePosition(object_map, tile_pos.pos + Vector3Int.down, true));
+                    {
+                        TilePosition obj_pos = new TilePosition(object_map, tile_pos.pos + Vector3Int.down, true);
+                        if (!tile_positions.Contains(obj_pos))
+                            object_positions.Add(obj_pos);
+                    }
+                        
                 }
             }
 
