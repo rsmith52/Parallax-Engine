@@ -51,6 +51,7 @@ Unity Project for 2.5d Parallax RPG Engine
 
 ### Camera
 * Reflection could use a bit more work again
+* Auto find player and set player follow on map load
 
 ### Settings Code
 * Switch to a settings asset?

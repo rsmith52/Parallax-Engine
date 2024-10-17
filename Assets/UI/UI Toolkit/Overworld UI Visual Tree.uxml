@@ -1,0 +1,36 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/UI%20Toolkit/Overworld%20UI%20Style.uss?fileID=7433441132597879392&amp;guid=47cec72d37d824ace8a870eb623240f9&amp;type=3#Overworld UI Style" />
+    <engine:VisualElement name="MessageBox" class="messageBox" style="flex-grow: 1;">
+        <engine:VisualElement name="TopRow" class="messageBoxRow" style="flex-grow: 1; flex-direction: row;">
+            <engine:VisualElement name="TopLeft" class="messageBoxCorner transparent" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Fill%20-%20Black.png?fileID=-54453418&amp;guid=c5315fea417fb45c397c8c0d612fda36&amp;type=3#Fill - Black_0&quot;);">
+                <engine:VisualElement name="Frame" class="messageBoxCorner" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Frame%20-%20White.png?fileID=422450112&amp;guid=79c38f76d70674dda872b93f62476e05&amp;type=3#Frame - White_0&quot;);" />
+            </engine:VisualElement>
+            <engine:VisualElement name="TopMid" class="messageBoxScaleLength transparent" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Fill%20-%20Black.png?fileID=-736616389&amp;guid=c5315fea417fb45c397c8c0d612fda36&amp;type=3#Fill - Black_1&quot;);">
+                <engine:VisualElement name="Frame" class="messageBoxScaleLength" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Frame%20-%20White.png?fileID=-834829433&amp;guid=79c38f76d70674dda872b93f62476e05&amp;type=3#Frame - White_1&quot;);" />
+            </engine:VisualElement>
+            <engine:VisualElement name="TopRight" class="messageBoxCorner transparent" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Fill%20-%20Black.png?fileID=-1419236825&amp;guid=c5315fea417fb45c397c8c0d612fda36&amp;type=3#Fill - Black_2&quot;);">
+                <engine:VisualElement name="Frame" class="messageBoxCorner" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Frame%20-%20White.png?fileID=-141174184&amp;guid=79c38f76d70674dda872b93f62476e05&amp;type=3#Frame - White_2&quot;);" />
+            </engine:VisualElement>
+        </engine:VisualElement>
+        <engine:VisualElement name="MidRow" class="messageBoxMidRow" style="flex-grow: 1; flex-direction: row;">
+            <engine:VisualElement name="MidLeft" class="messageBoxScaleHeight transparent" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Fill%20-%20Black.png?fileID=1437620273&amp;guid=c5315fea417fb45c397c8c0d612fda36&amp;type=3#Fill - Black_3&quot;);">
+                <engine:VisualElement name="Frame" class="messageBoxScaleHeight" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Frame%20-%20White.png?fileID=1808579964&amp;guid=79c38f76d70674dda872b93f62476e05&amp;type=3#Frame - White_3&quot;);" />
+            </engine:VisualElement>
+            <engine:VisualElement name="Mid" class="messageBoxFreeScale transparent" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Fill%20-%20Black.png?fileID=-1234111136&amp;guid=c5315fea417fb45c397c8c0d612fda36&amp;type=3#Fill - Black_4&quot;);" />
+            <engine:VisualElement name="MidRight" class="messageBoxScaleHeight transparent" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Fill%20-%20Black.png?fileID=-690103907&amp;guid=c5315fea417fb45c397c8c0d612fda36&amp;type=3#Fill - Black_5&quot;);">
+                <engine:VisualElement name="Frame" class="messageBoxScaleHeight" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Frame%20-%20White.png?fileID=-177581461&amp;guid=79c38f76d70674dda872b93f62476e05&amp;type=3#Frame - White_4&quot;);" />
+            </engine:VisualElement>
+        </engine:VisualElement>
+        <engine:VisualElement name="BotRow" class="messageBoxRow" style="flex-grow: 1; flex-direction: row;">
+            <engine:VisualElement name="BotLeft" class="messageBoxCorner transparent" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Fill%20-%20Black.png?fileID=-15167152&amp;guid=c5315fea417fb45c397c8c0d612fda36&amp;type=3#Fill - Black_6&quot;);">
+                <engine:VisualElement name="Frame" class="messageBoxCorner" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Frame%20-%20White.png?fileID=-537567622&amp;guid=79c38f76d70674dda872b93f62476e05&amp;type=3#Frame - White_5&quot;);" />
+            </engine:VisualElement>
+            <engine:VisualElement name="BotMid" class="messageBoxScaleLength transparent" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Fill%20-%20Black.png?fileID=-1521204763&amp;guid=c5315fea417fb45c397c8c0d612fda36&amp;type=3#Fill - Black_7&quot;);">
+                <engine:VisualElement name="Frame" class="messageBoxScaleLength" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Frame%20-%20White.png?fileID=-1572083159&amp;guid=79c38f76d70674dda872b93f62476e05&amp;type=3#Frame - White_6&quot;);" />
+            </engine:VisualElement>
+            <engine:VisualElement name="BotRight" class="messageBoxCorner transparent" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Fill%20-%20Black.png?fileID=-1239071856&amp;guid=c5315fea417fb45c397c8c0d612fda36&amp;type=3#Fill - Black_8&quot;);">
+                <engine:VisualElement name="Frame" class="messageBoxCorner" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Frame%20-%20White.png?fileID=-2568042&amp;guid=79c38f76d70674dda872b93f62476e05&amp;type=3#Frame - White_7&quot;);" />
+            </engine:VisualElement>
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

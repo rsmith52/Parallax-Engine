@@ -1,0 +1,57 @@
+.messageBoxFreeScale {
+    min-width: 24px;
+    min-height: 24px;
+}
+
+.messageBoxCorner {
+    width: 24px;
+    height: 24px;
+    max-width: 24px;
+    max-height: 24px;
+    min-width: 24px;
+    min-height: 24px;
+}
+
+.messageBoxScaleLength {
+    height: 24px;
+    max-height: 24px;
+    min-height: 24px;
+    min-width: 24px;
+    width: 100%;
+}
+
+.messageBoxRow {
+    width: 100%;
+    height: 24px;
+    max-height: 24px;
+    min-height: 24px;
+    align-self: flex-start;
+}
+
+.messageBox {
+    width: 100%;
+    align-items: auto;
+    align-self: center;
+    bottom: auto;
+    justify-content: flex-end;
+}
+
+.messageBoxScaleHeight {
+    height: 100%;
+    width: 24px;
+    max-width: 24px;
+    min-width: 24px;
+    min-height: 24px;
+}
+
+.transparent {
+    background-color: rgba(0, 0, 0, 0);
+    opacity: 0.75;
+}
+
+.messageBoxMidRow {
+    align-self: flex-start;
+    min-width: 24px;
+    min-height: 24px;
+    width: 100%;
+}
