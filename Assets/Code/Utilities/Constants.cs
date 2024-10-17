@@ -101,6 +101,12 @@ namespace Utilities
 
         public static readonly string MESSAGE_BOX_RICH_TEXT = "<line-height=115%>";
 
+        public static readonly string[] TEXT_CODES = new string[]
+        {
+            "",         // None
+            "\n"        // NewLine
+        };
+
         #endregion
     }
 }

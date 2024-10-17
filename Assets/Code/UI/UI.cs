@@ -14,5 +14,46 @@ namespace UI
         Instant
     }
 
+    public enum TextType
+    {
+        Word,
+        Code
+    }
+
+    public enum TextCodes
+    {
+        None,
+        NewLine
+    }
+
+    #endregion
+
+
+    #region Structs
+
+    public struct TextPiece
+    {
+        public string text;
+        public int length;
+        public TextType type;
+        public TextCodes code;
+
+        public TextPiece(string text)
+        {
+            this.text = text;
+            length = text.Length;
+            type = TextType.Word;
+            code = TextCodes.None;
+        }
+
+        public TextPiece(string text, TextCodes code)
+        {
+            this.text = text;
+            length = text.Length;
+            type = TextType.Code;
+            this.code = code;
+        }
+    }
+
     #endregion
 }

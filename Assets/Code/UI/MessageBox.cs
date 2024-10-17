@@ -67,6 +67,10 @@ namespace UI
                 for (int i = 0; i < message_text.Length; i++)
                 {
                     yield return new WaitForSeconds(1 / Settings.TEXT_SPEEDS[(int)text_speed]);
+
+                    TextCodes code = TextUtils.GetTextCode(message_text, i);
+                    string word = TextUtils.GetWord(message_text, i);
+
                     display_text += message_text[i];
                     label.text = display_text;
                 }

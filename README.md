@@ -57,9 +57,16 @@ Unity Project for 2.5d Parallax RPG Engine
 * Switch to a settings asset?
 
 ### UI Code
-* Simple message boxes
 * Speech bubbles -> Pop up automatically as NPCs come into hearing range, trying to start a conversation with you! Can be many popped up at once.
-* Consider Unity 2023.2 version for UI Toolkit updates...
+* Handle words that will cut to next line
+* Update fonts
+* Recognize rich text and any other text modifiers
+* Continue past 3 lines
+* Main menu scene
+* Window scaling
+* Map label popup
+* HUD
+* Pause Menu
 
 ### AI Code
 * Path Finding will need custom logic, gonna be hard
