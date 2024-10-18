@@ -303,7 +303,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text_speed: 1
   auto_start: 0
-  message_text: Different text blah {variable} blah blah \n test newline <rich-text>
+  message_text: Different text {variable} <color="red"><b>blah blah</b></color> \n
+    newline <line-indent=15%> all should be indented \n <b>bold text {var2}</b> nomoremods
 --- !u!1001 &4530581919089750066
 PrefabInstance:
   m_ObjectHideFlags: 0

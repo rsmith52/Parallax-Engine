@@ -9,9 +9,11 @@ namespace NLP
     public enum TextType
     {
         Word,
+        Variable,
         Code,
         Rich,
-        Variable
+        RichWord,
+        RichVariable
     }
 
     public enum TextCodes
@@ -31,13 +33,15 @@ namespace NLP
         public int length;
         public TextType type;
         public TextCodes code;
+        public List<string> rich_mods;
 
         public TextPiece(string text, TextType type = TextType.Word)
         {
             this.text = text;
             length = text.Length;
-            code = TextCodes.None;
             this.type = type;
+            code = TextCodes.None;
+            rich_mods = new List<string>();
         }
 
         public TextPiece(string text, TextCodes code)
@@ -46,6 +50,18 @@ namespace NLP
             length = text.Length;
             type = TextType.Code;
             this.code = code;
+            rich_mods = new List<string>();
+        }
+
+        public TextPiece(string text, List<string> rich_mods, bool is_variable = false)
+        {
+            this.text = text;
+            length = text.Length;
+            type = is_variable ? TextType.RichVariable : TextType.RichWord;
+            code = TextCodes.None;
+            this.rich_mods = new List<string>();
+            foreach (string mod in rich_mods)
+                this.rich_mods.Add(mod);
         }
     }
 

@@ -9,7 +9,7 @@ namespace NLP
 {
     public class TextUtils
     {
-        #region Raw String Parsing
+        #region Text Out
 
         public static List<TextPiece> GetTextPieces(string text)
         {
@@ -19,35 +19,57 @@ namespace NLP
             bool contains_rich_text = ContainsRichText(text);
             bool contains_variable = ContainsVariable(text);
 
+            List<string> active_rich_text_mods = new List<string>();
+            List<string> end_rich_text_mods = new List<string>();
+
             foreach (string piece in pieces)
             {
-                // Gather all rich text and put at the front
-                if (contains_rich_text && IsRichText(piece))
+                // Gather all pure rich text and put at the front
+                if (contains_rich_text && IsPureRichText(piece))
                 {
                     text_pieces.Insert(0, new TextPiece(piece, TextType.Rich));
                     continue;
                 }
 
-                // Recognize variables to be inserted
-                else if (contains_variable && IsVariable(piece))
+                // Extract start/end of rich text modifiers
+                else if (contains_rich_text && ContainsRichText(piece))
                 {
-                    text_pieces.Add(new TextPiece(piece, TextType.Variable));
-                    continue;
+                    active_rich_text_mods.AddRange(ExtractRichTextStartMods(piece)); // add all new mods
+                    end_rich_text_mods = ExtractRichTextEndMods(piece); // track mods to remove after this piece
+                }
+
+                TextCodes code = GetTextCode(piece);
+
+                // Recognize variables to be inserted
+                if (contains_variable && ContainsVariable(piece))
+                {
+                    if (active_rich_text_mods.Count() > 0)
+                        text_pieces.Add(new TextPiece(CleanRichText(piece), active_rich_text_mods, true));
+                    else text_pieces.Add(new TextPiece(piece, TextType.Variable));
                 }
 
                 // Recognize special text codes
-                TextCodes code = GetTextCode(piece);
-                if (code != TextCodes.None)
+                else if (code != TextCodes.None)
                     text_pieces.Add(new TextPiece(piece, code));
 
-                // Simple text case
-                else text_pieces.Add(new TextPiece(piece));
+                // Plaintext word case
+                else
+                {
+                    if (active_rich_text_mods.Count() > 0)
+                        text_pieces.Add(new TextPiece(CleanRichText(piece), active_rich_text_mods));
+                    else text_pieces.Add(new TextPiece(piece));
+                }
+
+                // Update rich text mod tracking with any ended mods
+                foreach (string text_mod in end_rich_text_mods)
+                    active_rich_text_mods = RemoveLastMatchingMod(active_rich_text_mods, text_mod);
+                end_rich_text_mods = new List<string>();
             }
 
             return text_pieces;
         }
 
-        public static string GetWord(string text, int char_index)
+        private static string GetWord(string text, int char_index)
         {
             if (text[char_index] == ' ') return "";
 
@@ -57,13 +79,13 @@ namespace NLP
             return left + right;
         }
 
-        public static TextCodes GetTextCode(string text, int char_index)
+        private static TextCodes GetTextCode(string text, int char_index)
         {
             string word = GetWord(text, char_index);
             return GetTextCode(word);
         }
 
-        public static TextCodes GetTextCode(string text)
+        private static TextCodes GetTextCode(string text)
         {
             TextCodes code = TextCodes.None;
 
@@ -76,30 +98,109 @@ namespace NLP
             return code;
         }
 
-        public static bool ContainsRichText(string text)
+        private static bool ContainsRichText(string text)
         {
-            string pattern = ".*<.*>.*";
+            string pattern = ".*<[^<>]*>.*";
             Regex rx = new Regex(pattern);
             return rx.IsMatch(text);
         }
 
-        public static bool IsRichText(string text)
+        private static bool IsPureRichText(string text)
         {
-            string pattern = "<.*>";
+            string pattern = "^<[^<>/]*>$";
             Regex rx = new Regex(pattern);
             return rx.IsMatch(text);
         }
 
-        public static bool ContainsVariable(string text)
+        private static List<string> ExtractRichTextStartMods(string text)
+        {
+            List<string> text_mods = new List<string>();
+
+            string pattern = "<[^<>/]*>";
+            Regex rx = new Regex(pattern);
+            MatchCollection matches = rx.Matches(text);
+
+            foreach (Match match in matches)
+            {
+                string mod = ExtractRichTextValue(match.Value);
+                text_mods.Add(mod);
+            }
+
+            return text_mods;
+        }
+
+        private static List<string> ExtractRichTextEndMods(string text)
+        {
+            List<string> text_mods = new List<string>();
+
+            string pattern = "</[^<>/]*>";
+            Regex rx = new Regex(pattern);
+            MatchCollection matches = rx.Matches(text);
+
+            foreach (Match match in matches)
+            {
+                string mod = ExtractRichTextValue(match.Value);
+                text_mods.Add(mod);
+            }
+
+            return text_mods;
+        }
+
+        private static string CleanRichText(string text)
+        {
+            string pattern = "<[^<>]*>";
+            Regex rx = new Regex(pattern);
+
+            return rx.Replace(text, "");
+        }
+
+        private static string ExtractRichTextValue(string text)
+        {
+            string pattern = "[<>/]";
+            Regex rx = new Regex(pattern);
+
+            return rx.Replace(text, "");
+        }
+
+        private static string ExtractRichTextLabel(string text)
+        {
+            string pattern = "=\".*\"";
+            Regex rx = new Regex(pattern);
+
+            return rx.Replace(text, "");
+        }
+
+        private static List<string> RemoveLastMatchingMod(List<string> mod_list, string mod)
+        {
+            int match_idx = -1;
+            for (int i = mod_list.Count() - 1; i >= 0; i--)
+            {
+                string mod_label = ExtractRichTextLabel(mod_list[i]);
+                if (mod_label.Equals(mod))
+                {
+                    match_idx = i;
+                    break;
+                }
+            }
+
+            if (match_idx < 0) return mod_list;
+            else
+            {
+                mod_list.RemoveAt(match_idx);
+                return mod_list;
+            }
+        }
+
+        private static bool ContainsVariable(string text)
         {
             string pattern = ".*\\{.*\\}.*";
             Regex rx = new Regex(pattern);
             return rx.IsMatch(text);
         }
 
-        public static bool IsVariable(string text)
+        private static bool IsVariable(string text)
         {
-            string pattern = "\\{.*\\}";
+            string pattern = "^\\{.*\\}$";
             Regex rx = new Regex(pattern);
             return rx.IsMatch(text);
         }
@@ -119,6 +220,11 @@ namespace NLP
                 default:
                     return "";
             }
+        }
+
+        public static string VariableReplace(string text)
+        {
+            return "<VAR>";
         }
 
         #endregion

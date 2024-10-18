@@ -60,7 +60,7 @@ namespace UI
 
         public IEnumerator DrawText(string text = "")
         {
-            display_text = Constants.MESSAGE_BOX_RICH_TEXT;
+            display_text = "";
             label.text = display_text;
             if (text != "") message_text = text;
 
@@ -73,25 +73,40 @@ namespace UI
             {
                 List<TextPiece> text_pieces = TextUtils.GetTextPieces(message_text);
                 TextPiece last = text_pieces.Last();
+                display_text = Constants.MESSAGE_BOX_RICH_TEXT;
 
                 foreach (TextPiece piece in text_pieces)
                 {
                     yield return new WaitUntil(() => !drawing);
+                    bool is_last = (piece.Equals(last));
+                    string replacement;
 
                     switch (piece.type)
                     {
                         case TextType.Word:
-                            bool is_last = (piece.Equals(last));
+                        case TextType.RichWord:
                             StartCoroutine(DrawWord(piece, is_last));
                             break;
+                        case TextType.Variable:
+                            replacement = TextUtils.VariableReplace(piece.text);
+                            StartCoroutine(DrawWord(new TextPiece(replacement), is_last));
+                            break;
                         case TextType.Code:
-                            string replacement = TextUtils.TextCodeReplace(piece.code);
+                            replacement = TextUtils.TextCodeReplace(piece.code);
                             display_text += replacement;
+                            break;
+                        case TextType.Rich:
+                            drawing = true;
+                            display_text += piece.text;
+                            drawing = false;
+                            break;
+                        case TextType.RichVariable:
+                            replacement = TextUtils.VariableReplace(piece.text);
+                            StartCoroutine(DrawWord(new TextPiece(replacement, piece.rich_mods, true)));
                             break;
                         default:
                             break;
                     }
-                    
                 }
             }
         }
