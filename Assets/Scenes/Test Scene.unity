@@ -301,10 +301,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626a7acb05180418b90e4928eb367985, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text_speed: 0
+  text_speed: 1
   auto_start: 0
-  message_text: Different text {variable} <color="red"><b>blah blah</b></color> \n
-    newline all should be indented \n <b>bold text {var2}</b> nomoremods
+  message_text: Different text {variable} jump <color="red"><b>blah blah</b></color>
+    \n newline <b>bold text {var2}</b> nomoremods looooooooooong text should know
+    to jump.
 --- !u!1001 &4530581919089750066
 PrefabInstance:
   m_ObjectHideFlags: 0

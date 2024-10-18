@@ -44,7 +44,8 @@ namespace Utilities
         {
             20,          // Slow
             35,          // Moderate
-            50           // Fast
+            50,          // Fast
+            9999         // Instant
         };
 
         #endregion

@@ -26,7 +26,12 @@ namespace UI
         public string message_text;
         private string display_text;
 
-        private bool drawing;
+        private bool drawing_line;
+        private bool drawing_word;
+        private bool generating_lines;
+        private bool calculating_width;
+
+        private List<List<TextPiece>> lines;
 
         #endregion
 
@@ -42,7 +47,9 @@ namespace UI
             display_text = Constants.MESSAGE_BOX_RICH_TEXT;
             label.text = display_text;
 
-            drawing = false;
+            drawing_line = false;
+            drawing_word = false;
+            calculating_width = false;
 
             if (auto_start) StartCoroutine(DrawText());
         }
@@ -53,6 +60,7 @@ namespace UI
         #region Text Drawing
 
         [Button("Draw Text")]
+        [HideIf("@drawing_word")]
         public void StartDrawingText()
         {
             StartCoroutine(DrawText());
@@ -60,60 +68,68 @@ namespace UI
 
         public IEnumerator DrawText(string text = "")
         {
-            display_text = "";
-            label.text = display_text;
             if (text != "") message_text = text;
+            List<TextPiece> text_pieces = TextUtils.GetTextPieces(message_text);
 
-            if (text_speed == TextSpeeds.Instant)
+            StartCoroutine(GenerateTextLines(text_pieces));
+            yield return new WaitUntil(() => !generating_lines);
+
+            display_text = Constants.MESSAGE_BOX_RICH_TEXT;
+            label.text = display_text;
+
+            foreach (List<TextPiece> line in lines)
             {
-                display_text += message_text;
-                label.text = display_text;
+                yield return new WaitUntil(() => !drawing_line);
+                StartCoroutine(DrawLine(line));
             }
-            else
+        }
+
+        private IEnumerator DrawLine(List<TextPiece> line)
+        {
+            drawing_line = true;
+
+            TextPiece last = line.Last();
+
+            foreach (TextPiece piece in line)
             {
-                List<TextPiece> text_pieces = TextUtils.GetTextPieces(message_text);
-                TextPiece last = text_pieces.Last();
-                display_text = Constants.MESSAGE_BOX_RICH_TEXT;
+                yield return new WaitUntil(() => !drawing_word);
+                bool is_last = (piece.Equals(last));
+                string replacement;
 
-                foreach (TextPiece piece in text_pieces)
+                switch (piece.type)
                 {
-                    yield return new WaitUntil(() => !drawing);
-                    bool is_last = (piece.Equals(last));
-                    string replacement;
-
-                    switch (piece.type)
-                    {
-                        case TextType.Word:
-                        case TextType.RichWord:
-                            StartCoroutine(DrawWord(piece, is_last));
-                            break;
-                        case TextType.Variable:
-                            replacement = TextUtils.VariableReplace(piece.text);
-                            StartCoroutine(DrawWord(new TextPiece(replacement), is_last));
-                            break;
-                        case TextType.Code:
-                            replacement = TextUtils.TextCodeReplace(piece.code);
-                            display_text += replacement;
-                            break;
-                        case TextType.Rich:
-                            drawing = true;
-                            display_text += piece.text;
-                            drawing = false;
-                            break;
-                        case TextType.RichVariable:
-                            replacement = TextUtils.VariableReplace(piece.text);
-                            StartCoroutine(DrawWord(new TextPiece(replacement, piece.rich_mods, true)));
-                            break;
-                        default:
-                            break;
-                    }
+                    case TextType.Word:
+                    case TextType.RichWord:
+                        StartCoroutine(DrawWord(piece, is_last));
+                        break;
+                    case TextType.Variable:
+                        replacement = TextUtils.VariableReplace(piece.text);
+                        StartCoroutine(DrawWord(new TextPiece(replacement), is_last));
+                        break;
+                    case TextType.Code:
+                        replacement = TextUtils.TextCodeReplace(piece.code);
+                        display_text += replacement;
+                        break;
+                    case TextType.Rich:
+                        drawing_word = true;
+                        display_text += piece.text;
+                        drawing_word = false;
+                        break;
+                    case TextType.RichVariable:
+                        replacement = TextUtils.VariableReplace(piece.text);
+                        StartCoroutine(DrawWord(new TextPiece(replacement, piece.rich_mods, true)));
+                        break;
+                    default:
+                        break;
                 }
             }
+
+            drawing_line = false;
         }
 
         private IEnumerator DrawWord(TextPiece word, bool last = false)
         {
-            drawing = true;
+            drawing_word = true;
 
             string mod_start = "";
             string mod_end = "";
@@ -147,7 +163,94 @@ namespace UI
                 display_text += " ";
             }
 
-            drawing = false;
+            drawing_word = false;
+        }
+
+        private IEnumerator GenerateTextLines(List<TextPiece> text_pieces)
+        {
+            generating_lines = true;
+
+            lines = new List<List<TextPiece>>();
+            List<TextPiece> cur_line = new List<TextPiece>();
+            float max_line_width = label.parent.resolvedStyle.width;
+            float piece_width;
+            float cur_line_width = 0f;
+            bool new_line;
+
+            foreach (TextPiece piece in text_pieces)
+            {
+                new_line = false;
+
+                switch (piece.type)
+                {
+                    case TextType.Word:
+                    case TextType.RichWord:
+                        label.text = piece.text + " ";
+
+                        label.RegisterCallback<GeometryChangedEvent>(GeometryChangedCallback);
+                        calculating_width = true;
+                        yield return new WaitUntil(() => !calculating_width);
+                        piece_width = label.resolvedStyle.width;
+
+                        break;
+                    case TextType.Variable:
+                    case TextType.RichVariable:
+                        label.text = TextUtils.VariableReplace(piece.text);
+
+                        label.RegisterCallback<GeometryChangedEvent>(GeometryChangedCallback);
+                        calculating_width = true;
+                        yield return new WaitUntil(() => !calculating_width);
+                        piece_width = label.resolvedStyle.width;
+
+                        break;
+                    case TextType.Code:
+                        if (piece.code == TextCodes.NewLine)
+                        {
+                            new_line = true;
+                            piece_width = 0f;
+                        }
+                        else
+                        {
+                            label.text = TextUtils.TextCodeReplace(piece.code);
+
+                            label.RegisterCallback<GeometryChangedEvent>(GeometryChangedCallback);
+                            calculating_width = true;
+                            yield return new WaitUntil(() => !calculating_width);
+                            piece_width = label.resolvedStyle.width;
+                        }
+                        break;
+                    case TextType.Rich:
+                        piece_width = 0f;
+                        break;
+                    default:
+                        piece_width = 0f;
+                        break;
+                }
+
+                Debug.Log(cur_line_width);
+                new_line = new_line || (cur_line_width + piece_width > max_line_width);
+                if (new_line)
+                {
+                    lines.Add(new List<TextPiece>(cur_line));
+                    cur_line = new List<TextPiece> { piece };
+                    cur_line_width = piece_width;
+                }
+                else
+                {
+                    cur_line.Add(piece);
+                    cur_line_width += piece_width;
+                }
+            }
+            lines.Add(new List<TextPiece>(cur_line));
+
+            label.text = "";
+            generating_lines = false;
+        }
+
+        private void GeometryChangedCallback(GeometryChangedEvent evt)
+        {
+            label.UnregisterCallback<GeometryChangedEvent>(GeometryChangedCallback);
+            calculating_width = false;
         }
 
         #endregion
