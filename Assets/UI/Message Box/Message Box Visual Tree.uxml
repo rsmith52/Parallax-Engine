@@ -17,8 +17,8 @@
                 <engine:VisualElement name="Frame" class="messageBoxScaleHeight" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Frame%20-%20White.png?fileID=1808579964&amp;guid=79c38f76d70674dda872b93f62476e05&amp;type=3#Frame - White_3&quot;);" />
             </engine:VisualElement>
             <engine:VisualElement name="Mid" class="messageBoxFreeScale transparent" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Fill%20-%20Black.png?fileID=-1234111136&amp;guid=c5315fea417fb45c397c8c0d612fda36&amp;type=3#Fill - Black_4&quot;);">
-                <engine:VisualElement name="TextContainer" class="textContainer" style="flex-grow: 1;">
-                    <engine:Label name="Text" text="&lt;line-height=115%&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud" emoji-fallback-support="true" class="text" style="white-space: normal;" />
+                <engine:VisualElement name="TextContainer" class="textContainer" style="flex-grow: 1; margin-left: 4px;">
+                    <engine:Label name="Text" text="&lt;line-height=160%&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis" emoji-fallback-support="true" class="text" style="white-space: normal;" />
                 </engine:VisualElement>
             </engine:VisualElement>
             <engine:VisualElement name="MidRight" class="messageBoxScaleHeight transparent" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Graphics/UI/Message%20Boxes/Fill%20-%20Black.png?fileID=-690103907&amp;guid=c5315fea417fb45c397c8c0d612fda36&amp;type=3#Fill - Black_5&quot;);">

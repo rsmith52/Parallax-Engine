@@ -99,7 +99,7 @@ namespace Utilities
 
         public static readonly string TEXT_LABEL = "Text";
 
-        public static readonly string MESSAGE_BOX_RICH_TEXT = "<line-height=115%>";
+        public static readonly string MESSAGE_BOX_RICH_TEXT = "<line-height=160%>";
 
         public static readonly string[] TEXT_CODES = new string[]
         {

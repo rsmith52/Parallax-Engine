@@ -59,8 +59,6 @@ Unity Project for 2.5d Parallax RPG Engine
 ### UI Code
 * Speech bubbles -> Pop up automatically as NPCs come into hearing range, trying to start a conversation with you! Can be many popped up at once.
 * Handle words that will cut to next line
-* Update fonts
-* Recognize rich text and any other text modifiers
 * Continue past 3 lines
 * Main menu scene
 * Window scaling

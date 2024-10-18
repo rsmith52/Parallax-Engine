@@ -191,6 +191,24 @@ namespace NLP
             }
         }
 
+        public static string ConstructTextModStart(List<string> text_mods)
+        {
+            string output = "";
+            foreach (string mod in text_mods)
+                output += "<" + mod + ">";
+
+            return output;
+        }
+
+        public static string ConstructTextModEnd(List<string> text_mods)
+        {
+            string output = "";
+            foreach (string mod in text_mods)
+                output += "</" + ExtractRichTextLabel(mod) + ">";
+
+            return output;
+        }
+
         private static bool ContainsVariable(string text)
         {
             string pattern = ".*\\{.*\\}.*";

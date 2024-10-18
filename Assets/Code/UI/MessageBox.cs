@@ -115,10 +115,29 @@ namespace UI
         {
             drawing = true;
 
+            string mod_start = "";
+            string mod_end = "";
+            if (word.type == TextType.RichWord || word.type == TextType.RichVariable)
+            {
+                mod_start = TextUtils.ConstructTextModStart(word.rich_mods);
+                mod_end = TextUtils.ConstructTextModEnd(word.rich_mods);
+            }
+
             for (int i = 0; i < word.length; i++)
             {
                 yield return new WaitForSeconds(1 / Settings.TEXT_SPEEDS[(int)text_speed]);
+
+                if (word.type == TextType.RichWord || word.type == TextType.RichVariable)
+                {
+                    if (i == 0) display_text += mod_start; // add start of rich text
+                    else display_text = display_text.Substring(0, display_text.LastIndexOf(mod_end)); // remove end of rich text from unfinished word
+                }
+                
                 display_text += word.text[i];
+
+                if (word.type == TextType.RichWord || word.type == TextType.RichVariable)
+                    display_text += mod_end;
+
                 label.text = display_text;
             }
 
